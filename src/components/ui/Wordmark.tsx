@@ -29,7 +29,7 @@ export function Wordmark({ showProduct = true }: { showProduct?: boolean }) {
       {/* nowrap on both lines: the nav must stay on one line at 1024px. */}
       <span className="flex flex-col leading-none whitespace-nowrap">
         <span className="text-[1.0625rem] font-bold tracking-[-0.02em] text-foreground">
-          DYCH
+          DYCH TECHNOLOGIES
         </span>
         {showProduct && (
           <span className="mt-1 text-[0.625rem] font-medium tracking-[0.14em] text-faint">

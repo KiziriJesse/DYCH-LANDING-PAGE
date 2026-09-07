@@ -33,7 +33,7 @@ export const CONTACT = {
     { display: "+256 767 870 035", href: "https://wa.me/256767870035" },
     { display: "+256 788 195 067", href: "https://wa.me/256788195067" },
   ],
-  email: { display: "xristeck@gmail.com", href: "mailto:xristeck@gmail.com" },
+  email: { display: "dychtech256@gmail.com", href: "mailto:dychtech256@gmail.com" },
   location: "Kampala, Uganda",
 } as const;
 

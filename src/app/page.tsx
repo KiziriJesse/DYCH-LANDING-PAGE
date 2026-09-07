@@ -1,22 +1,25 @@
-import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { Solutions } from "@/components/Solutions";
-import { Integration } from "@/components/Integration";
-import { Trust } from "@/components/Trust";
+import { Hero } from "@/components/home/Hero";
+import { Problem } from "@/components/home/Problem";
+import { ProductSnapshot } from "@/components/home/ProductSnapshot";
+import { HowItWorksTeaser } from "@/components/home/HowItWorksTeaser";
+import { Proof } from "@/components/home/Proof";
+import { ClosingCta } from "@/components/home/ClosingCta";
 
 /**
- * Phase 1 keeps the existing homepage sections intact. The homepage itself is
- * rebuilt in Phase 2; Navbar and Footer now live in the root layout so every
- * route shares them.
+ * Six sections, six different layout families: media hero, text-led list,
+ * asymmetric bento, horizontal rail, split proof, solid panel. The full About
+ * and Trust blocks have moved off the homepage; they belong to /about and
+ * /security-and-trust in Phases 3-4.
  */
 export default function Home() {
   return (
     <>
       <Hero />
-      <About />
-      <Solutions />
-      <Integration />
-      <Trust />
+      <Problem />
+      <ProductSnapshot />
+      <HowItWorksTeaser />
+      <Proof />
+      <ClosingCta />
     </>
   );
 }
