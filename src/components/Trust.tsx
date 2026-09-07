@@ -1,62 +1,103 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Globe2, Smartphone } from "lucide-react";
+import { useRef } from "react";
+import Image from "next/image";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { CloudSlash, DeviceMobile } from "@phosphor-icons/react";
+import { EASE_OUT_EXPO, VIEWPORT } from "@/lib/motion";
+
+const POINTS = [
+  {
+    Icon: CloudSlash,
+    title: "Offline first",
+    body: "The gate keeps reading and the register keeps writing when the line drops. Everything syncs on its own once connectivity returns.",
+  },
+  {
+    Icon: DeviceMobile,
+    title: "On the phone parents already own",
+    body: "Alerts travel over SMS and WhatsApp. No download, no data bundle, no assumption about the handset in a parent's pocket.",
+  },
+];
 
 export function Trust() {
-  return (
-    <section className="py-24 bg-gradient-to-b from-slate-950 to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-blue-900/20 to-cyan-900/20 rounded-3xl p-8 md:p-12 border border-slate-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                African-Focused Digital Transformation
-              </h2>
-              <p className="text-lg text-slate-300 leading-relaxed mb-8">
-                Built for local context, supporting offline/low-bandwidth areas and using
-                widely accessible mobile technology (SMS/WhatsApp) to build trust with parents.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4 text-slate-300">
-                  <div className="p-2 bg-slate-800 rounded-lg text-cyan-400">
-                    <Globe2 className="w-6 h-6" />
-                  </div>
-                  <span>Offline-first architecture for low connectivity</span>
-                </div>
-                <div className="flex items-center space-x-4 text-slate-300">
-                  <div className="p-2 bg-slate-800 rounded-lg text-cyan-400">
-                    <Smartphone className="w-6 h-6" />
-                  </div>
-                  <span>SMS & WhatsApp integration for instant updates</span>
-                </div>
-              </div>
-            </motion.div>
+  const bandRef = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative h-64 md:h-96 rounded-2xl overflow-hidden bg-slate-800 flex items-center justify-center"
+  // Depth: the ground moves slower than the copy, which separates the band
+  // from the sections above and below it.
+  const { scrollYProgress } = useScroll({
+    target: bandRef,
+    offset: ["start end", "end start"],
+  });
+  const groundY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+
+  return (
+    <section
+      ref={bandRef}
+      aria-labelledby="trust-heading"
+      className="relative isolate overflow-hidden px-4 py-32 sm:px-6 lg:px-10 lg:py-48"
+    >
+      <motion.div
+        aria-hidden
+        style={reduce ? undefined : { y: groundY }}
+        /* Taller than the band by more than the parallax travel, so no edge
+           creeps into view at either end of the scroll. */
+        className="absolute inset-x-0 -inset-y-[12%] -z-20"
+      >
+        <Image
+          src="https://picsum.photos/seed/dych-open-country-road/1920/1200?grayscale"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          style={{
+            opacity: "var(--media-opacity)" as never,
+            filter: "var(--media-filter)",
+          }}
+        />
+      </motion.div>
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, var(--canvas) 0%, var(--veil-soft) 26%, var(--veil-soft) 74%, var(--canvas) 100%)",
+        }}
+      />
+
+      <div className="mx-auto max-w-[1400px]">
+        <motion.h2
+          id="trust-heading"
+          initial={reduce ? false : { opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
+          className="max-w-[22ch] font-display text-[clamp(2.5rem,6vw,4.25rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-ink"
+        >
+          Designed around how African schools actually run.
+        </motion.h2>
+
+        <div className="mt-16 grid gap-px overflow-hidden rounded-shell border border-line bg-line md:grid-cols-2">
+          {POINTS.map(({ Icon, title, body }, i) => (
+            <motion.article
+              key={title}
+              initial={reduce ? false : { opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.7, delay: 0.08 + i * 0.08, ease: EASE_OUT_EXPO }}
+              className="bg-surface p-8 sm:p-10"
             >
-              {/* Abstract Map or Tech Visual Representation */}
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
-              <div className="relative z-10 text-center p-6">
-                <span className="text-5xl font-bold text-white block mb-2">100+</span>
-                <span className="text-cyan-400 text-lg uppercase tracking-wider">Schools Connected</span>
-              </div>
-            </motion.div>
-          </div>
+              <span className="mb-7 flex h-12 w-12 items-center justify-center rounded-full bg-accent-soft text-[var(--accent-text)] ring-1 ring-[var(--accent-line)]">
+                <Icon size={24} weight="light" />
+              </span>
+              <h3 className="font-display text-2xl font-bold tracking-[-0.02em] text-ink">
+                {title}
+              </h3>
+              <p className="mt-3 max-w-[46ch] leading-relaxed text-ink-muted">{body}</p>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>
   );
 }
-
