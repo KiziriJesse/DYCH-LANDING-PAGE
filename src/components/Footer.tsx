@@ -1,117 +1,126 @@
-"use client";
+import Link from "next/link";
+import {
+  EnvelopeSimple,
+  MapPin,
+  PhoneCall,
+  WhatsappLogo,
+} from "@phosphor-icons/react/dist/ssr";
+import { BRAND, CONTACT, SITEMAP } from "@/lib/site";
+import { Wordmark } from "@/components/ui/Wordmark";
 
-import { Mail, Phone, MapPin } from "lucide-react";
+const ICON = { size: 18, weight: "light" } as const;
 
 export function Footer() {
   return (
-    <footer id="contact-team" className="bg-slate-950 border-t border-slate-900 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          {/* Contact Info */}
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-8">Contact Our Team</h2>
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <Phone className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Call Us</p>
-                  <a href="tel:+256767870035" className="block text-white hover:text-cyan-400 transition-colors">
-                    +256 767870035
-                  </a>
-                  <a href="tel:+256788195067" className="block text-white hover:text-cyan-400 transition-colors">
-                    +256 788195067
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <Mail className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Email Us</p>
-                  <a href="mailto:xristeck@gmail.com" className="block text-white hover:text-cyan-400 transition-colors">
-                    xristeck@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <MapPin className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Location</p>
-                  <p className="text-white">Kampala, Uganda</p>
-                </div>
-              </div>
-            </div>
+    <footer className="border-t border-border bg-surface-sunk px-4 pb-10 pt-20 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-[1240px]">
+        {/* Three columns, not a four-column link farm. */}
+        <div className="grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <Link href="/" aria-label="DYCH Technologies, home" className="inline-block">
+              <Wordmark />
+            </Link>
+            <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
+              {BRAND.blurb}
+            </p>
+            <p className="mt-5 flex items-center gap-2 text-sm text-faint">
+              <MapPin {...ICON} aria-hidden />
+              {CONTACT.location}
+            </p>
           </div>
 
-          {/* Contact Form */}
-          <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800">
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="Your Name"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-slate-400 mb-1">
-                  Company / School
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="School Name"
-                />
-              </div>
+          <nav aria-labelledby="footer-sitemap" className="md:col-span-3">
+            <h2
+              id="footer-sitemap"
+              className="text-sm font-semibold tracking-[0.1em] text-foreground"
+            >
+              Site
+            </h2>
+            <ul className="mt-5 flex flex-col gap-3">
+              {SITEMAP.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="email@example.com"
-                />
-              </div>
+          <div className="md:col-span-4">
+            <h2 className="text-sm font-semibold tracking-[0.1em] text-foreground">
+              Talk to us
+            </h2>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-1">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="How can we help you?"
-                />
-              </div>
+            <ul className="mt-5 flex flex-col gap-4">
+              {CONTACT.whatsapp.map((line) => (
+                <li key={line.href}>
+                  <a
+                    href={line.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <WhatsappLogo {...ICON} />
+                    </span>
+                    <span className="nums">
+                      WhatsApp {line.display}
+                    </span>
+                  </a>
+                </li>
+              ))}
 
-              <button
-                type="submit"
-                className="w-full px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-cyan-500/20"
-              >
-                Send Message
-              </button>
-            </form>
+              {CONTACT.phones.map((line) => (
+                <li key={line.href}>
+                  <a
+                    href={line.href}
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <PhoneCall {...ICON} />
+                    </span>
+                    <span className="nums">{line.display}</span>
+                  </a>
+                </li>
+              ))}
+
+              <li>
+                <a
+                  href={CONTACT.email.href}
+                  className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                  >
+                    <EnvelopeSimple {...ICON} />
+                  </span>
+                  {CONTACT.email.display}
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-slate-900 pt-8 text-center">
-          <p className="text-slate-500">
-            © {new Date().getFullYear()} Dych Technologies. All rights reserved.
+        <div className="mt-14 border-t border-border pt-6 text-sm text-faint">
+          <p>
+            <span className="nums">{new Date().getFullYear()}</span> {BRAND.name}. All
+            rights reserved.
           </p>
+          {/* TODO: add Privacy and Terms links here once those routes exist.
+              Omitted rather than linked to a 404. */}
         </div>
       </div>
     </footer>
   );
 }
-

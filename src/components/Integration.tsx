@@ -28,11 +28,11 @@ const steps = [
 
 export function Integration() {
   return (
-    <section id="integration" className="py-24 bg-slate-900 relative overflow-hidden">
+    <section id="integration" className="py-24 bg-surface relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
-        <div className="absolute top-1/4 -left-10 w-96 h-96 bg-cyan-900/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-blue-900/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 -left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-accent-attendance/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -40,14 +40,14 @@ export function Integration() {
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             System Integration
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">
+          <p className="text-muted max-w-2xl mx-auto">
             A seamless flow from entry to insight.
           </p>
         </div>
 
         <div className="relative">
           {/* Connecting Line (Horizontal on Desktop) */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-800 -translate-y-1/2 rounded-full" />
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-border -translate-y-1/2 rounded-full" />
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {steps.map((step, index) => (
@@ -59,11 +59,11 @@ export function Integration() {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="relative flex flex-col items-center text-center"
               >
-                <div className="w-16 h-16 rounded-full bg-slate-800 border-2 border-cyan-500 flex items-center justify-center mb-6 z-10 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-                  <step.icon className="w-8 h-8 text-cyan-400" />
+                <div className="w-16 h-16 rounded-full bg-surface-raised border border-accent-line flex items-center justify-center mb-6 z-10">
+                  <step.icon className="w-8 h-8 text-accent" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Step {index + 1}: {step.title}</h3>
-                <p className="text-slate-400 text-sm">
+                <p className="text-muted text-sm">
                   {step.description}
                 </p>
               </motion.div>

@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
+/* ============================================================
+   DYCH Technologies - design tokens
+
+   Fixed dark theme. This is a dark-themed brand site, not a
+   system-preference toggle, so there is no prefers-color-scheme block.
+
+   Accent policy (build plan 0.4a): four accents are kept because they are
+   functional product branding, not decoration. Each is calibrated below
+   ~75% HSL saturation, and no more than two may glow/activate in the same
+   viewport. Cyan (security) is the primary brand accent and the only one
+   allowed on a CTA.
+
+   Radius scale (locked):  card | pill (interactive) | input
+   Z-index scale (locked): raise 10 | menu 40 | nav 50 | grain 60
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Substrate. Near-black navy, deliberately not slate-950 (#020617),
+     which reads as the default Tailwind dark theme. */
+  --background: #0a0e14;
+  --surface: #111823;
+  --surface-raised: #18202d;
+  --surface-sunk: #070a0f;
+
+  /* Type. Never pure white on a dark substrate. */
+  --foreground: #e8ecf1;
+  --muted: #94a3b8;
+  --faint: #64748b;
+
+  /* Structure */
+  --border: rgba(232, 236, 241, 0.1);
+  --border-strong: rgba(232, 236, 241, 0.2);
+
+  /* Semantic accents, each desaturated below ~75% */
+  --accent-security: #3ec8da; /* hsl(187 68% 55%) - 9.6:1 on background */
+  --accent-attendance: #4d8adb; /* hsl(214 66% 58%) - 5.9:1 */
+  --accent-communication: #37be8c; /* hsl(158 55% 48%) - 7.9:1 */
+  --accent-finance: #9b76db; /* hsl(262 58% 66%) - 5.5:1 */
+
+  /* Primary brand accent aliases cyan. CTAs use these and nothing else. */
+  --accent: var(--accent-security);
+  --accent-ink: #04222a; /* label colour on an accent fill - 8.3:1 */
+  --accent-soft: rgba(62, 200, 218, 0.12);
+  --accent-line: rgba(62, 200, 218, 0.34);
+
+  /* The one glow on the site. Primary CTAs only, never on cards,
+     step circles, badges or icon wells. */
+  --glow-cta: 0 0 24px -4px rgba(62, 200, 218, 0.45);
+  --glow-cta-hover: 0 0 34px -4px rgba(62, 200, 218, 0.62);
+
+  /* Tinted to the substrate hue, never pure black */
+  --shade: 0 24px 60px -28px rgba(2, 5, 10, 0.9);
+  --shade-lift: 0 34px 80px -30px rgba(2, 5, 10, 0.96);
+
+  --radius-card: 1.25rem;
+  --radius-input: 0.625rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunk: var(--surface-sunk);
+
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+
+  --color-accent-security: var(--accent-security);
+  --color-accent-attendance: var(--accent-attendance);
+  --color-accent-communication: var(--accent-communication);
+  --color-accent-finance: var(--accent-finance);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-card: var(--radius-card);
+  --radius-input: var(--radius-input);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* Was `Arial, Helvetica, sans-serif`, which silently overrode the Geist
+       font this project already loads. */
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Anchor targets clear the fixed navbar. */
+  section[id],
+  main[id] {
+    scroll-margin-top: 6rem;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Outline follows each element's own radius. Never set border-radius here,
+     or focusing a pill button squares it off. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+  }
+
+  /* No 300ms double-tap zoom delay, and a tap highlight chosen on purpose
+     rather than the browser's default blue-grey block. */
+  a,
+  button,
+  label,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(62, 200, 218, 0.18);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .z-raise {
+    z-index: 10;
+  }
+  .z-menu {
+    z-index: 40;
+  }
+  /* Above the menu overlay: the hamburger morphs into the close control,
+     so it has to stay reachable while the menu is open. */
+  .z-nav {
+    z-index: 50;
+  }
+
+  /* Tabular figures for any number a reader may compare. */
+  .nums {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Full-bleed fixed layers clear notches and rounded display corners. */
+  .safe-x {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .skip-link {
+    position: fixed;
+    z-index: 70;
+    left: 1rem;
+    top: -6rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+    transition: top 220ms var(--ease-out-expo);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+/* Reduced motion: loops, parallax and transitions collapse to static. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Transparency-sensitive users get solid surfaces instead of glass. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: var(--surface) !important;
+  }
 }
