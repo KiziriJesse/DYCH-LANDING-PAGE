@@ -24,7 +24,7 @@ import { motion, useReducedMotion } from "framer-motion";
 export function SpotlightCard({
   children,
   href,
-  accent = "var(--accent-security)",
+  accent = "var(--accent)",
   className = "",
 }: {
   children: ReactNode;

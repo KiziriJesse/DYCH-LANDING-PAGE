@@ -46,6 +46,11 @@ export function Hero() {
         playsInline
         aria-hidden
         tabIndex={-1}
+        // The stock clip is saturated neon teal, which competed with the brand
+        // purple once the palette was re-keyed. Pulling the saturation down
+        // lets it read as texture behind the type instead of as a second
+        // palette. Remove this when real campus footage replaces it.
+        style={{ filter: "saturate(0.45)" }}
         className="absolute inset-0 z-0 h-full w-full object-cover"
       >
         <source src={HERO_VIDEO} type="video/mp4" />

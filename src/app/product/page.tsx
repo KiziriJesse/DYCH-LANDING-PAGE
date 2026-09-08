@@ -137,7 +137,9 @@ const CAPABILITIES: CapabilityData[] = [
     ],
     media: "the analytics dashboard showing attendance trends across a term",
     mediaAspect: "aspect-[16/7]",
-    accent: "var(--accent-security)",
+    // Analytics is the layer over all four features rather than a fifth one,
+    // so it carries the brand accent, not a feature hue.
+    accent: "var(--accent)",
     Icon: ChartLineUp,
     layout: "wide",
   },

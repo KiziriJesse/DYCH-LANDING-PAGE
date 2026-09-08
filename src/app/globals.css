@@ -6,11 +6,14 @@
    Fixed dark theme. This is a dark-themed brand site, not a
    system-preference toggle, so there is no prefers-color-scheme block.
 
-   Accent policy (build plan 0.4a): four accents are kept because they are
-   functional product branding, not decoration. Each is calibrated below
-   ~75% HSL saturation, and no more than two may glow/activate in the same
-   viewport. Cyan (security) is the primary brand accent and the only one
-   allowed on a CTA.
+   Accent policy (build plan 0.4a): four feature accents are kept because they
+   are functional product branding, not decoration. Each is calibrated below
+   ~75% HSL saturation, and no more than two may activate in the same viewport.
+
+   The primary brand accent is separate from those four: it is the DYCH purple
+   taken from the logo, and it is the only colour allowed on a CTA, a link, a
+   focus ring or the selection highlight. Feature accents never appear on an
+   interactive control; they only tint an icon glyph or a spotlight fill.
 
    Radius scale (locked):  card | pill (interactive) | input
    Z-index scale (locked): raise 10 | menu 40 | nav 50 | grain 60
@@ -35,22 +38,30 @@
   --border: rgba(232, 236, 241, 0.1);
   --border-strong: rgba(232, 236, 241, 0.2);
 
-  /* Semantic accents, each desaturated below ~75% */
-  --accent-security: #3ec8da; /* hsl(187 68% 55%) - 9.6:1 on background */
-  --accent-attendance: #4d8adb; /* hsl(214 66% 58%) - 5.9:1 */
-  --accent-communication: #37be8c; /* hsl(158 55% 48%) - 7.9:1 */
-  --accent-finance: #9b76db; /* hsl(262 58% 66%) - 5.5:1 */
+  /* Semantic feature accents. Each is calibrated below 75% saturation and
+     clears WCAG AA against the substrate. Finance moved off violet to amber
+     when violet was reclaimed as the corporate brand colour. */
+  --accent-security: #3ec8da; /* hsl(187 68% 55%) - 9.65:1 */
+  --accent-attendance: #4d8adb; /* hsl(214 66% 58%) - 5.50:1 */
+  --accent-communication: #37be8c; /* hsl(158 55% 48%) - 8.20:1 */
+  --accent-finance: #e1a847; /* hsl(38 72% 58%)  - 9.11:1 */
 
-  /* Primary brand accent aliases cyan. CTAs use these and nothing else. */
-  --accent: var(--accent-security);
-  --accent-ink: #04222a; /* label colour on an accent fill - 8.3:1 */
-  --accent-soft: rgba(62, 200, 218, 0.12);
-  --accent-line: rgba(62, 200, 218, 0.34);
+  /* Primary brand accent: the DYCH purple, lifted for a dark substrate.
+     The logo master is hsl(258 89% 35%), which measures 1.67:1 here and is
+     unusable as ink. This keeps the hue exactly and raises lightness to 68%,
+     which is the usual digital tint of a print brand colour.
+     CTAs, links, focus rings and the selection colour use these and nothing
+     else, so the interface reads as one brand rather than five. */
+  --accent: #9570eb; /* hsl(258 75% 68%) - 5.34:1 on background */
+  --accent-ink: #140b2e; /* label on an accent fill - 5.19:1.
+                            White would be 3.62:1, so it is not used. */
+  --accent-soft: rgba(149, 112, 235, 0.14);
+  --accent-line: rgba(149, 112, 235, 0.38);
 
   /* The one glow on the site. Primary CTAs only, never on cards,
      step circles, badges or icon wells. */
-  --glow-cta: 0 0 24px -4px rgba(62, 200, 218, 0.45);
-  --glow-cta-hover: 0 0 34px -4px rgba(62, 200, 218, 0.62);
+  --glow-cta: 0 0 24px -4px rgba(149, 112, 235, 0.5);
+  --glow-cta-hover: 0 0 34px -4px rgba(149, 112, 235, 0.68);
 
   /* Tinted to the substrate hue, never pure black */
   --shade: 0 24px 60px -28px rgba(2, 5, 10, 0.9);
@@ -153,7 +164,7 @@
   summary,
   [role="button"] {
     touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(62, 200, 218, 0.18);
+    -webkit-tap-highlight-color: rgba(149, 112, 235, 0.2);
   }
 }
 
