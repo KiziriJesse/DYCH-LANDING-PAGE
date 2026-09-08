@@ -201,7 +201,7 @@ export function StepSpine() {
                 <step.Icon size={24} weight="light" />
               </span>
 
-              <h2 className="mt-6 text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground lg:mt-0">
+              <h2 className="mt-6 text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground lg:mt-0">
                 {step.title}
               </h2>
               <p className="mt-5 max-w-[58ch] text-lg leading-relaxed text-muted">

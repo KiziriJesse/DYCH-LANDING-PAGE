@@ -97,8 +97,8 @@
   --color-accent-communication: var(--accent-communication);
   --color-accent-finance: var(--accent-finance);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: var(--radius-card);
   --radius-input: var(--radius-input);
@@ -113,7 +113,8 @@
   body {
     /* Was `Arial, Helvetica, sans-serif`, which silently overrode the Geist
        font this project already loads. */
-    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
     background-color: var(--background);
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
@@ -121,9 +122,18 @@
     overflow-x: hidden;
   }
 
+  /* Ported from the prototype on `main`: display face at a light weight with
+     tight leading and tracking. Sizes stay on the components, which already
+     set their own clamp() values. Weight 300 was checked against this dark
+     substrate at display sizes and reads well; small headings (roughly 20px
+     and under) opt back up to 500 locally, where 300 loses its hierarchy. */
   h1,
   h2,
   h3 {
+    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
@@ -181,11 +191,12 @@
     z-index: 50;
   }
 
-  /* Tabular figures for any number a reader may compare. */
+  /* Tabular figures for any number a reader may compare. IBM Plex Sans has
+     them, so aligning digits no longer costs a whole extra mono family. */
   .nums {
-    font-family: var(--font-geist-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
+    letter-spacing: 0.01em;
   }
 
   /* Full-bleed fixed layers clear notches and rounded display corners. */

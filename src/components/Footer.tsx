@@ -33,7 +33,7 @@ export function Footer() {
           <nav aria-labelledby="footer-sitemap" className="md:col-span-3">
             <h2
               id="footer-sitemap"
-              className="text-sm font-semibold tracking-[0.1em] text-foreground"
+              className="text-sm font-medium tracking-[0.1em] text-foreground"
             >
               Site
             </h2>
@@ -52,7 +52,7 @@ export function Footer() {
           </nav>
 
           <div className="md:col-span-4">
-            <h2 className="text-sm font-semibold tracking-[0.1em] text-foreground">
+            <h2 className="text-sm font-medium tracking-[0.1em] text-foreground">
               Talk to us
             </h2>
 

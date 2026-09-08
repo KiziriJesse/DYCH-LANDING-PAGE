@@ -32,7 +32,7 @@ export function Commitment({ item }: { item: CommitmentData }) {
         </span>
         <h2
           id={item.id}
-          className="mt-6 max-w-[16ch] scroll-mt-32 text-[clamp(1.5rem,3vw,2rem)] font-bold leading-[1.15] tracking-[-0.025em] text-foreground"
+          className="mt-6 max-w-[16ch] scroll-mt-32 text-[clamp(1.5rem,3vw,2rem)] leading-[1.15] tracking-[-0.025em] text-foreground"
         >
           {item.title}
         </h2>

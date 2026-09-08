@@ -9,6 +9,7 @@ import {
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Capability, type CapabilityData } from "@/components/product/Capability";
+import { RecognitionFigure } from "@/components/product/RecognitionFigure";
 
 export const metadata: Metadata = {
   title: "Product",
@@ -41,6 +42,9 @@ const CAPABILITIES: CapabilityData[] = [
     media:
       "recognition view at the school gate, or the camera and reader hardware in place",
     mediaAspect: "aspect-[4/3]",
+    // The one capability with a real figure. The other four keep the marked
+    // placeholder slot until artwork exists for them.
+    renderMedia: () => <RecognitionFigure />,
     accent: "var(--accent-security)",
     Icon: ScanSmiley,
     layout: "split-right",

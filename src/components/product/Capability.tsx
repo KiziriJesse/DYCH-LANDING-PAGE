@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
@@ -9,12 +10,22 @@ export type CapabilityData = {
   title: string;
   lead: string;
   points: { label: string; body: string }[];
+  /** Description of the artwork this section wants. Also the fallback slot's
+      label, and useful as alt text once a real asset lands. */
   media: string;
   mediaAspect: string;
+  /** Render a real figure instead of the marked placeholder slot. */
+  renderMedia?: () => ReactNode;
   accent: string;
   Icon: PhosphorIcon;
   layout: CapabilityLayout;
 };
+
+/** A real figure where one exists, the marked placeholder slot otherwise. */
+function Media({ item }: { item: CapabilityData }) {
+  if (item.renderMedia) return <>{item.renderMedia()}</>;
+  return <PlaceholderMedia description={item.media} aspect={item.mediaAspect} />;
+}
 
 function Head({ item, centered = false }: { item: CapabilityData; centered?: boolean }) {
   return (
@@ -27,7 +38,7 @@ function Head({ item, centered = false }: { item: CapabilityData; centered?: boo
         <item.Icon size={26} weight="light" />
       </span>
 
-      <h2 className="mt-7 max-w-[16ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+      <h2 className="mt-7 max-w-[16ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
         {item.title}
       </h2>
       <p className="mt-5 max-w-[58ch] text-lg leading-relaxed text-muted">{item.lead}</p>
@@ -81,7 +92,7 @@ export function Capability({
 
           <div className="mt-14 grid items-center gap-12 lg:grid-cols-12">
             <Reveal delay={0.08} className="mx-auto w-full max-w-[16rem] lg:col-span-5 lg:col-start-2">
-              <PlaceholderMedia description={item.media} aspect={item.mediaAspect} />
+              <Media item={item} />
             </Reveal>
             <Reveal delay={0.14} className="lg:col-span-5">
               <Points item={item} />
@@ -105,7 +116,7 @@ export function Capability({
             </Reveal>
           </div>
           <Reveal delay={0.14} className="mt-14">
-            <PlaceholderMedia description={item.media} aspect={item.mediaAspect} />
+            <Media item={item} />
           </Reveal>
         </div>
       </section>
@@ -130,7 +141,7 @@ export function Capability({
           delay={0.08}
           className={mediaFirst ? "lg:col-span-6 lg:row-start-1" : "lg:col-span-6"}
         >
-          <PlaceholderMedia description={item.media} aspect={item.mediaAspect} />
+          <Media item={item} />
         </Reveal>
       </div>
     </section>

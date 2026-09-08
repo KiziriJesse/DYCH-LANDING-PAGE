@@ -26,7 +26,7 @@ export function Problem() {
     <section className="bg-background px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
-          <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] font-bold leading-[1.08] tracking-[-0.03em] text-foreground">
+          <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             Right now, security and attendance run on trust and paper.
           </h2>
         </Reveal>

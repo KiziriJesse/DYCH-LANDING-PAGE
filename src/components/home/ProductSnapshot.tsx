@@ -103,7 +103,7 @@ export function ProductSnapshot() {
     >
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
-          <h2 className="max-w-[18ch] text-[clamp(2rem,4.6vw,3.25rem)] font-bold leading-[1.08] tracking-[-0.03em] text-foreground">
+          <h2 className="max-w-[18ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             Four jobs the school office stops doing by hand.
           </h2>
           <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
@@ -127,7 +127,7 @@ export function ProductSnapshot() {
                         wide cell balance instead of one hanging low. */}
                     <div className="flex items-center gap-4 md:col-span-6">
                       <IconWell Icon={feature.Icon} accent={feature.accent} />
-                      <h3 className="text-xl font-bold leading-tight tracking-[-0.02em] text-foreground sm:text-2xl">
+                      <h3 className="text-xl leading-tight tracking-[-0.02em] text-foreground sm:text-2xl">
                         {feature.title}
                       </h3>
                     </div>
@@ -163,7 +163,7 @@ export function ProductSnapshot() {
                     <div className="mt-auto pt-7">
                       <h3
                         className={
-                          "font-bold leading-tight tracking-[-0.02em] text-foreground " +
+                          "leading-tight tracking-[-0.02em] text-foreground " +
                           (feature.shape === "lead"
                             ? "text-2xl sm:text-3xl"
                             : "text-xl sm:text-2xl")

@@ -56,7 +56,7 @@ export default function ContactPage() {
                 actually reaches us fastest, and the form below cannot yet
                 deliver anything. */}
             <Reveal>
-              <h2 className="text-xl font-bold tracking-[-0.02em] text-foreground">
+              <h2 className="text-xl tracking-[-0.02em] text-foreground">
                 Prefer WhatsApp?
               </h2>
               <p className="mt-3 max-w-[46ch] leading-relaxed text-muted">
@@ -120,7 +120,7 @@ export default function ContactPage() {
 
           <Reveal delay={0.1} className="lg:col-span-7">
             <div className="rounded-card border border-border bg-surface p-6 sm:p-9">
-              <h2 className="text-xl font-bold tracking-[-0.02em] text-foreground">
+              <h2 className="text-xl tracking-[-0.02em] text-foreground">
                 Or send us the details
               </h2>
               <p className="mt-3 max-w-[52ch] leading-relaxed text-muted">

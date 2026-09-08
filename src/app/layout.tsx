@@ -1,18 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+/* Two intentional faces, ported from the prototype on `main`: a characterful
+   display grotesk over a legible humanist body face. Replaces Geist Sans and
+   Geist Mono. Geist Mono is not replaced with a third family: the only thing
+   it was doing here was aligning digits, and IBM Plex Sans has tabular
+   figures, so `.nums` now uses those instead of loading another font. */
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["300", "400", "500"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-plex",
   subsets: ["latin"],
+  weight: ["300", "400", "500"],
   display: "swap",
 });
 
@@ -64,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
+        className={`${spaceGrotesk.variable} ${plexSans.variable} bg-background text-foreground antialiased`}
       >
         <a href="#main" className="skip-link">
           Skip to content

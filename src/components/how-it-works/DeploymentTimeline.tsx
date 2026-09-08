@@ -32,7 +32,7 @@ export function DeploymentTimeline() {
     <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
-          <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+          <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
             Deployment and support
           </h2>
           <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
@@ -61,7 +61,7 @@ export function DeploymentTimeline() {
                 className="mt-1.5 block h-[15px] w-[15px] shrink-0 rounded-full border-2 border-accent bg-background md:mt-0"
               />
               <div className="md:mt-6">
-                <h3 className="font-bold tracking-[-0.015em] text-foreground">
+                <h3 className="font-medium tracking-[-0.015em] text-foreground">
                   {stage.title}
                 </h3>
                 <p className="mt-2 max-w-[34ch] text-[0.9375rem] leading-relaxed text-muted">

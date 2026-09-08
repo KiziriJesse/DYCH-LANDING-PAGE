@@ -27,7 +27,7 @@ export function CtaBand({
               }}
             />
 
-            <h2 className="mx-auto max-w-[22ch] text-[clamp(1.875rem,4.2vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em] text-foreground">
+            <h2 className="mx-auto max-w-[22ch] text-[clamp(1.875rem,4.2vw,3rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
               {title}
             </h2>
             <p className="mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-muted">

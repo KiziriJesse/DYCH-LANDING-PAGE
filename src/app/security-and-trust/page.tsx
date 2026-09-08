@@ -174,7 +174,7 @@ export default function SecurityAndTrustPage() {
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               Questions worth putting to us, and to anyone else.
             </h2>
             <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">

@@ -43,7 +43,7 @@ export function HowItWorksTeaser() {
     <section className="bg-background px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
-          <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] font-bold leading-[1.08] tracking-[-0.03em] text-foreground">
+          <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             From the gate to the head teacher, in one line.
           </h2>
           <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
@@ -74,7 +74,7 @@ export function HowItWorksTeaser() {
                   <step.Icon {...ICON} />
                 </span>
                 <div className="md:mt-6">
-                  <h3 className="text-lg font-bold tracking-[-0.015em] text-foreground">
+                  <h3 className="text-lg font-medium tracking-[-0.015em] text-foreground">
                     {step.title}
                   </h3>
                   <p className="mt-2 max-w-[34ch] text-[0.9375rem] leading-relaxed text-muted">

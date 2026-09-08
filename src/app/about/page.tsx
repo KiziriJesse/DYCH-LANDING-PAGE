@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               The people who install it and answer the phone.
             </h2>
             <p className="mt-5 max-w-[58ch] text-lg leading-relaxed text-muted">
@@ -102,7 +102,7 @@ export default function AboutPage() {
               <Reveal as="li" key={person.role} delay={0.05 * i}>
                 <div className="flex h-full flex-col">
                   <PlaceholderMedia description={person.photo} aspect="aspect-[4/5]" />
-                  <h3 className="mt-5 font-bold tracking-[-0.015em] text-foreground">
+                  <h3 className="mt-5 font-medium tracking-[-0.015em] text-foreground">
                     {person.name}
                   </h3>
                   <p className="mt-1 text-[0.9375rem] leading-relaxed text-muted">
@@ -118,7 +118,7 @@ export default function AboutPage() {
       <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto grid max-w-[1240px] items-center gap-14 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-5">
-            <h2 className="max-w-[16ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[16ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               Where we operate
             </h2>
             <p className="mt-5 flex items-center gap-2 text-lg text-foreground">

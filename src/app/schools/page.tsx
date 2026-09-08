@@ -71,7 +71,7 @@ export default function SchoolsPage() {
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               Primary and secondary, single site and multi-campus.
             </h2>
             <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
@@ -101,7 +101,7 @@ export default function SchoolsPage() {
       <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               In their own words.
             </h2>
           </Reveal>

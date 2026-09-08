@@ -99,7 +99,7 @@ export default function PricingPage() {
                       start at the same Y position. */}
                   <div className="min-h-[9.5rem]">
                     <div className="flex items-baseline justify-between gap-4">
-                      <h2 className="text-2xl font-bold tracking-[-0.02em] text-foreground">
+                      <h2 className="text-2xl tracking-[-0.02em] text-foreground">
                         {plan.name}
                       </h2>
                       {plan.recommended && (
@@ -167,7 +167,7 @@ export default function PricingPage() {
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] font-bold leading-[1.1] tracking-[-0.03em] text-foreground">
+            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               What schools ask before they sign.
             </h2>
           </Reveal>
