@@ -18,7 +18,8 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <Link href="/" aria-label="DYCH Technologies, home" className="inline-block">
-              <Wordmark />
+              {/* The corporate tagline belongs here; the nav carries the product name. */}
+              <Wordmark subline="AUTOMATING TOMORROW" markHeight={38} />
             </Link>
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
               {BRAND.blurb}

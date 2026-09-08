@@ -71,7 +71,12 @@ export function Navbar() {
             className="flex items-center rounded-full py-2 pr-2"
             aria-label="DYCH Technologies, home"
           >
-            <Wordmark />
+            <Wordmark
+              sublineClass="hidden xl:block"
+              textClass="text-base xl:text-[1.0625rem]"
+              markHeight={32}
+              priority
+            />
           </Link>
 
           <ul className="hidden items-center gap-0.5 lg:flex">

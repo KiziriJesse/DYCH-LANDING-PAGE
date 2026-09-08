@@ -1,39 +1,53 @@
+import Image from "next/image";
+
 /**
- * Brand mark: one simple geometric glyph (a gate with a cleared threshold)
- * beside the wordmark. Deliberately minimal so it stays legible at 32px
- * inside the nav pill.
+ * The real DYCH mark plus a live-text wordmark.
+ *
+ * The supplied lockup sets "DYCH TECHNOLOGIES" and the tagline in deep navy
+ * and purple, which measure between 1.3:1 and 1.7:1 against this site's
+ * near-black substrate. Rendering that artwork here would be illegible, so
+ * only the mark is used as an image and the words are set in the site's own
+ * type at full contrast. The complete supplied lockup lives at
+ * /logo/dych-lockup-on-white.png for light surfaces.
  */
-export function Wordmark({ showProduct = true }: { showProduct?: boolean }) {
+export function Wordmark({
+  /** Corporate tagline for the footer; the nav uses the product name instead. */
+  subline = "SMART SCHOOL SYSTEMS",
+  markHeight = 34,
+  /** The nav hides the subline below xl to keep its single line uncrowded. */
+  sublineClass = "",
+  textClass = "text-[1.0625rem]",
+  /** True only in the navbar, which is above the fold. */
+  priority = false,
+}: {
+  subline?: string;
+  markHeight?: number;
+  sublineClass?: string;
+  textClass?: string;
+  priority?: boolean;
+}) {
   return (
-    <span className="flex items-center gap-2.5">
-      <span
+    <span className="flex items-center gap-3">
+      <Image
+        src="/logo/dych-mark.png"
+        alt=""
         aria-hidden
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.625rem] bg-accent"
-      >
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
-          <path
-            d="M5 20V7.5A2.5 2.5 0 0 1 7.5 5H12M19 20V7.5A2.5 2.5 0 0 0 16.5 5H15"
-            stroke="var(--accent-ink)"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          <path
-            d="M9 13.5 11.25 16 16 10.5"
-            stroke="var(--accent-ink)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-      {/* nowrap on both lines: the nav must stay on one line at 1024px. */}
-      <span className="flex flex-col leading-none whitespace-nowrap">
-        <span className="text-[1.0625rem] font-bold tracking-[-0.02em] text-foreground">
+        width={320}
+        height={235}
+        priority={priority}
+        loading={priority ? undefined : "lazy"}
+        style={{ height: markHeight, width: "auto" }}
+        className="shrink-0"
+      />
+      <span className="flex flex-col whitespace-nowrap leading-none">
+        <span className={`${textClass} font-bold tracking-[-0.02em] text-foreground`}>
           DYCH TECHNOLOGIES
         </span>
-        {showProduct && (
-          <span className="mt-1 text-[0.625rem] font-medium tracking-[0.14em] text-faint">
-            SMART SCHOOL SYSTEMS
+        {subline && (
+          <span
+            className={`mt-1 text-[0.625rem] font-medium tracking-[0.14em] text-faint ${sublineClass}`}
+          >
+            {subline}
           </span>
         )}
       </span>
