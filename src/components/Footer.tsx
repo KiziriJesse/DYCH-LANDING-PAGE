@@ -1,117 +1,55 @@
-"use client";
+/* BAND 8 — DARK, 0.79vh. */
 
-import { Mail, Phone, MapPin } from "lucide-react";
+const COLS = [
+  {
+    label: "10 — Products",
+    links: [
+      { href: "/#recognition", text: "Facial Recognition" },
+      { href: "/#vision-one", text: "Vision One" },
+    ],
+  },
+  {
+    label: "20 — Company",
+    links: [
+      { href: "/about", text: "About" },
+      { href: "/#contact", text: "Contact" },
+      { href: "/sign-in", text: "Sign in" },
+    ],
+  },
+];
 
 export function Footer() {
   return (
-    <footer id="contact-team" className="bg-slate-950 border-t border-slate-900 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          {/* Contact Info */}
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-8">Contact Our Team</h2>
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <Phone className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Call Us</p>
-                  <a href="tel:+256767870035" className="block text-white hover:text-cyan-400 transition-colors">
-                    +256 767870035
+    <footer className="bg-[var(--ink)] px-[var(--shell)] pb-12 pt-24 text-[var(--paper)]">
+      <div className="grid gap-16 md:grid-cols-12">
+        <p className="font-[family-name:var(--font-display)] text-2xl font-light tracking-tight md:col-span-4">
+          dych
+        </p>
+
+        {COLS.map((c) => (
+          <nav key={c.label} className="md:col-span-3" aria-label={c.label}>
+            <p className="eyebrow text-[var(--paper)]/40">{c.label}</p>
+            <ul className="mt-6 space-y-1">
+              {c.links.map((l) => (
+                <li key={l.text}>
+                  <a
+                    href={l.href}
+                    className="flex h-11 items-center text-[var(--paper)]/80 transition-colors hover:text-[var(--accent-on-dark)] md:h-8"
+                  >
+                    {l.text}
                   </a>
-                  <a href="tel:+256788195067" className="block text-white hover:text-cyan-400 transition-colors">
-                    +256 788195067
-                  </a>
-                </div>
-              </div>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
 
-              <div className="flex items-start space-x-4">
-                <Mail className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Email Us</p>
-                  <a href="mailto:xristeck@gmail.com" className="block text-white hover:text-cyan-400 transition-colors">
-                    xristeck@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <MapPin className="w-6 h-6 text-cyan-400 mt-1" />
-                <div>
-                  <p className="text-slate-400">Location</p>
-                  <p className="text-white">Kampala, Uganda</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800">
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="Your Name"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-slate-400 mb-1">
-                  Company / School
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="School Name"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="email@example.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-1">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="How can we help you?"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-cyan-500/20"
-              >
-                Send Message
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="border-t border-slate-900 pt-8 text-center">
-          <p className="text-slate-500">
-            © {new Date().getFullYear()} Dych Technologies. All rights reserved.
-          </p>
-        </div>
+      <div className="mt-24 flex flex-col gap-4 border-t border-[var(--paper)]/12 pt-8 text-sm text-[var(--paper)]/40 sm:flex-row sm:justify-between">
+        <p>© {new Date().getFullYear()} Dych Technologies</p>
+        {/* [PLACEHOLDER] legal links — no policies exist yet */}
+        <p>Privacy Policy · Terms of Use</p>
       </div>
     </footer>
   );
 }
-
