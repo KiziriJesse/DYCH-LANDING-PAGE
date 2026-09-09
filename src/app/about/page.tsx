@@ -41,7 +41,7 @@ const TEAM = [
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="theme-light">
       <PageHeader
         title="Intelligent automation, built by DYCH Technologies."
         intro="We build automation and system management for industries and education across Africa, from Kampala. Smart School Systems is what that work looks like when it is pointed at a school gate."
@@ -154,6 +154,6 @@ export default function AboutPage() {
         title="Come and meet the team that would install it."
         body="A site assessment is a walk around your entry points and an hour of questions, with the people who would do the work."
       />
-    </>
+    </div>
   );
 }

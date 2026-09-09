@@ -3,8 +3,15 @@
 /* ============================================================
    DYCH Technologies - design tokens
 
-   Fixed dark theme. This is a dark-themed brand site, not a
-   system-preference toggle, so there is no prefers-color-scheme block.
+   Two scopes, one set of token names. Dark is the default and lives on :root;
+   .theme-light overrides the same names locally, so every component that
+   already reads bg-background / text-foreground / border-border flips with no
+   per-component styling. .theme-dark re-asserts the dark scope for islands
+   that must stay dark inside a light page, which is how CtaBand keeps its own
+   register at the foot of a light page.
+
+   Neither scope follows the system preference: which sections are light and
+   which are dark is a composition decision, not a user setting.
 
    Accent policy (build plan 0.4a): four feature accents are kept because they
    are functional product branding, not decoration. Each is calibrated below
@@ -19,7 +26,8 @@
    Z-index scale (locked): raise 10 | menu 40 | nav 50 | grain 60
    ============================================================ */
 
-:root {
+:root,
+.theme-dark {
   color-scheme: dark;
 
   /* Substrate. Near-black navy, deliberately not slate-950 (#020617),
@@ -72,6 +80,78 @@
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Light scope. Same token names, local values. Every contrast below was
+   measured against this scope's own --background (#f7f7f8), not assumed.
+
+   The build plan proposed #8b6cf0 as a starting point for the light accent;
+   it measures 3.57:1 on paper and fails AA, so it is not used. #6b3fd6 is
+   hsl(258 65% 54%): the same hue as the logo master and as the dark accent,
+   taken darker rather than lighter because the ground flipped.
+
+   Note --accent-ink inverts here. On the dark accent, near-black wins; on this
+   deeper one, white wins by 6.35:1 to 3.05:1. */
+@layer base {
+.theme-light {
+  color-scheme: light;
+
+  /* Painted on the scope itself, so a wrapper can never let the dark body
+     show through a gap between sections. */
+  background-color: var(--background);
+  color: var(--foreground);
+
+  --background: #f7f7f8;
+  --surface: #ffffff;
+  --surface-raised: #f0f0f2;
+  --surface-sunk: #e8e8ea;
+
+  /* Reuses the dark scope's background value as ink, so light-section text
+     carries the same hue family rather than introducing a second near-black. */
+  --foreground: #0a0e14; /* 18.06:1 on paper */
+  --muted: #565963; /*  6.53:1 */
+  --faint: #6b7080; /*  4.61:1 */
+
+  --border: rgba(10, 14, 20, 0.1);
+  --border-strong: rgba(10, 14, 20, 0.2);
+  --shade: 0 24px 60px -28px rgba(10, 14, 20, 0.18);
+  --shade-lift: 0 32px 80px -30px rgba(10, 14, 20, 0.26);
+
+  --accent: #6b3fd6; /* hsl(258 65% 54%) - 5.93:1 on paper */
+  --accent-ink: #ffffff; /* 6.35:1 on the accent fill */
+  --accent-soft: rgba(107, 63, 214, 0.1);
+  --accent-line: rgba(107, 63, 214, 0.32);
+
+  /* A glow reads as a smudge on paper, so the one CTA effect becomes a tinted
+     lift instead. Same role, same restraint: primary CTAs only. */
+  --glow-cta: 0 10px 24px -10px rgba(107, 63, 214, 0.55);
+  --glow-cta-hover: 0 14px 32px -10px rgba(107, 63, 214, 0.7);
+
+  /* The four feature accents are deliberately NOT overridden. All four fail AA
+     on paper, but none of them appear on a light section: they live only in
+     ProductSnapshot, /product and RecognitionFigure, which all stay dark. If a
+     feature accent is ever used on a light page, it needs a variant here. */
+}
+}
+
+/* The closing band is a third register: neither the light scope nor the dark
+   one, but a solid brand plate, which is how the prototype closes a page.
+
+   It does not reuse the dark scope's --accent. That value is lightened for
+   legibility ON near-black, so a full-width slab of it reads washed out and
+   the near-black label on top goes muddy. This uses the deeper light-scope
+   purple with white text at 6.35:1 instead.
+
+   Overriding --surface and --accent locally means the CTA inside resolves to a
+   white pill with a deep purple label through the existing on-accent tone,
+   with no special casing in the button. */
+@layer base {
+.band-accent {
+  --surface: #ffffff;
+  --accent: #6b3fd6;
+  background-color: #6b3fd6;
+  color: #ffffff;
+}
 }
 
 @theme inline {

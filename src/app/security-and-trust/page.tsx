@@ -155,7 +155,7 @@ const QUESTIONS = [
 
 export default function SecurityAndTrustPage() {
   return (
-    <>
+    <div className="theme-light">
       <PageHeader
         title="Children’s biometric data, handled carefully."
         intro="Recognition means holding data about children, so how it is captured, stored, kept apart from other schools, exported and destroyed matters more than any feature on this site. This page sets out how that works, in terms a head teacher can take to a board meeting."
@@ -211,6 +211,6 @@ export default function SecurityAndTrustPage() {
         title="Bring your data protection questions to the site assessment."
         body="We would rather answer them in front of your board than after an installation. A site assessment costs nothing and ends with a written scope."
       />
-    </>
+    </div>
   );
 }

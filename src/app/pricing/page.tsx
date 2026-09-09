@@ -79,7 +79,7 @@ const FAQS = [
 
 export default function PricingPage() {
   return (
-    <>
+    <div className="theme-light">
       <PageHeader
         title="Start with one gate. Decide after that."
         intro="Two ways in: a trial on a single entry point, or a full deployment across the school. Hardware, installation and training are part of the plan rather than a separate invoice."
@@ -195,6 +195,6 @@ export default function PricingPage() {
         title="We will quote after we have seen the site, not before."
         body="Entry points, power and the size of your roll all change the number. A site assessment costs nothing and ends with a written scope."
       />
-    </>
+    </div>
   );
 }

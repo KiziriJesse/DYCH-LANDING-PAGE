@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import type { ReactNode } from "react";
 
-type Tone = "primary" | "quiet";
+type Tone = "primary" | "quiet" | "on-accent";
 
 const base =
   "group inline-flex items-center gap-3 rounded-full pl-6 pr-2 py-2 text-[0.9375rem] font-semibold whitespace-nowrap " +
@@ -10,17 +10,23 @@ const base =
   "active:scale-[0.98]";
 
 const tones: Record<Tone, string> = {
-  /* The only glow on the site. Cyan on near-black, 8.3:1 label contrast. */
+  /* The only glow on the site, and only ever on a primary CTA. */
   primary:
     "border border-transparent bg-accent text-accent-ink shadow-[var(--glow-cta)] hover:shadow-[var(--glow-cta-hover)]",
   /* No glow, no fill: a hairline pill that reads as secondary at a glance. */
   quiet:
     "glass border border-border-strong bg-surface/60 text-foreground backdrop-blur-sm hover:border-accent-line hover:bg-surface",
+  /* For a CTA sitting on a solid accent ground, where the primary tone would
+     be the same colour as the thing behind it. Inverts to a surface fill with
+     an accent label. */
+  "on-accent":
+    "border border-transparent bg-surface text-accent hover:bg-surface/90",
 };
 
 const wells: Record<Tone, string> = {
   primary: "bg-accent-ink/15 text-accent-ink",
   quiet: "bg-accent-soft text-accent",
+  "on-accent": "bg-accent/12 text-accent",
 };
 
 export function Cta({

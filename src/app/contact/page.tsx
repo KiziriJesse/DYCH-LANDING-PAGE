@@ -40,7 +40,7 @@ const CHANNELS: {
 
 export default function ContactPage() {
   return (
-    <>
+    <div className="theme-light">
       <PageHeader
         title="Talk to the team in Kampala."
         intro="Tell us the size of your roll and how attendance is taken today, and we will come back with what an installation would involve at your site. A site assessment costs nothing and ends with a written scope."
@@ -134,6 +134,6 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
-    </>
+    </div>
   );
 }

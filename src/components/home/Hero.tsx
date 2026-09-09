@@ -6,6 +6,10 @@ import { DetectionFigure } from "@/components/ui/DetectionFigure";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
+/* The light scope’s accent, #6b3fd6. The component defaults to the dark-theme
+   accent, which is too pale to read on paper. */
+const LIGHT_MESH: [number, number, number] = [107, 63, 214];
+
 /**
  * Asymmetric editorial composition: copy on the left, the detection mesh on
  * the right, rather than the centred-over-video block this used to be.
@@ -14,9 +18,8 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
  * filter. DetectionFigure is the visual now, and it says something true about
  * the product instead of being stock footage of a city.
  *
- * Phase 7 moves this section to the light ground the figure was originally
- * tuned for, and will pass a light-tuned `stroke` accordingly. Until then it
- * runs on the dark substrate with the dark-theme accent.
+ * The section runs on the light scope, which is the ground this figure was
+ * originally drawn for, with a stroke tuned for paper rather than near-black.
  */
 export function Hero() {
   const reduce = useReducedMotion();
@@ -24,7 +27,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 lg:px-10 lg:pb-28 lg:pt-40"
+      className="relative overflow-hidden bg-background px-4 pb-20 pt-32 sm:px-6 lg:px-10 lg:pb-28 lg:pt-40"
     >
       <div className="mx-auto grid max-w-[1240px] items-center gap-14 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-7">
@@ -68,7 +71,7 @@ export function Hero() {
           transition={{ duration: 1.1, delay: reduce ? 0 : 0.12, ease: EASE_OUT_EXPO }}
           className="hidden lg:col-span-5 lg:block"
         >
-          <DetectionFigure className="mx-auto w-full max-w-[24rem]" />
+          <DetectionFigure className="mx-auto w-full max-w-[24rem]" stroke={LIGHT_MESH} />
         </motion.div>
       </div>
 
@@ -79,7 +82,7 @@ export function Hero() {
         transition={{ duration: 0.9, delay: reduce ? 0 : 0.2, ease: EASE_OUT_EXPO }}
         className="mx-auto mt-16 max-w-[1240px] lg:hidden"
       >
-        <DetectionFigure className="w-2/3 max-w-[16rem]" />
+        <DetectionFigure className="w-2/3 max-w-[16rem]" stroke={LIGHT_MESH} />
       </motion.div>
     </section>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -10,6 +10,7 @@ import {
   useReducedMotion,
   useScroll,
 } from "framer-motion";
+import { CaretDown } from "@phosphor-icons/react";
 import { NAV_LINKS, CONTACT } from "@/lib/site";
 import { Cta } from "@/components/ui/Cta";
 import { Wordmark } from "@/components/ui/Wordmark";
@@ -17,12 +18,23 @@ import { Wordmark } from "@/components/ui/Wordmark";
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
 
+/** The five capabilities, as anchors into /product. */
+const PRODUCT_MENU = [
+  { label: "Facial Recognition", href: "/product#security" },
+  { label: "Attendance", href: "/product#attendance" },
+  { label: "Parent Alerts", href: "/product#communication" },
+  { label: "Fees & Finance", href: "/product#finance" },
+  { label: "Analytics", href: "/product#analytics" },
+];
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const reduce = useReducedMotion();
+  const productRef = useRef<HTMLLIElement>(null);
 
   // A discrete flip, not a per-frame value, so React state is safe here.
   useMotionValueEvent(scrollY, "change", (y) => setLifted(y > 24));
@@ -47,23 +59,46 @@ export function Navbar() {
     };
   }, [open]);
 
+  // The Product disclosure closes on Escape and on a pointer down elsewhere.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!productRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onDown);
+    };
+  }, [menuOpen]);
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const productActive = isActive("/product");
+
   return (
     <>
-      {/* Floating island rather than an edge-to-edge bar glued to the top. */}
-      <header className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex justify-center px-4 pt-4 sm:pt-5">
+      {/* Floating island, now weighted to the right rather than centred. The
+          pill carries .theme-light so its own contents resolve against a light
+          ground: dark ink, a white surface and the deeper light accent. That
+          also settles the wordmark, which would otherwise still be set in the
+          dark scope's near-white. */}
+      <header className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex justify-end px-4 pt-4 sm:pt-5">
         <motion.nav
           aria-label="Primary"
           initial={reduce ? false : { y: -28, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
           className={
-            "glass pointer-events-auto flex h-[4.25rem] w-full max-w-[1240px] items-center justify-between gap-4 rounded-full border pl-5 pr-2 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] " +
+            "theme-light glass pointer-events-auto flex h-[4.25rem] w-full max-w-[1240px] items-center justify-between gap-4 rounded-full border pl-5 pr-2 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] " +
             (lifted
-              ? "border-border bg-surface/85 shadow-[var(--shade)]"
-              : "border-transparent bg-surface/40")
+              ? "border-border bg-white/90 shadow-[var(--shade)]"
+              : "border-transparent bg-white/70")
           }
         >
           <Link
@@ -80,7 +115,83 @@ export function Navbar() {
           </Link>
 
           <ul className="hidden items-center gap-0.5 lg:flex">
-            {NAV_LINKS.map((link) => {
+            {/* Product is a disclosure rather than a link: it reveals the five
+                capabilities as anchors into /product. */}
+            <li
+              ref={productRef}
+              className="relative"
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") setMenuOpen(true);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") setMenuOpen(false);
+              }}
+            >
+              <button
+                type="button"
+                aria-expanded={menuOpen}
+                aria-controls="product-menu"
+                // The trigger stands in for the Product route now that it is a
+                // disclosure rather than a link, so it still has to carry the
+                // current-page signal. Without this, /product is the one route
+                // with no announced nav state.
+                aria-current={productActive ? "page" : undefined}
+                onClick={() => setMenuOpen((v) => !v)}
+                className={
+                  "relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-300 xl:px-3 " +
+                  (productActive ? "text-foreground" : "text-muted hover:text-foreground")
+                }
+              >
+                Product
+                <motion.span
+                  aria-hidden
+                  animate={{ rotate: menuOpen ? 180 : 0 }}
+                  transition={reduce ? { duration: 0 } : { duration: 0.3, ease: EASE_GLIDE }}
+                  className="flex"
+                >
+                  <CaretDown size={12} weight="bold" />
+                </motion.span>
+                {productActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    aria-hidden
+                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-[var(--accent-line)]"
+                    transition={{ duration: 0.45, ease: EASE_GLIDE }}
+                  />
+                )}
+              </button>
+
+              <AnimatePresence>
+                {menuOpen && (
+                  <motion.div
+                    id="product-menu"
+                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: EASE_GLIDE }}
+                    // pt-3 rather than mt-3: the pointer must not cross a gap
+                    // between the trigger and the panel.
+                    className="absolute left-0 top-full pt-3"
+                  >
+                    <ul className="min-w-[15rem] rounded-[1.25rem] border border-border bg-surface p-2 shadow-[var(--shade-lift)]">
+                      {PRODUCT_MENU.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="block rounded-[0.75rem] px-3.5 py-2.5 text-sm font-medium text-muted transition-colors duration-200 hover:bg-accent-soft hover:text-foreground"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+
+            {NAV_LINKS.filter((l) => l.href !== "/product").map((link) => {
               const active = isActive(link.href);
               return (
                 <li key={link.href}>
@@ -147,7 +258,8 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE_GLIDE }}
-            className="glass fixed inset-0 z-menu overflow-y-auto overscroll-contain bg-background/95 backdrop-blur-2xl lg:hidden"
+            // Light, to match the now-light nav trigger floating above it.
+            className="theme-light glass fixed inset-0 z-menu overflow-y-auto overscroll-contain bg-background/95 backdrop-blur-2xl lg:hidden"
           >
             <nav
               aria-label="Mobile"

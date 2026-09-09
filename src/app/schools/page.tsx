@@ -51,7 +51,7 @@ const TESTIMONIALS = [
 
 export default function SchoolsPage() {
   return (
-    <>
+    <div className="theme-light">
       <PageHeader
         title="The schools already running on DYCH."
         intro="Who is using the system, what changed for them, and what they say about it in their own words."
@@ -151,6 +151,6 @@ export default function SchoolsPage() {
         title="Ask one of them what the first term was like."
         body="We will put you in touch with a school of a similar size, and you can hear it without us in the room."
       />
-    </>
+    </div>
   );
 }
