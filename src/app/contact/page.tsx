@@ -8,6 +8,7 @@ import {
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { Button } from "@/components/ui/Button";
 import { CONTACT } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -40,7 +41,7 @@ const CHANNELS: {
 
 export default function ContactPage() {
   return (
-    <div className="theme-light">
+    <>
       <PageHeader
         title="Talk to the team in Kampala."
         intro="Tell us the size of your roll and how attendance is taken today, and we will come back with what an installation would involve at your site. A site assessment costs nothing and ends with a written scope."
@@ -66,20 +67,12 @@ export default function ContactPage() {
               <ul className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 {CONTACT.whatsapp.map((line) => (
                   <li key={line.href}>
-                    <a
-                      href={line.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-3 rounded-full border border-accent-line bg-accent-soft py-2.5 pl-4 pr-5 text-[0.9375rem] font-semibold text-foreground transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent hover:bg-surface-raised active:scale-[0.98]"
-                    >
-                      <WhatsappLogo
-                        size={20}
-                        weight="light"
-                        aria-hidden
-                        className="text-accent"
-                      />
+                    {/* The glyph slot carries the WhatsApp mark instead of the
+                        default arrow: on a control whose whole purpose is one
+                        named channel, the channel is the more useful glyph. */}
+                    <Button href={line.href} size="lg" icon={WhatsappLogo}>
                       <span className="nums">{line.display}</span>
-                    </a>
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -91,7 +84,7 @@ export default function ContactPage() {
                   <dt className="sr-only">{label}</dt>
                   <span
                     aria-hidden
-                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-accent"
+                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
                   >
                     <Icon size={22} weight="light" />
                   </span>
@@ -102,7 +95,7 @@ export default function ContactPage() {
                         <a
                           key={line.text}
                           href={line.href}
-                          className="nums mt-1 block text-[0.9375rem] text-foreground underline decoration-[var(--accent-line)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-accent"
+                          className="nums mt-1 block text-[0.9375rem] text-foreground underline decoration-[var(--accent-line)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-accent-on-light"
                         >
                           {line.text}
                         </a>
@@ -134,6 +127,6 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
-    </div>
+    </>
   );
 }

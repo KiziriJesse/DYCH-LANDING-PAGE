@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  BellRinging,
-  ChartLineUp,
-  Fingerprint,
-  SecurityCamera,
+  DeviceMobileSpeaker,
+  Export,
+  ListChecks,
+  ScanSmiley,
 } from "@phosphor-icons/react";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -16,8 +16,8 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const STEPS = [
   {
     id: "step-security",
-    title: "Security",
-    Icon: SecurityCamera,
+    title: "Recognition",
+    Icon: ScanSmiley,
     lead: "Recognition happens at the boundary, so the record starts at the moment someone actually arrives rather than when a teacher gets to it.",
     detail: [
       {
@@ -37,7 +37,7 @@ const STEPS = [
   {
     id: "step-attendance",
     title: "Attendance",
-    Icon: Fingerprint,
+    Icon: ListChecks,
     lead: "The entry event is the attendance record. There is no second step for anyone to remember, and no paper register to transcribe afterwards.",
     detail: [
       {
@@ -57,7 +57,7 @@ const STEPS = [
   {
     id: "step-alerts",
     title: "Alerts",
-    Icon: BellRinging,
+    Icon: DeviceMobileSpeaker,
     lead: "A parent hears within the minute, not at the end of the day. This is the part that changes what a school can promise a family.",
     detail: [
       {
@@ -76,8 +76,8 @@ const STEPS = [
   },
   {
     id: "step-analytics",
-    title: "Analytics",
-    Icon: ChartLineUp,
+    title: "Records",
+    Icon: Export,
     lead: "Everything above produces records. This is where they become something a head teacher can take into a meeting.",
     detail: [
       {
@@ -90,7 +90,7 @@ const STEPS = [
       },
       {
         label: "What the school sees",
-        body: "Attendance trends by class and by pupil, a searchable security log, and exports for board papers and ministry returns.",
+        body: "Live counts by class and by pupil, a searchable entry log, and exports for board papers and ministry returns. Not a trend dashboard: the records, in a form you can take out.",
       },
     ],
   },
@@ -167,7 +167,7 @@ export function StepSpine() {
                       className={
                         "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 " +
                         (isActive
-                          ? "border-accent-line bg-surface text-accent"
+                          ? "border border-accent-line bg-wash text-accent-on-light"
                           : "border-border bg-surface-raised text-muted")
                       }
                     >
@@ -196,7 +196,7 @@ export function StepSpine() {
             >
               <span
                 aria-hidden
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-surface-raised text-accent lg:hidden"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light lg:hidden"
               >
                 <step.Icon size={24} weight="light" />
               </span>

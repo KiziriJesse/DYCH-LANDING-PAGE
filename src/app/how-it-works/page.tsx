@@ -14,9 +14,13 @@ export const metadata: Metadata = {
 export default function HowItWorksPage() {
   return (
     <>
+      {/* Written from the school deployment, which is the one with source
+          documents behind it. The mechanism is identical at a business
+          entrance, so the header says so rather than leaving a business
+          reader to work out whether this page is about them. */}
       <PageHeader
-        title="From the gate to the head teacher, in one line."
-        intro="Four parts pass the same record along, so nothing is re-typed between the gate log and the report at the end of term. Each one below covers what it needs on site, what happens without anyone doing it, and what the school and the parent actually see."
+        title="From the door to the office, in one line."
+        intro="Four parts pass the same record along, so nothing is re-typed between the entry log and the report at the end of the term. It is written here from a school deployment, because that is the one with the fullest detail; at a business entrance the mechanism is the same and only the nouns change. Each part below covers what it needs on site, what happens without anyone doing it, and what people actually see."
       />
 
       <StepSpine />

@@ -1,30 +1,29 @@
 /**
- * RecognitionFigure - illustrative camera view for the security capability.
+ * RecognitionFigure - illustrative camera view for the recognition capability.
  *
- * Ported from `Reidentification.tsx` on the prototype branch. The SVG grammar
- * (bounding box, corner ticks, label chip) is unchanged; only the colours move
- * onto this branch's tokens.
+ * THE ORANGE IS GONE. This figure used #e8620f for an unmatched face, on the
+ * reasoning that an unmatched face is a real product signal rather than
+ * decoration. That reasoning was sound under the old multi-accent system; it
+ * does not survive the two-colour one, where the whole site is a paper family
+ * and one purple and there is no third hue to spend.
  *
- * ORANGE POLICY, carried over from the original: #e8620f appears ONLY inside
- * this figure, because an unmatched face is a real product signal rather than
- * decoration. It is never used as site chrome - no orange buttons, links or
- * headings anywhere else.
+ * So matched and unmatched are now told apart by TREATMENT rather than by
+ * hue: a matched face gets a solid box with a filled label chip, an unmatched
+ * one gets a dashed box with an outlined chip. That is arguably the better
+ * signal anyway - it survives greyscale, it survives colour blindness, and it
+ * does not rely on a reader knowing that orange means "check this one".
  *
- * Colour note: matched boxes use --accent-security rather than the brand
- * purple. This figure belongs to the security capability, so its own feature
- * accent is the correct one here; brand purple stays reserved for interactive
- * controls.
+ * The label chip states which is which in words as well, so nothing here
+ * depends on the visual distinction alone.
  *
  * CONTENT NOTE: the original legend read "Repeat unmatched / Seen before,
  * still unknown", which claims the product tracks an unmatched visitor across
- * repeat visits. Nothing in this branch's copy says that: /product and
- * /how-it-works both describe a single unmatched face being flagged at the
- * gate for a person to check. The safer legend is used here instead. If DYCH
- * confirms repeat-visit tracking is real, restore the original wording and the
- * "x3" count on the chip.
+ * repeat visits. Nothing in this branch's copy says that: the product pages
+ * and /how-it-works both describe a single unmatched face being flagged at the
+ * entry point for a person to check. The safer legend is used here instead. If
+ * DYCH confirms repeat-visit tracking is real, restore the original wording
+ * and the "x3" count on the chip.
  */
-
-const ORANGE = "#e8620f";
 
 export function RecognitionFigure() {
   return (
@@ -34,7 +33,7 @@ export function RecognitionFigure() {
           viewBox="0 0 400 300"
           className="absolute inset-0 size-full"
           role="img"
-          aria-label="Illustrative camera view with three tracked faces: two matched, one unmatched and flagged for the gate to check"
+          aria-label="Illustrative camera view with three tracked faces: two matched, shown with solid boxes, and one unmatched, shown with a dashed box and flagged for a person to check"
         >
           {/* Frame scan lines. Restrained, not a decorative glow. */}
           <g stroke="var(--foreground)" strokeWidth="0.3" opacity="0.07">
@@ -43,23 +42,9 @@ export function RecognitionFigure() {
             ))}
           </g>
 
-          <TrackedBox
-            x={40}
-            y={70}
-            w={70}
-            h={88}
-            color="var(--accent-security)"
-            label="ID 4471"
-          />
-          <TrackedBox
-            x={165}
-            y={110}
-            w={62}
-            h={78}
-            color="var(--accent-security)"
-            label="ID 2208"
-          />
-          <TrackedBox x={280} y={84} w={76} h={94} color={ORANGE} label="UNMATCHED" />
+          <TrackedBox x={40} y={70} w={70} h={88} label="ID 4471" />
+          <TrackedBox x={165} y={110} w={62} h={78} label="ID 2208" />
+          <TrackedBox x={280} y={84} w={76} h={94} label="UNMATCHED" unmatched />
         </svg>
       </div>
 
@@ -68,8 +53,7 @@ export function RecognitionFigure() {
           <dt className="flex items-center gap-2 text-sm text-muted">
             <span
               aria-hidden
-              className="inline-block size-3 border"
-              style={{ borderColor: "var(--accent-security)" }}
+              className="inline-block size-3 border border-accent bg-accent"
             />
             Matched
           </dt>
@@ -79,12 +63,11 @@ export function RecognitionFigure() {
           <dt className="flex items-center gap-2 text-sm text-muted">
             <span
               aria-hidden
-              className="inline-block size-3 border"
-              style={{ borderColor: ORANGE }}
+              className="inline-block size-3 border border-dashed border-accent"
             />
             Unmatched
           </dt>
-          <dd className="text-sm text-muted">Flagged for the gate to check</dd>
+          <dd className="text-sm text-muted">Flagged for a person to check</dd>
         </div>
       </dl>
 
@@ -100,36 +83,57 @@ function TrackedBox({
   y,
   w,
   h,
-  color,
   label,
+  unmatched = false,
 }: {
   x: number;
   y: number;
   w: number;
   h: number;
-  color: string;
   label: string;
+  unmatched?: boolean;
 }) {
+  const chipW = label.length * 6.2 + 8;
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} fill="none" stroke={color} strokeWidth="1.5" />
+      <rect
+        x={x}
+        y={y}
+        width={w}
+        height={h}
+        fill="none"
+        stroke="var(--accent)"
+        strokeWidth="1.5"
+        strokeDasharray={unmatched ? "5 4" : undefined}
+      />
       {[
         [x, y],
         [x + w, y],
         [x, y + h],
         [x + w, y + h],
       ].map(([cx, cy], i) => (
-        <g key={i} stroke={color} strokeWidth="2.5">
+        <g key={i} stroke="var(--accent)" strokeWidth="2.5">
           <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} />
           <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} />
         </g>
       ))}
-      <rect x={x} y={y - 15} width={label.length * 6.2 + 8} height="13" fill={color} />
+      {/* Matched: filled chip, paper label. Unmatched: outlined chip, accent
+          label - the same inversion the buttons use. */}
+      <rect
+        x={x}
+        y={y - 15}
+        width={chipW}
+        height="13"
+        fill={unmatched ? "var(--surface)" : "var(--accent)"}
+        stroke="var(--accent)"
+        strokeWidth={unmatched ? 1 : 0}
+      />
       <text
         x={x + 4}
         y={y - 5}
-        fill="var(--background)"
+        fill={unmatched ? "var(--accent-on-light)" : "var(--accent-ink)"}
         fontSize="8.5"
+        fontWeight={unmatched ? 600 : 400}
         fontFamily="var(--font-plex), sans-serif"
         letterSpacing="0.06em"
       >

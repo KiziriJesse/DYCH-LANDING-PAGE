@@ -1,4 +1,4 @@
-import { CloudSlash, DeviceMobile, Lock } from "@phosphor-icons/react/dist/ssr";
+import { CloudSlash, DeviceMobile, HardDrives } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -63,7 +63,7 @@ export function Proof() {
               >
                 <span
                   aria-hidden
-                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-accent"
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
                 >
                   <point.Icon {...ICON} />
                 </span>
@@ -82,9 +82,12 @@ export function Proof() {
           <div className="rounded-card border-l-2 border-accent bg-surface-raised/60 py-8 pl-8 pr-7">
             <span
               aria-hidden
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line text-accent"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
             >
-              <Lock size={22} weight="light" />
+              {/* HardDrives, not a padlock. The claim is that matching runs
+                  on the school own machine; a padlock is the generic security
+                  glyph and says nothing about where. */}
+              <HardDrives size={22} weight="light" />
             </span>
             <p className="mt-7 text-xl leading-relaxed text-foreground sm:text-2xl">
               All face data is matched and encrypted on-device. No photos ever leave
@@ -97,7 +100,7 @@ export function Proof() {
             </p>
             <Link
               href="/security-and-trust"
-              className="mt-7 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
+              className="mt-7 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
             >
               How we handle children&rsquo;s data
             </Link>

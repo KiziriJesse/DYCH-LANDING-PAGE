@@ -9,27 +9,20 @@ import { ClosingCta } from "@/components/home/ClosingCta";
  * Six sections, six different layout families: media hero, text-led list,
  * asymmetric bento, horizontal rail, split proof, solid panel.
  *
- * The page alternates light and dark bands rather than running one substrate
- * throughout. Light carries the human sections: the hero, the problem framing
- * and the proof. Dark carries the technical ones, the product grid and the
- * pipeline, which is the register the prototype uses for its product bands.
- * The closing CtaBand brings its own dark scope.
+ * The page used to alternate light and dark bands. There is no dark scope any
+ * more, so section rhythm now comes from the three paper tones - --paper,
+ * white and --paper-alt - plus the one solid accent plate at the foot. Each
+ * section carries its own ground, so the order is legible here rather than
+ * hidden in a wrapper.
  */
 export default function Home() {
   return (
     <>
-      <div className="theme-light">
-        <Hero />
-        <Problem />
-      </div>
-
+      <Hero />
+      <Problem />
       <ProductSnapshot />
       <HowItWorksTeaser />
-
-      <div className="theme-light">
-        <Proof />
-      </div>
-
+      <Proof />
       <ClosingCta />
     </>
   );

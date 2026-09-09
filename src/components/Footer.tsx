@@ -23,9 +23,10 @@ export function Footer() {
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
               {BRAND.blurb}
             </p>
-            {/* text-muted, not text-faint: --faint (#64748b) on the footer's
-                --surface-sunk (#070a0f) measures 4.17:1 at 14px, which misses
-                AA. --muted clears it at 7.81:1 on the same ground. */}
+            {/* text-muted, not text-faint. Under the old dark palette --faint
+                measured 4.17:1 here and missed AA; both tokens have been
+                re-measured against the paper family since, but the more
+                readable one is still the right call for a footer. */}
             <p className="mt-5 flex items-center gap-2 text-sm text-muted">
               <MapPin {...ICON} aria-hidden />
               {CONTACT.location}
@@ -69,7 +70,7 @@ export function Footer() {
                   >
                     <span
                       aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
                     >
                       <WhatsappLogo {...ICON} />
                     </span>
@@ -88,7 +89,7 @@ export function Footer() {
                   >
                     <span
                       aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
                     >
                       <PhoneCall {...ICON} />
                     </span>
@@ -104,7 +105,7 @@ export function Footer() {
                 >
                   <span
                     aria-hidden
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent ring-1 ring-[var(--accent-line)] transition-transform duration-300 group-hover:scale-105"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
                   >
                     <EnvelopeSimple {...ICON} />
                   </span>

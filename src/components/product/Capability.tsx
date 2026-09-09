@@ -16,7 +16,6 @@ export type CapabilityData = {
   mediaAspect: string;
   /** Render a real figure instead of the marked placeholder slot. */
   renderMedia?: () => ReactNode;
-  accent: string;
   Icon: PhosphorIcon;
   layout: CapabilityLayout;
 };
@@ -32,8 +31,7 @@ function Head({ item, centered = false }: { item: CapabilityData; centered?: boo
     <div className={centered ? "flex flex-col items-center text-center" : ""}>
       <span
         aria-hidden
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface-raised"
-        style={{ color: item.accent }}
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
       >
         <item.Icon size={26} weight="light" />
       </span>

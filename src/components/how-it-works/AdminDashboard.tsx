@@ -2,7 +2,7 @@ import {
   Broadcast,
   MonitorPlay,
   PlugsConnected,
-  ShieldCheck,
+  IdentificationBadge,
   Table,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/ui/Reveal";
@@ -18,7 +18,7 @@ import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 
 const AREAS = [
   {
-    Icon: ShieldCheck,
+    Icon: IdentificationBadge,
     title: "People and permissions",
     body: "Roles decide what each account can open, and anything outside a role is hidden or refused outright rather than merely discouraged. A bursar, a class teacher and a head teacher are not sharing one login and hoping nobody wanders.",
   },
@@ -53,7 +53,7 @@ export function AdminDashboard() {
           <Reveal className="lg:col-span-6">
             <span
               aria-hidden
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-surface-raised text-accent"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
             >
               <MonitorPlay size={26} weight="light" />
             </span>
@@ -80,7 +80,7 @@ export function AdminDashboard() {
           <Reveal className="lg:col-span-6 lg:col-start-7 lg:row-start-1">
             <span
               aria-hidden
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-surface-raised text-accent"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
             >
               <Table size={26} weight="light" />
             </span>
@@ -113,7 +113,7 @@ export function AdminDashboard() {
               <dt className="flex items-center gap-4 lg:col-span-5">
                 <span
                   aria-hidden
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-accent"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
                 >
                   <area.Icon size={20} weight="light" />
                 </span>
@@ -129,10 +129,9 @@ export function AdminDashboard() {
         </dl>
 
         <Reveal delay={0.16}>
-          {/* text-muted, not text-faint. Measured: --faint (#64748b) on
-              --surface (#111823) is 3.74:1, which misses AA for 16px body
-              text. --muted (#94a3b8) clears it comfortably on the same
-              ground. */}
+          {/* text-muted, not text-faint. Under the old dark palette --faint
+              measured 3.74:1 on --surface and missed AA at this size. The
+              palette has changed since; the more readable token stays. */}
           <p className="mt-10 max-w-[62ch] leading-relaxed text-muted">
             A full administrator guide covers every screen and button in the
             dashboard. It is provided during onboarding rather than published here.

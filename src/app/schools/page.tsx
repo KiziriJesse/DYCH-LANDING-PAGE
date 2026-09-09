@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Schools",
@@ -68,7 +67,7 @@ const SUITABILITY = [
 
 export default function SchoolsPage() {
   return (
-    <div className="theme-light">
+    <>
       <PageHeader
         title="We are early, and we would rather say so."
         intro="This is the page where most suppliers would show you a wall of school badges. We are not going to invent one. Here is where DYCH actually is, what the first deployment involved, and what we will publish the moment a school has reported it."
@@ -79,7 +78,7 @@ export default function SchoolsPage() {
         <div className="mx-auto max-w-[1240px]">
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-on-light">
                 First deployment
               </p>
               <h2 className="mt-5 max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
@@ -191,18 +190,9 @@ export default function SchoolsPage() {
             It also means we will tell you if your school is not a good fit. We can
             afford to, and we would rather not learn it after the cameras are up.
           </p>
-          <Link
-            href="/contact"
-            className="group mt-10 inline-flex items-center gap-3 rounded-full border border-border-strong py-3.5 pl-6 pr-4 text-[0.9375rem] font-semibold text-foreground transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent-line active:scale-[0.98]"
-          >
+          <Button href="/contact" size="lg" className="mt-10">
             Talk to the people who would install it
-            <ArrowUpRight
-              size={17}
-              weight="bold"
-              aria-hidden
-              className="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[2px]"
-            />
-          </Link>
+          </Button>
         </Reveal>
       </section>
 
@@ -210,6 +200,6 @@ export default function SchoolsPage() {
         title="Be the school whose name goes on this page."
         body="We have capacity for a small number of installations this term, which means the people who built the system do the work themselves. A site visit costs nothing and ends with a written scope."
       />
-    </div>
+    </>
   );
 }

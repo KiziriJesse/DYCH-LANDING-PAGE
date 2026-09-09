@@ -25,22 +25,27 @@ const plexSans = IBM_Plex_Sans({
 });
 
 const description =
-  "DYCH Technologies builds Smart School Systems: facial-recognition entry, automatic attendance and instant parent alerts for schools across Uganda.";
+  "DYCH Technologies builds Smart Vision: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
+
+const title = "DYCH Technologies | Smart Vision";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://dychtechnologies.com"),
   title: {
-    default: "DYCH Technologies | Smart School Systems",
+    default: title,
     template: "%s | DYCH Technologies",
   },
   description,
   applicationName: "DYCH Technologies",
+  // "school fees tracking" was here. There is no fees capability in the
+  // product and no source document describing one, so it is not a term this
+  // site should be found for.
   keywords: [
     "school security Uganda",
     "facial recognition attendance",
-    "school management system Africa",
+    "access control Uganda",
+    "staff time tracking Africa",
     "parent notification SMS",
-    "school fees tracking",
     "DYCH Technologies",
   ],
   authors: [{ name: "DYCH Technologies" }],
@@ -49,19 +54,21 @@ export const metadata: Metadata = {
     locale: "en_UG",
     url: "https://dychtechnologies.com",
     siteName: "DYCH Technologies",
-    title: "DYCH Technologies | Smart School Systems",
+    title,
     description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "DYCH Technologies | Smart School Systems",
+    title,
     description,
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0e14",
+  // --paper. Was the old dark substrate, which tinted the mobile browser
+  // chrome near-black above a white page.
+  themeColor: "#faf9fd",
 };
 
 export default function RootLayout({

@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { Cta } from "@/components/ui/Cta";
+import { Button } from "@/components/ui/Button";
 
 /**
  * The closing band every page ends on.
@@ -18,7 +18,7 @@ import { Cta } from "@/components/ui/Cta";
  */
 export function CtaBand({ title, body }: { title: string; body: string }) {
   return (
-    <section className="theme-dark bg-background px-4 pb-28 pt-4 sm:px-6 lg:px-10 lg:pb-40">
+    <section className="bg-background px-4 pb-28 pt-4 sm:px-6 lg:px-10 lg:pb-40">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
           <div className="band-accent relative isolate overflow-hidden rounded-card px-6 py-16 text-center sm:px-12 lg:py-24">
@@ -30,9 +30,12 @@ export function CtaBand({ title, body }: { title: string; body: string }) {
             </p>
 
             <div className="mt-10 flex justify-center">
-              <Cta href="/contact" tone="on-accent">
+              {/* No variant needed: .band-accent re-points the accent
+                  tokens, so the standard outline comes out white-on-purple
+                  and fills white on hover. */}
+              <Button href="/contact" size="lg">
                 Book a Demo
-              </Cta>
+              </Button>
             </div>
           </div>
         </Reveal>

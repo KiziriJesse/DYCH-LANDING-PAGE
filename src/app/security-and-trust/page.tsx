@@ -164,10 +164,15 @@ const QUESTIONS = [
 
 export default function SecurityAndTrustPage() {
   return (
-    <div className="theme-light">
+    <>
+      {/* Deliberately still written for the school case. Children's biometric
+          data is the harder version of this problem, and a business reader
+          who is satisfied by the answers here will be satisfied by them for
+          staff. The intro says that rather than pretending the page is
+          audience-neutral when its examples plainly are not. */}
       <PageHeader
         title="Children’s biometric data, handled carefully."
-        intro="Recognition means holding data about children, so how it is captured, stored, kept apart from other schools, exported and destroyed matters more than any feature on this site. The short version: matching happens on your own hardware, and no photos leave the school. The rest of this page is what that means in practice, in terms a head teacher can take to a board meeting."
+        intro="Recognition means holding data about people, and about children in particular, so how it is captured, stored, kept apart from other customers, exported and destroyed matters more than any feature on this site. The short version: matching happens on your own hardware, and no photos leave your site. This page is written for schools because that is the strictest case; every commitment on it applies to staff and visitor data at a business too."
       />
 
       <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">
@@ -203,7 +208,7 @@ export default function SecurityAndTrustPage() {
               >
                 <span
                   aria-hidden
-                  className="nums mt-0.5 shrink-0 text-sm font-semibold text-accent"
+                  className="nums mt-0.5 shrink-0 text-sm font-semibold text-accent-on-light"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -220,6 +225,6 @@ export default function SecurityAndTrustPage() {
         title="Bring your data protection questions to the site assessment."
         body="We would rather answer them in front of your board than after an installation. A site assessment costs nothing and ends with a written scope."
       />
-    </div>
+    </>
   );
 }

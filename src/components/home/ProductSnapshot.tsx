@@ -5,6 +5,7 @@ import {
   Devices,
   ScanSmiley,
 } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
@@ -14,8 +15,7 @@ const FEATURES = [
   {
     title: "Facial Recognition Security",
     body: "Biometric and digital identification tied to the entry point, so the school knows who is on the grounds and who is not, without anyone walking a clipboard to the perimeter.",
-    href: "/product#security",
-    accent: "var(--accent-security)",
+    href: "/product/schools#security",
     Icon: ScanSmiley,
     span: "md:col-span-7 lg:row-span-2",
     shape: "lead" as const,
@@ -23,8 +23,7 @@ const FEATURES = [
   {
     title: "Automatic Attendance",
     body: "Arrival and departure are recorded as they happen. No manual register, so no transcription errors to chase at the end of term.",
-    href: "/product#attendance",
-    accent: "var(--accent-attendance)",
+    href: "/product/schools#attendance",
     Icon: ListChecks,
     span: "md:col-span-5",
     shape: "standard" as const,
@@ -32,8 +31,7 @@ const FEATURES = [
   {
     title: "Real-Time Parent Alerts",
     body: "A push notification within seconds of the scan, carrying the pupil’s photo so a parent can see it is their child. SMS follows as a fallback if the push goes unopened.",
-    href: "/product#communication",
-    accent: "var(--accent-communication)",
+    href: "/product/schools#communication",
     Icon: PaperPlaneTilt,
     span: "md:col-span-5",
     shape: "standard" as const,
@@ -44,8 +42,7 @@ const FEATURES = [
     // what a school is buying: camera, software, parent app, guard app.
     title: "The Guard App",
     body: "One screen at the gate instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival, and keeps working when the connection drops.",
-    href: "/product#guard-app",
-    accent: "var(--accent-security)",
+    href: "/product/schools#guard-app",
     Icon: Devices,
     span: "md:col-span-12",
     shape: "wide" as const,
@@ -66,18 +63,14 @@ function ReadMore() {
   );
 }
 
-function IconWell({
-  Icon,
-  accent,
-}: {
-  Icon: (typeof FEATURES)[number]["Icon"];
-  accent: string;
-}) {
+/*  One well treatment for every feature, everywhere on the site. The four
+    per-feature hues this used to carry are gone; what distinguishes a card
+    now is its glyph and its position, not its colour. */
+function IconWell({ Icon }: { Icon: (typeof FEATURES)[number]["Icon"] }) {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised"
-      style={{ color: accent }}
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
     >
       <Icon {...ICON} />
     </span>
@@ -109,10 +102,14 @@ export function ProductSnapshot() {
           <h2 className="max-w-[18ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             Four jobs the school office stops doing by hand.
           </h2>
+          {/* This line used to end "...the parent line and the fees ledger."
+              There is no fees ledger. The finance capability was removed from
+              the product for want of any source document describing it, and
+              this sentence was the last place the claim survived. */}
           <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
             One installation covers the gate, the register, the parent line and the
-            fees ledger. Each part works on its own and gets sharper alongside the
-            others.
+            guard&rsquo;s screen. Each part works on its own and gets sharper
+            alongside the others.
           </p>
         </Reveal>
 
@@ -121,7 +118,6 @@ export function ProductSnapshot() {
             <Reveal key={feature.title} delay={0.06 * i} className={feature.span}>
               <SpotlightCard
                 href={feature.href}
-                accent={feature.accent}
                 className="h-full"
               >
                 {feature.shape === "wide" ? (
@@ -129,7 +125,7 @@ export function ProductSnapshot() {
                     {/* Icon and title sit inline here so the two columns of the
                         wide cell balance instead of one hanging low. */}
                     <div className="flex items-center gap-4 md:col-span-6">
-                      <IconWell Icon={feature.Icon} accent={feature.accent} />
+                      <IconWell Icon={feature.Icon} />
                       <h3 className="text-xl leading-tight tracking-[-0.02em] text-foreground sm:text-2xl">
                         {feature.title}
                       </h3>
@@ -143,7 +139,7 @@ export function ProductSnapshot() {
                   </div>
                 ) : (
                   <>
-                    <IconWell Icon={feature.Icon} accent={feature.accent} />
+                    <IconWell Icon={feature.Icon} />
 
                     {/* The lead cell is two rows tall, so it gets the homepage's
                         image slot rather than an empty stretch of surface.
@@ -185,6 +181,24 @@ export function ProductSnapshot() {
             </Reveal>
           ))}
         </div>
+
+        {/* The grid is the schools deployment, which is the one with seven
+            documented capabilities behind it. Business readers get told where
+            their page is rather than being left to infer it from the nav. */}
+        <Reveal delay={0.28}>
+          <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
+            Not a school? The same recognition, attendance and alerting runs at a
+            business entrance, with staff and contractors in place of pupils and
+            a duty manager in place of a parent.{" "}
+            <Link
+              href="/product/business"
+              className="border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-150 hover:border-accent"
+            >
+              See Smart Vision for business
+            </Link>
+            .
+          </p>
+        </Reveal>
       </div>
     </section>
   );

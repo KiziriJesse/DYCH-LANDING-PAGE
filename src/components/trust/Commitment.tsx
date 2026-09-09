@@ -26,7 +26,7 @@ export function Commitment({ item }: { item: CommitmentData }) {
       <div className="lg:col-span-4">
         <span
           aria-hidden
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-surface-raised text-accent"
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
         >
           <item.Icon size={24} weight="light" />
         </span>

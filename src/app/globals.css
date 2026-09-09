@@ -3,77 +3,98 @@
 /* ============================================================
    DYCH Technologies - design tokens
 
-   Two scopes, one set of token names. Dark is the default and lives on :root;
-   .theme-light overrides the same names locally, so every component that
-   already reads bg-background / text-foreground / border-border flips with no
-   per-component styling. .theme-dark re-asserts the dark scope for islands
-   that must stay dark inside a light page, which is how CtaBand keeps its own
-   register at the foot of a light page.
+   TWO HUES. ONE SCOPE. NO DARK THEME.
 
-   Neither scope follows the system preference: which sections are light and
-   which are dark is a composition decision, not a user setting.
+   This replaces the previous two-scope system (dark :root + .theme-light
+   override + .theme-dark islands) and the four semantic feature accents
+   (security=cyan, attendance=blue, communication=emerald, operations=amber).
+   None of that survives. There is now a near-white paper family and a single
+   purple accent family, and nothing else - including the icon wells, which
+   all take the same purple at different weights instead of a hue per feature.
 
-   Accent policy (build plan 0.4a): four feature accents are kept because they
-   are functional product branding, not decoration. Each is calibrated below
-   ~75% HSL saturation, and no more than two may activate in the same viewport.
+   That trade is deliberate. The old system colour-coded the seven
+   capabilities, which was genuinely useful for scanning; cohesion won. If a
+   capability ever needs to be told apart at a glance again, do it with
+   position, icon or label - not by reintroducing a second hue.
 
-   The primary brand accent is separate from those four: it is the DYCH purple
-   taken from the logo, and it is the only colour allowed on a CTA, a link, a
-   focus ring or the selection highlight. Feature accents never appear on an
-   interactive control; they only tint an icon glyph or a spotlight fill.
+   ON PURPLE. The governing design standard bans purple as a primary brand
+   colour and calls it the single biggest tell of a generated site. It carries
+   its own exception: a brief that explicitly asks for one wins. DYCH's logo is
+   a real, designed purple mark supplied by the client, so the exception
+   applies, and the answer to "does it still look designed rather than
+   defaulted" is the split below - the accent is separated by role and every
+   pairing is measured, not assumed. Every other ban in that document still
+   holds in full.
+
+   CONTRAST. Measured, not estimated. Ratios are against the ground named.
+   The worst ground for dark ink is --wash, so that is the column that decides
+   whether a value ships.
 
    Radius scale (locked):  card | pill (interactive) | input
-   Z-index scale (locked): raise 10 | menu 40 | nav 50 | grain 60
+   Z-index scale (locked): raise 10 | float 30 | menu 40 | nav 50 | skip 70
    ============================================================ */
 
-:root,
-.theme-dark {
-  color-scheme: dark;
+:root {
+  color-scheme: light;
 
-  /* Substrate. Near-black navy, deliberately not slate-950 (#020617),
-     which reads as the default Tailwind dark theme. */
-  --background: #0a0e14;
-  --surface: #111823;
-  --surface-raised: #18202d;
-  --surface-sunk: #070a0f;
+  /* ---- Paper family. Three tones, warm-shifted toward the brand hue so the
+     page never reads as neutral grey stock. ---- */
+  --paper: #faf9fd; /* page ground */
+  --paper-alt: #f3f0fb; /* section-alternation band */
+  --wash: #eee8fc; /* the deepest tone: gradient stops, hover fills */
 
-  /* Type. Never pure white on a dark substrate. */
-  --foreground: #e8ecf1;
-  --muted: #94a3b8;
-  --faint: #64748b;
+  /* Role aliases. Components across the site already read bg-background,
+     bg-surface and friends, so the roles are mapped onto the palette above
+     rather than rewritten at every call site. --surface is pure white on
+     purpose: cards need to lift off --paper, and white is the only tone
+     lighter than it. */
+  --background: var(--paper);
+  --surface: #ffffff;
+  --surface-raised: var(--paper-alt);
+  --surface-sunk: var(--wash);
 
-  /* Structure */
-  --border: rgba(232, 236, 241, 0.1);
-  --border-strong: rgba(232, 236, 241, 0.2);
+  /* ---- Ink. Near-black tinted toward the brand hue, not neutral grey. ---- */
+  --ink: #181521;
+  --foreground: var(--ink); /* 17.15 paper · 15.98 alt · 15.05 wash */
+  --muted: #5b5470; /*  6.80 paper ·  6.33 alt ·  5.97 wash */
+  --faint: #6b6480; /*  5.33 paper ·  4.97 alt ·  4.68 wash */
 
-  /* Semantic feature accents. Each is calibrated below 75% saturation and
-     clears WCAG AA against the substrate. Finance moved off violet to amber
-     when violet was reclaimed as the corporate brand colour. */
-  --accent-security: #3ec8da; /* hsl(187 68% 55%) - 9.65:1 */
-  --accent-attendance: #4d8adb; /* hsl(214 66% 58%) - 5.50:1 */
-  --accent-communication: #37be8c; /* hsl(158 55% 48%) - 8.20:1 */
-  --accent-operations: #e1a847; /* hsl(38 72% 58%)  - 9.11:1 */
+  /* ---- Structure ---- */
+  --border: rgba(24, 21, 33, 0.1);
+  --border-strong: rgba(24, 21, 33, 0.2);
 
-  /* Primary brand accent: the DYCH purple, lifted for a dark substrate.
-     The logo master is hsl(258 89% 35%), which measures 1.67:1 here and is
-     unusable as ink. This keeps the hue exactly and raises lightness to 68%,
-     which is the usual digital tint of a print brand colour.
-     CTAs, links, focus rings and the selection colour use these and nothing
-     else, so the interface reads as one brand rather than five. */
-  --accent: #9570eb; /* hsl(258 75% 68%) - 5.34:1 on background */
-  --accent-ink: #140b2e; /* label on an accent fill - 5.19:1.
-                            White would be 3.62:1, so it is not used. */
-  --accent-soft: rgba(149, 112, 235, 0.14);
-  --accent-line: rgba(149, 112, 235, 0.38);
+  /* ---- Accent, split by role.
 
-  /* The one glow on the site. Primary CTAs only, never on cards,
-     step circles, badges or icon wells. */
-  --glow-cta: 0 0 24px -4px rgba(149, 112, 235, 0.5);
-  --glow-cta-hover: 0 0 34px -4px rgba(149, 112, 235, 0.68);
+     --accent is the border, icon-stroke and large-display value. It measures
+     3.94-4.70:1 across the paper tones, which clears the 3:1 that non-text
+     and large text need on every one of them, and it is 4.70:1 under a white
+     label, so the same token covers the outline state and the hover-fill
+     state of a button with no second value.
 
-  /* Tinted to the substrate hue, never pure black */
-  --shade: 0 24px 60px -28px rgba(2, 5, 10, 0.9);
-  --shade-lift: 0 34px 80px -30px rgba(2, 5, 10, 0.96);
+     It is 4.49:1 on --paper, a hair under the 4.5 body threshold, which is
+     exactly why it is not used for body-size text. That is what
+     --accent-on-light is for: 6.04-7.22:1, comfortable everywhere. Same hue
+     family, lower lightness - the page still reads as one purple. ---- */
+  --accent: #7c5ce0;
+  --accent-on-light: #6238c7;
+  --accent-ink: #ffffff; /* label on a filled --accent - 4.70:1 */
+  --accent-inverse: #ffffff; /* border + label on the solid accent band */
+  --accent-soft: rgba(124, 92, 224, 0.1);
+  --accent-line: rgba(124, 92, 224, 0.32);
+
+  /* Shadows are tinted to the ink hue, never neutral black, and the lift used
+     on an interactive card is tinted further toward the accent. A rainbow of
+     soft shadows on every card is banned; these two are the whole set. */
+  --shade: 0 24px 60px -28px rgba(24, 21, 33, 0.18);
+  --shade-lift: 0 32px 80px -30px rgba(24, 21, 33, 0.26);
+  --shade-accent: 0 18px 44px -20px rgba(98, 56, 199, 0.28);
+
+  /* ---- Interactive element metrics, from the button spec ---- */
+  --btn-h: 2.25rem; /* 36px desktop */
+  --btn-h-lg: 2.75rem; /* 44px below 768px, and the lg size */
+  --btn-h-sm: 1.75rem;
+  --btn-icon: 2.0625rem; /* the 33px glyph circle */
+  --btn-border: 1px;
 
   --radius-card: 1.25rem;
   --radius-input: 0.625rem;
@@ -82,84 +103,37 @@
   --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Light scope. Same token names, local values. Every contrast below was
-   measured against this scope's own --background (#f7f7f8), not assumed.
+/* The closing band: a solid plate of the deeper accent with white on it at
+   7.22:1. This is still the same purple family, not a third hue, and it is
+   the one place a large area of saturated colour is allowed.
 
-   The build plan proposed #8b6cf0 as a starting point for the light accent;
-   it measures 3.57:1 on paper and fails AA, so it is not used. #6b3fd6 is
-   hsl(258 65% 54%): the same hue as the logo master and as the dark accent,
-   taken darker rather than lighter because the ground flipped.
-
-   Note --accent-ink inverts here. On the dark accent, near-black wins; on this
-   deeper one, white wins by 6.35:1 to 3.05:1. */
+   --surface and --accent are re-pointed locally so a button placed inside
+   resolves to the inverse treatment through its normal tokens, with no
+   special casing in the component. */
 @layer base {
-.theme-light {
-  color-scheme: light;
-
-  /* Painted on the scope itself, so a wrapper can never let the dark body
-     show through a gap between sections. */
-  background-color: var(--background);
-  color: var(--foreground);
-
-  --background: #f7f7f8;
-  --surface: #ffffff;
-  --surface-raised: #f0f0f2;
-  --surface-sunk: #e8e8ea;
-
-  /* Reuses the dark scope's background value as ink, so light-section text
-     carries the same hue family rather than introducing a second near-black. */
-  --foreground: #0a0e14; /* 18.06:1 on paper */
-  --muted: #565963; /*  6.53:1 */
-  --faint: #6b7080; /*  4.61:1 */
-
-  --border: rgba(10, 14, 20, 0.1);
-  --border-strong: rgba(10, 14, 20, 0.2);
-  --shade: 0 24px 60px -28px rgba(10, 14, 20, 0.18);
-  --shade-lift: 0 32px 80px -30px rgba(10, 14, 20, 0.26);
-
-  --accent: #6b3fd6; /* hsl(258 65% 54%) - 5.93:1 on paper */
-  --accent-ink: #ffffff; /* 6.35:1 on the accent fill */
-  --accent-soft: rgba(107, 63, 214, 0.1);
-  --accent-line: rgba(107, 63, 214, 0.32);
-
-  /* A glow reads as a smudge on paper, so the one CTA effect becomes a tinted
-     lift instead. Same role, same restraint: primary CTAs only. */
-  --glow-cta: 0 10px 24px -10px rgba(107, 63, 214, 0.55);
-  --glow-cta-hover: 0 14px 32px -10px rgba(107, 63, 214, 0.7);
-
-  /* The four feature accents are deliberately NOT overridden. All four fail AA
-     on paper, but none of them appear on a light section: they live only in
-     ProductSnapshot, /product and RecognitionFigure, which all stay dark. If a
-     feature accent is ever used on a light page, it needs a variant here. */
-}
-}
-
-/* The closing band is a third register: neither the light scope nor the dark
-   one, but a solid brand plate, which is how the prototype closes a page.
-
-   It does not reuse the dark scope's --accent. That value is lightened for
-   legibility ON near-black, so a full-width slab of it reads washed out and
-   the near-black label on top goes muddy. This uses the deeper light-scope
-   purple with white text at 6.35:1 instead.
-
-   Overriding --surface and --accent locally means the CTA inside resolves to a
-   white pill with a deep purple label through the existing on-accent tone,
-   with no special casing in the button. */
-@layer base {
-.band-accent {
-  --surface: #ffffff;
-  --accent: #6b3fd6;
-  background-color: #6b3fd6;
-  color: #ffffff;
-}
+  .band-accent {
+    --surface: #ffffff;
+    --accent: var(--accent-inverse);
+    --accent-on-light: var(--accent-inverse);
+    --accent-ink: #6238c7;
+    --border: rgba(255, 255, 255, 0.28);
+    --border-strong: rgba(255, 255, 255, 0.44);
+    background-color: #6238c7;
+    color: #ffffff;
+  }
 }
 
 @theme inline {
+  --color-paper: var(--paper);
+  --color-paper-alt: var(--paper-alt);
+  --color-wash: var(--wash);
+
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunk: var(--surface-sunk);
 
+  --color-ink: var(--ink);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
@@ -168,14 +142,11 @@
   --color-border-strong: var(--border-strong);
 
   --color-accent: var(--accent);
+  --color-accent-on-light: var(--accent-on-light);
   --color-accent-ink: var(--accent-ink);
+  --color-accent-inverse: var(--accent-inverse);
   --color-accent-soft: var(--accent-soft);
   --color-accent-line: var(--accent-line);
-
-  --color-accent-security: var(--accent-security);
-  --color-accent-attendance: var(--accent-attendance);
-  --color-accent-communication: var(--accent-communication);
-  --color-accent-operations: var(--accent-operations);
 
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
@@ -191,8 +162,6 @@
   }
 
   body {
-    /* Was `Arial, Helvetica, sans-serif`, which silently overrode the Geist
-       font this project already loads. */
     font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
     line-height: 1.6;
     background-color: var(--background);
@@ -202,11 +171,10 @@
     overflow-x: hidden;
   }
 
-  /* Ported from the prototype on `main`: display face at a light weight with
-     tight leading and tracking. Sizes stay on the components, which already
-     set their own clamp() values. Weight 300 was checked against this dark
-     substrate at display sizes and reads well; small headings (roughly 20px
-     and under) opt back up to 500 locally, where 300 loses its hierarchy. */
+  /* Display face at a light weight with tight leading and tracking. Sizes
+     stay on the components, which set their own clamp() values. Small
+     headings (roughly 20px and under) opt back up to 500 locally, where 300
+     loses its hierarchy. */
   h1,
   h2,
   h3 {
@@ -236,7 +204,7 @@
      or focusing a pill button squares it off. */
   :focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline-offset: 2px;
   }
 
   input,
@@ -254,7 +222,7 @@
   summary,
   [role="button"] {
     touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(149, 112, 235, 0.2);
+    -webkit-tap-highlight-color: rgba(124, 92, 224, 0.2);
   }
 }
 
@@ -277,8 +245,7 @@
     z-index: 50;
   }
 
-  /* Tabular figures for any number a reader may compare. IBM Plex Sans has
-     them, so aligning digits no longer costs a whole extra mono family. */
+  /* Tabular figures for any number a reader may compare. */
   .nums {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
@@ -291,6 +258,24 @@
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 
+  /* The soft lavender field behind the hero. A gradient of --wash into
+     --paper rather than a flat block, which is what gives it the
+     photographic falloff the brief asked for. Two offset radials, so the
+     light has a direction instead of sitting dead centre. */
+  .wash-field {
+    background-image:
+      radial-gradient(
+        62rem 42rem at 78% 8%,
+        color-mix(in srgb, var(--wash) 92%, transparent) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        48rem 36rem at 12% 62%,
+        color-mix(in srgb, var(--wash) 58%, transparent) 0%,
+        transparent 58%
+      );
+  }
+
   .skip-link {
     position: fixed;
     z-index: 70;
@@ -298,7 +283,7 @@
     top: -6rem;
     padding: 0.75rem 1.25rem;
     border-radius: 9999px;
-    background-color: var(--accent);
+    background-color: var(--accent-on-light);
     color: var(--accent-ink);
     font-weight: 600;
     transition: top 220ms var(--ease-out-expo);
@@ -336,6 +321,16 @@
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /* Same problem, same fix, for the hero's drifting fragments and its
+     word-by-word headline resolve. */
+  .drift,
+  .resolve-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
   }
 }
 

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Check } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
+import { Check } from "@phosphor-icons/react/dist/ssr";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -97,7 +97,7 @@ const FAQS = [
 
 export default function PricingPage() {
   return (
-    <div className="theme-light">
+    <>
       <PageHeader
         title="Three plans. The figure comes after we have seen your site."
         intro="Hardware, installation and training are part of a plan rather than a separate invoice. What changes the number is your site: how many entry points, how many pupils, and what is already there."
@@ -119,7 +119,7 @@ export default function PricingPage() {
                         {plan.name}
                       </h2>
                       {plan.recommended && (
-                        <span className="shrink-0 text-[0.8125rem] font-semibold text-accent">
+                        <span className="shrink-0 text-[0.8125rem] font-semibold text-accent-on-light">
                           Most schools
                         </span>
                       )}
@@ -134,7 +134,7 @@ export default function PricingPage() {
                           size={18}
                           weight="bold"
                           aria-hidden
-                          className="mt-[3px] shrink-0 text-accent"
+                          className="mt-[3px] shrink-0 text-accent-on-light"
                         />
                         <span className="leading-relaxed text-muted">{feature}</span>
                       </li>
@@ -142,30 +142,17 @@ export default function PricingPage() {
                   </ul>
 
                   {/* Pinned to the bottom, so all three buttons line up however
-                      long the lists above them are. */}
+                      long the lists above them are.
+
+                      All three are now identical. The recommended tier used to
+                      get a filled, glowing button and the other two an outline,
+                      which is exactly the fill the interactive spec bans - and
+                      it also made the three CTAs different heights. The tier is
+                      still marked, by the "Most schools" label above. */}
                   <div className="mt-auto pt-9">
-                    <Link
-                      href="/contact"
-                      className={
-                        // `border` is on both variants, transparent on the
-                        // accent one. Without it the filled button measures
-                        // 52px against the outlined 54px, and because these
-                        // are bottom-pinned the recommended card's CTA sits
-                        // 2px lower than its neighbours.
-                        "group inline-flex w-full items-center justify-center gap-3 rounded-full border py-3.5 pl-6 pr-4 text-[0.9375rem] font-semibold transition-[transform,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] " +
-                        (plan.recommended
-                          ? "border-transparent bg-accent text-accent-ink shadow-[var(--glow-cta)] hover:shadow-[var(--glow-cta-hover)]"
-                          : "border-border-strong text-foreground hover:border-accent-line")
-                      }
-                    >
+                    <Button href="/contact" size="lg" className="w-full justify-center">
                       Book a site visit
-                      <ArrowUpRight
-                        size={17}
-                        weight="bold"
-                        aria-hidden
-                        className="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[2px]"
-                      />
-                    </Link>
+                    </Button>
                   </div>
                 </div>
               </SpotlightCard>
@@ -228,6 +215,6 @@ export default function PricingPage() {
         title="Book the site visit. It costs nothing either way."
         body="An hour walking your entry points, and a written scope at the end of it. If it is not right for your school, we will say so."
       />
-    </div>
+    </>
   );
 }

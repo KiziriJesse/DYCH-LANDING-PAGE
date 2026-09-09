@@ -35,17 +35,17 @@ const TEAM = [
   },
   {
     name: "[Full name]",
-    role: "School partnerships",
+    role: "Partnerships",
     photo: "a portrait of the partnerships lead",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="theme-light">
+    <>
       <PageHeader
         title="Intelligent automation, built by DYCH Technologies."
-        intro="We build automation and system management for industries and education across Africa, from Kampala. Smart School Systems is what that work looks like when it is pointed at a school gate."
+        intro="DYCH Technologies is a software solutions company. We build automation and system management for industry and education across Africa, from Kampala. Smart Vision is what that work looks like pointed at an entry point - a school gate, or a reception desk."
       />
 
       {/* Text-led, no cards: the reason the company exists should not be
@@ -55,9 +55,9 @@ export default function AboutPage() {
           <Reveal>
             {/* TODO: this is a proposed articulation of why DYCH exists, not a
                 statement DYCH has made. Confirm or rewrite with the founder. */}
-            <p className="max-w-[24ch] text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.03em] text-foreground">
-              A school already knows who should be on its grounds. It just has no
-              reliable way to prove it.
+            <p className="max-w-[26ch] text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.03em] text-foreground">
+              An organisation already knows who should be on its premises. It just
+              has no reliable way to prove it.
             </p>
           </Reveal>
 
@@ -146,7 +146,7 @@ export default function AboutPage() {
               </p>
               <Link
                 href="/schools"
-                className="mt-5 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
+                className="mt-5 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
               >
                 Where we are so far
               </Link>
@@ -166,6 +166,6 @@ export default function AboutPage() {
         title="Come and meet the team that would install it."
         body="A site assessment is a walk around your entry points and an hour of questions, with the people who would do the work."
       />
-    </div>
+    </>
   );
 }

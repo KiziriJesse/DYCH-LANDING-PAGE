@@ -15,16 +15,17 @@ import { useEffect, useRef } from "react";
  * ridge, philtrum, lips, cheekbones), not random points, so the mesh reads as
  * a face. All of that is unchanged from the original.
  *
- * The one change made in porting: the stroke colour was hardcoded as
- * `rgba(0, 113, 227, ...)` in four places. It is now a single module default
- * plus an optional `stroke` prop, because the hero renders this on a light
- * ground and needs a more saturated purple than a dark section would.
+ * The stroke colour was originally hardcoded as `rgba(0, 113, 227, ...)` in
+ * four places. It is a single module default plus an optional `stroke` prop,
+ * which is now mostly redundant - there is one ground on the site - but is
+ * kept so a caller can tune the mesh against an unusually deep wash.
  */
 
 type P = [number, number];
 
-/** Dark-theme brand purple, matching --accent (#9570eb). */
-const DEFAULT_STROKE: [number, number, number] = [149, 112, 235];
+/** --accent, #7C5CE0. Line art, so 3:1 is the bar; it clears that on every
+    paper tone (3.94-4.70:1). */
+const DEFAULT_STROKE: [number, number, number] = [124, 92, 224];
 
 /* The self-running scan cycle, in seconds. Idle drift, then a sweep down the
    mesh, a short lock, and a release back to idle. */
@@ -216,6 +217,48 @@ export function DetectionFigure({
       ctx.translate(ox, oy);
       ctx.scale(s, s);
 
+      /*  The silhouette, behind everything.
+
+          Without it the mesh is a node network floating in white space; with
+          it the same mesh reads as mapped onto a face, which is what the
+          product actually does.
+
+          It is drawn from OUTLINE - the hand-placed cranium-and-jaw contour
+          the mesh is already built on - smoothed through midpoints, and
+          filled with a vertical duotone of the stroke colour at 4-13%. So it
+          is an illustration by construction: there is no photograph here, and
+          there could not be. That is deliberate on two counts. No licensed
+          portrait exists for this, and putting a real, identifiable person
+          behind a facial-recognition company's own marketing would imply that
+          specific individual is the one under surveillance - which is a bad
+          look however the photo was obtained.
+
+          Drawn from the HOME coordinates rather than the drifting ones, so
+          the face holds still while the mesh breathes over it. */
+      const face = new Path2D();
+      face.moveTo(
+        (OUTLINE[0][0] + OUTLINE[OUTLINE.length - 1][0]) / 2,
+        (OUTLINE[0][1] + OUTLINE[OUTLINE.length - 1][1]) / 2,
+      );
+      for (let i = 0; i < OUTLINE.length; i++) {
+        const cur = OUTLINE[i];
+        const next = OUTLINE[(i + 1) % OUTLINE.length];
+        face.quadraticCurveTo(
+          cur[0],
+          cur[1],
+          (cur[0] + next[0]) / 2,
+          (cur[1] + next[1]) / 2,
+        );
+      }
+      face.closePath();
+
+      const fill = ctx.createLinearGradient(0, 0, 0, H);
+      fill.addColorStop(0, `rgba(${rgb}, 0.13)`);
+      fill.addColorStop(0.55, `rgba(${rgb}, 0.08)`);
+      fill.addColorStop(1, `rgba(${rgb}, 0.035)`);
+      ctx.fillStyle = fill;
+      ctx.fill(face);
+
       const now = performance.now();
       // Clamped so a backgrounded tab does not jump the cycle on return.
       const dt = Math.min((now - last) / 1000, 0.05);
@@ -360,7 +403,7 @@ export function DetectionFigure({
       className={className + " touch-none"}
       style={{ aspectRatio: `${W} / ${H}` }}
       role="img"
-      aria-label="Interactive facial-landmark wireframe that responds to pointer movement and pressing"
+      aria-label="An illustrated facial-landmark wireframe over a generic face silhouette, scanning on a loop and responding to pointer movement"
     />
   );
 }

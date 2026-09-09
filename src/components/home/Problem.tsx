@@ -1,18 +1,21 @@
 import { Reveal } from "@/components/ui/Reveal";
 
-// TODO: confirm these three pain points with a head teacher before launch.
+// TODO: confirm these three pain points with a head teacher and with an
+// operations manager before launch. They are written from the school case,
+// which is the one DYCH has documented; the business echo in each is an
+// inference, not something a business customer has said.
 const PROBLEMS = [
   {
-    lead: "The gate log is a book.",
-    body: "A visitor writes a name in a ledger. Nobody checks it against anything, and by the afternoon the page is full and the morning is unreadable.",
+    lead: "The entry log is a book.",
+    body: "Someone writes a name in a ledger on the way in. Nobody checks it against anything, and by the afternoon the page is full and the morning is unreadable. A school gate and an office reception have exactly the same book.",
   },
   {
-    lead: "The register is marked late, or not at all.",
-    body: "A teacher fills it in from memory at break. The errors surface at the end of term, by which point nobody can say who was actually in the room.",
+    lead: "The register is filled in from memory.",
+    body: "A teacher marks it at break, or a manager reconstructs a timesheet on Friday. Either way the errors surface at the end of the term or the month, by which point nobody can say who was actually in the room.",
   },
   {
-    lead: "Parents hear last.",
-    body: "A pupil who never arrived is noticed when the day ends. The call home lands hours after the moment it would have mattered.",
+    lead: "The person who needed to know hears last.",
+    body: "A pupil who never arrived is noticed when the day ends; a contractor who never left is noticed when the alarm is set. The call lands hours after the moment it would have mattered.",
   },
 ];
 
@@ -29,6 +32,10 @@ export function Problem() {
           <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             Right now, security and attendance run on trust and paper.
           </h2>
+          <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-muted">
+            In a school it looks like this. In an office it looks almost
+            identical, with different nouns.
+          </p>
         </Reveal>
 
         <dl className="mt-16 border-t border-border">

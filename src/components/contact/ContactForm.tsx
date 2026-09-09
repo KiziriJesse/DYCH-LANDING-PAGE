@@ -2,7 +2,8 @@
 
 import { useId, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Warning } from "@phosphor-icons/react";
+import { PaperPlaneTilt, Warning } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/Button";
 
 type Field = "name" | "company" | "email" | "message";
 type Errors = Partial<Record<Field, string>>;
@@ -35,7 +36,7 @@ const FIELDS: {
     id: "message",
     label: "What would you like to solve?",
     helper:
-      "Roll size, how attendance is taken today, and anything already installed at the gate.",
+      "How many people come through, how attendance or hours are recorded today, and anything already installed at the entrance.",
     type: "textarea",
     autoComplete: "off",
   },
@@ -169,7 +170,7 @@ export function ContactForm() {
             {error && (
               <p
                 id={errorId}
-                className="flex items-center gap-1.5 text-[0.8125rem] font-medium text-accent"
+                className="flex items-center gap-1.5 text-[0.8125rem] font-medium text-accent-on-light"
               >
                 <Warning size={15} weight="fill" aria-hidden />
                 {error}
@@ -180,16 +181,24 @@ export function ContactForm() {
       })}
 
       <div className="sm:col-span-2">
-        <button
-          type="submit"
-          disabled={status === "sending"}
-          className="relative w-full overflow-hidden rounded-full bg-accent px-6 py-4 text-[0.9375rem] font-semibold text-accent-ink shadow-[var(--glow-cta)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:shadow-[var(--glow-cta-hover)] active:scale-[0.98] disabled:cursor-progress disabled:opacity-75 sm:w-auto sm:px-10"
-        >
-          {status === "sending" ? "Sending your message" : "Send message"}
+        {/* The submit was the last filled control on the site: a solid accent
+            pill with a glow. Both are gone. It is the same outline button as
+            every other control now, and the sending state is carried by the
+            label plus the progress hairline rather than by a colour change. */}
+        <span className="relative inline-block w-full overflow-hidden rounded-full sm:w-auto">
+          <Button
+            type="submit"
+            size="lg"
+            icon={PaperPlaneTilt}
+            disabled={status === "sending"}
+            className="w-full justify-center sm:w-auto sm:pr-10"
+          >
+            {status === "sending" ? "Sending your message" : "Send message"}
+          </Button>
           {status === "sending" && (
             <motion.span
               aria-hidden
-              className="absolute inset-x-0 bottom-0 h-[3px] bg-accent-ink/45"
+              className="absolute inset-x-0 bottom-0 h-[3px] bg-accent"
               initial={{ scaleX: 0, transformOrigin: "0% 50%" }}
               animate={{ scaleX: 1 }}
               transition={
@@ -199,7 +208,7 @@ export function ContactForm() {
               }
             />
           )}
-        </button>
+        </span>
 
         <p aria-live="polite" className="sr-only">
           {status === "sending" ? "Sending your message" : ""}
