@@ -52,12 +52,21 @@ export function SpotlightCard({
       whileHover="active"
       whileFocus="active"
       whileTap="active"
+      /* Elevation is declared once at each end: a hairline border at rest,
+         a tinted shadow when lifted. The border fades out as the shadow
+         arrives rather than the card wearing both at once. */
       variants={{
-        rest: { boxShadow: "0 0 0 0 rgba(98, 56, 199, 0)" },
-        active: { boxShadow: "var(--shade-accent)" },
+        rest: {
+          boxShadow: "0 0 0 0 rgba(98, 56, 199, 0)",
+          borderColor: "var(--border)",
+        },
+        active: {
+          boxShadow: "var(--shade-accent)",
+          borderColor: "rgba(0, 0, 0, 0)",
+        },
       }}
       transition={transition}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface p-1.5 transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent-line ${className}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-card border bg-surface p-1.5 ${className}`}
     >
       {/* The spotlight fill. Opacity is the only animated property on it. */}
       <motion.span

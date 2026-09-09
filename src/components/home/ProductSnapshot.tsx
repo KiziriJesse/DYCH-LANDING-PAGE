@@ -183,18 +183,23 @@ export function ProductSnapshot() {
         </div>
 
         {/* The grid is the schools deployment, which is the one with seven
-            documented capabilities behind it. Business readers get told where
-            their page is rather than being left to infer it from the nav. */}
+            documented capabilities behind it.
+
+            PARKED: this used to end with a link to /product/business. That
+            page is parked pending DYCH's business documents, so the pointer
+            now goes to a conversation rather than to a page that would be
+            making claims nobody has confirmed. Restore the link here when the
+            page comes back. */}
         <Reveal delay={0.28}>
           <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
             Not a school? The same recognition, attendance and alerting runs at a
             business entrance, with staff and contractors in place of pupils and
             a duty manager in place of a parent.{" "}
             <Link
-              href="/product/business"
+              href="/contact"
               className="border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-150 hover:border-accent"
             >
-              See Smart Vision for business
+              Tell us what your entrance looks like
             </Link>
             .
           </p>

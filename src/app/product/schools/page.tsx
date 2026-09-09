@@ -40,11 +40,15 @@ export const metadata: Metadata = {
 
     THE SOFTWARE IS CALLED SMART VISION. The source documents call it Vision
     One and Smart School Vision; neither name is used on this site. This page
-    is the schools vertical of that one product - /product/business is the
-    other, and /product is the neutral landing above both.
+    is the schools vertical of that one product, and /product is the landing
+    above it.
 
-    Everything on THIS page is document-backed. /product/business is not, and
-    says so at the top of its own file.
+    It is currently the ONLY published vertical. A business page was drafted
+    and is parked at src/app/product/business/page.disabled.tsx until DYCH
+    supplies business documents, because it was derived by generalising this
+    page rather than sourced.
+
+    Everything on THIS page is document-backed.
     ============================================================ */
 const CAPABILITIES: CapabilityData[] = [
   {

@@ -85,7 +85,7 @@ export function WhatsAppWidget() {
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.96 }}
             transition={transition}
             style={{ transformOrigin: "bottom right" }}
-            className="pointer-events-auto w-[min(20.5rem,calc(100vw-2rem))] overflow-hidden rounded-card border border-border bg-surface text-left text-foreground shadow-[var(--shade)]"
+            className="pointer-events-auto w-[min(20.5rem,calc(100vw-2rem))] overflow-hidden rounded-card bg-surface text-left text-foreground shadow-[var(--shade)]"
           >
             {/* Named header, so the panel reads as a conversation opening
                 rather than a bare link list. */}
@@ -167,7 +167,7 @@ export function WhatsAppWidget() {
         transition={reduce ? { duration: 0 } : { duration: 0.5, delay: 0.6, ease }}
         whileHover={reduce ? undefined : { scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
-        className="pointer-events-auto grid size-14 place-items-center rounded-full border border-accent bg-surface text-accent-on-light shadow-[var(--shade-accent)] transition-colors duration-150 ease-out hover:bg-accent hover:text-accent-ink"
+        className="pointer-events-auto grid size-14 place-items-center rounded-full border border-accent bg-surface text-accent-on-light transition-colors duration-150 ease-out hover:bg-accent hover:text-accent-ink"
       >
         <motion.span
           aria-hidden

@@ -112,7 +112,7 @@ export function Navbar() {
           className={
             "glass pointer-events-auto flex h-[4.25rem] w-full max-w-[1240px] items-center justify-between gap-4 rounded-full border pl-5 pr-2 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] " +
             (lifted
-              ? "border-border bg-white/90 shadow-[var(--shade)]"
+              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
               : "border-transparent bg-white/70")
           }
         >
@@ -196,7 +196,7 @@ export function Navbar() {
                     // between the trigger and the panel.
                     className="absolute left-0 top-full pt-3"
                   >
-                    <div className="min-w-[17.5rem] rounded-[1.25rem] border border-border bg-surface p-2 shadow-[var(--shade-lift)]">
+                    <div className="min-w-[17.5rem] rounded-[1rem] bg-surface p-2 shadow-[var(--shade-lift)]">
                       {/* The software name, as a label rather than a third
                           level of menu. Not focusable, not clickable. */}
                       <p

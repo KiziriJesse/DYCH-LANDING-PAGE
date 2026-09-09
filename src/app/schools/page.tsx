@@ -78,12 +78,13 @@ export default function SchoolsPage() {
         <div className="mx-auto max-w-[1240px]">
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-on-light">
-                First deployment
-              </p>
-              <h2 className="mt-5 max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-                One school, one gate, and a register that stopped eating the first
-                lesson.
+              {/* The "FIRST DEPLOYMENT" eyebrow that sat here is gone. An
+                  eyebrow above a heading is a flat ban in the craft floor -
+                  the heading carries its own weight - and this one was also
+                  redundant, because the next sentence says the same thing. */}
+              <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+                The first deployment: one school, one gate, and a register that
+                stopped eating the first lesson.
               </h2>
               <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-muted">
                 The problem was the ordinary one. A manual register can take up to

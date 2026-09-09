@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     bolted on. So this page carries only what is true of BOTH - the three
     things the shared technology does - and then routes.
 
-    It deliberately does not list features. Seven capabilities on the schools
-    page and five on the business page is the detail; repeating a merged
-    version of them here would make this a third product page rather than a
-    fork in the road.
+    It deliberately does not list features. The seven capabilities on the
+    schools page are the detail; repeating a summary of them here would make
+    this a second product page rather than a way in.
 
-    The schools half is document-backed. The business half is derived - see
-    the note at the top of /product/business.  */
+    The schools half is document-backed. The business half is parked until
+    DYCH supplies business documents - see
+    src/app/product/business/page.disabled.tsx.  */
 
 const SHARED = [
   {
@@ -53,31 +53,27 @@ const SHARED = [
   },
 ];
 
-const VERTICALS = [
-  {
-    href: "/product/schools",
-    Icon: GraduationCap,
-    eyebrow: "For schools",
-    title: "The gate, the register and the parent line",
-    body: "Seven capabilities on one pupil record: recognition at the gate, attendance that fills itself, alerts to parents, boarding management, the guard's screen, the admin dashboard and report cards.",
-    cta: "See the schools product",
-  },
-  {
-    href: "/product/business",
-    Icon: Buildings,
-    eyebrow: "For business",
-    title: "Reception, hours and who is on site",
-    body: "The same technology at a business entrance: access at reception, staff and contractor hours from the same scan, alerts to a manager or a security desk, and one operations dashboard over the top.",
-    cta: "See the business product",
-  },
-];
+/*  One vertical is published. The business page is parked pending DYCH's
+    business documents - see src/app/product/business/page.disabled.tsx.
+
+    So this is not a two-card fork any more. The second cell is a
+    conversation rather than a second card, which is the honest shape while
+    there is only one page to send anyone to. When the business page returns,
+    restore its card here alongside the schools one.  */
+const SCHOOLS = {
+  href: "/product/schools",
+  Icon: GraduationCap,
+  title: "The gate, the register and the parent line",
+  body: "Seven capabilities on one pupil record: recognition at the gate, attendance that fills itself, alerts to parents, boarding management, the guard's screen, the admin dashboard and report cards.",
+  cta: "See the schools product",
+};
 
 export default function ProductPage() {
   return (
     <>
       <PageHeader
-        title="One technology. Two ways in."
-        intro="Smart Vision recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. Schools use it at a gate and businesses use it at a reception desk, but underneath it is the same three things doing the same job."
+        title="One technology, wherever the entrance is."
+        intro="Smart Vision recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. A school uses it at a gate and a business uses it at a reception desk, but underneath it is the same three things doing the same job."
       />
 
       {/* What is true of both. The figure is here rather than on either
@@ -117,60 +113,71 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* The fork. Two cards, not a feature comparison table: at this point
-          the reader knows which one they are, and the job is to get them
-          there rather than to sell them the difference. */}
+      {/* One published page and one conversation, side by side. Two matching
+          cards would imply two products to compare; there is one, plus an
+          invitation. */}
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-              Which building are you standing in?
+              Where is your entrance?
             </h2>
           </Reveal>
 
-          <ul className="mt-14 grid gap-6 lg:grid-cols-2">
-            {VERTICALS.map((v, i) => (
-              <Reveal as="li" key={v.href} delay={0.08 * i}>
-                <SpotlightCard href={v.href} className="h-full">
-                  <div className="flex h-full flex-col">
-                    <span
-                      aria-hidden
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
-                    >
-                      <v.Icon size={26} weight="light" />
+          <div className="mt-14 grid gap-6 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <SpotlightCard href={SCHOOLS.href} className="h-full">
+                <div className="flex h-full flex-col">
+                  <span
+                    aria-hidden
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  >
+                    <SCHOOLS.Icon size={26} weight="light" />
+                  </span>
+                  <h3 className="mt-7 max-w-[18ch] text-2xl leading-tight tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
+                    {SCHOOLS.title}
+                  </h3>
+                  <p className="mt-4 max-w-[46ch] leading-relaxed text-muted">
+                    {SCHOOLS.body}
+                  </p>
+                  {/* A span, not a nested link: the whole card is already the
+                      anchor, and a link inside a link is invalid. */}
+                  <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-accent-on-light">
+                    <span className="border-b border-accent-line pb-0.5 transition-colors duration-150 group-hover:border-accent">
+                      {SCHOOLS.cta}
                     </span>
-                    <p className="mt-7 text-sm font-semibold uppercase tracking-[0.14em] text-accent-on-light">
-                      {v.eyebrow}
-                    </p>
-                    <h3 className="mt-3 max-w-[18ch] text-2xl leading-tight tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
-                      {v.title}
-                    </h3>
-                    <p className="mt-4 max-w-[46ch] leading-relaxed text-muted">
-                      {v.body}
-                    </p>
-                    {/* A span, not a nested link: the whole card is already
-                        the anchor, and a link inside a link is invalid. */}
-                    <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-accent-on-light">
-                      <span className="border-b border-accent-line pb-0.5 transition-colors duration-150 group-hover:border-accent">
-                        {v.cta}
-                      </span>
-                    </span>
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </ul>
+                  </span>
+                </div>
+              </SpotlightCard>
+            </Reveal>
 
-          <Reveal delay={0.16}>
-            <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
-              Not sure which fits, or running something that is neither &mdash; a
-              clinic, a campus, a site with both staff and visitors? Say what the
-              entrance looks like now and we will tell you whether this helps.
-            </p>
-            <Button href="/contact" size="lg" className="mt-7">
-              Ask us about your site
-            </Button>
-          </Reveal>
+            {/* Not a card. An office, a clinic, a campus with both staff and
+                visitors - the technology is the same, but there is no page
+                yet that describes it honestly, so this asks instead of
+                claiming. */}
+            <Reveal delay={0.08} className="lg:col-span-5">
+              <div className="flex h-full flex-col border-t border-border pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-2">
+                <span
+                  aria-hidden
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                >
+                  <Buildings size={26} weight="light" />
+                </span>
+                <h3 className="mt-7 max-w-[18ch] text-2xl leading-tight tracking-[-0.02em] text-foreground">
+                  Anywhere else with a door
+                </h3>
+                <p className="mt-4 max-w-[42ch] leading-relaxed text-muted">
+                  An office reception, a clinic, a site with staff, contractors
+                  and visitors coming through the same gate. The recognition,
+                  the record and the alert do not change; the nouns do. We would
+                  rather scope that with you than publish a page guessing at it.
+                </p>
+                <div className="mt-auto pt-8">
+                  <Button href="/contact">Tell us about your site</Button>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 

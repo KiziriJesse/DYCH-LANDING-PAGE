@@ -37,17 +37,22 @@ export const PRODUCT_VERTICALS = [
     href: "/product/schools",
     note: "Gate, register, parents, boarding",
   },
-  {
-    label: "For Business",
-    href: "/product/business",
-    note: "Reception, hours, alerts, operations",
-  },
+  /*  PARKED until DYCH supplies business documents. Restore alongside
+      src/app/product/business/page.disabled.tsx:
+
+      {
+        label: "For Business",
+        href: "/product/business",
+        note: "Reception, hours, alerts, operations",
+      },
+  */
 ] as const;
 
 /** Full labels, used where horizontal space is not constrained. */
 export const SITEMAP = [
+  { label: "Smart Vision", href: "/product" },
   { label: "Smart Vision for Schools", href: "/product/schools" },
-  { label: "Smart Vision for Business", href: "/product/business" },
+  // PARKED: { label: "Smart Vision for Business", href: "/product/business" },
   { label: "How it works", href: "/how-it-works" },
   { label: "Security & trust", href: "/security-and-trust" },
   { label: "Schools", href: "/schools" },

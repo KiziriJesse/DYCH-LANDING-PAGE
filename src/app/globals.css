@@ -96,7 +96,10 @@
   --btn-icon: 2.0625rem; /* the 33px glyph circle */
   --btn-border: 1px;
 
-  --radius-card: 1.25rem;
+  /* 16px, the top of the 12-16px band the craft floor holds cards to. It was
+     20px, which is the radius that starts reading as a pill on a large
+     surface. Pills stay for small controls only. */
+  --radius-card: 1rem;
   --radius-input: 0.625rem;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);

@@ -79,7 +79,11 @@ export function Proof() {
         </div>
 
         <Reveal delay={0.12} className="lg:col-span-5 lg:col-start-8 lg:self-center">
-          <div className="rounded-card border-l-2 border-accent bg-surface-raised/60 py-8 pl-8 pr-7">
+          {/* Was border-l-2 border-accent. A coloured left border above 1px on a
+              callout is a craft-floor refusal, and it was also a second
+              elevation cue on a panel that already has a fill. The fill now
+              carries it alone. */}
+          <div className="rounded-card bg-surface-raised py-8 pl-8 pr-7">
             <span
               aria-hidden
               className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"

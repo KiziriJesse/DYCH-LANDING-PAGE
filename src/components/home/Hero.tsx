@@ -150,7 +150,7 @@ export function Hero() {
             <motion.div
               key={f.label}
               aria-hidden
-              className={`drift absolute ${f.place} pointer-events-none flex items-center gap-2.5 rounded-full border border-border bg-surface py-2 pl-2 pr-4 shadow-[var(--shade)]`}
+              className={`drift absolute ${f.place} pointer-events-none flex items-center gap-2.5 rounded-full border border-border-strong bg-surface py-2 pl-2 pr-4`}
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={
                 reduce
