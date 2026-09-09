@@ -69,7 +69,11 @@ export function AdminDashboard() {
             </p>
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-6">
+            {/* When the screenshot lands, uncomment src. That is the whole
+                swap - PlaceholderMedia renders a real next/image from it and
+                uses the description above as alt text. */}
             <PlaceholderMedia
+              // src="/how-it-works/live-operations.png"
               description="the live camera grid with recognition overlays and the recent-match log beneath it"
               aspect="aspect-[4/3]"
             />
@@ -97,6 +101,7 @@ export function AdminDashboard() {
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-6 lg:row-start-1">
             <PlaceholderMedia
+              // src="/how-it-works/records.png"
               description="the pupil database table with class, parent contact and attendance columns"
               aspect="aspect-[4/3]"
             />

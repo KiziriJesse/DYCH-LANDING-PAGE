@@ -72,15 +72,31 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="wash-field relative overflow-hidden bg-background px-4 pb-20 pt-32 sm:px-6 lg:px-10 lg:pb-28 lg:pt-40"
+      className="relative overflow-hidden bg-background px-4 pb-20 pt-32 sm:px-6 lg:px-10 lg:pb-28 lg:pt-40"
     >
-      <div className="mx-auto grid max-w-[1240px] items-center gap-14 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-7">
+      {/* The lavender field, on its own layer so it can drift. Painting it on
+          the section itself would mean animating a background, which cannot
+          go on the compositor; this is a transform on an inert child.
+          -z-10 keeps it under the content, aria-hidden keeps it out of the
+          accessibility tree, and the reduced-motion rule in globals.css
+          stops the animation without removing the light. */}
+      <span
+        aria-hidden
+        className="wash-field wash-drift pointer-events-none absolute -inset-x-24 -inset-y-32 -z-10"
+      />
+      {/* Two columns from md (768) rather than lg (1024). Below lg the
+          layout used to collapse straight to one column, which left the
+          headline and CTA sitting alone above a large gap with the mesh far
+          below - two disconnected blocks on every tablet. The headline scale
+          is pulled back between md and lg so it still breaks sensibly in the
+          narrower column. */}
+      <div className="mx-auto grid max-w-[1240px] items-center gap-14 md:grid-cols-12 md:gap-8 lg:gap-10">
+        <div className="md:col-span-7">
           {/* One h1 for assistive tech, then the animated words hidden from
               it, so a screen reader gets the sentence once and unbroken. */}
           <h1
             id="hero-heading"
-            className="max-w-[16ch] text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.03] tracking-[-0.035em] text-foreground"
+            className="max-w-[16ch] text-[clamp(2.5rem,5.2vw,4.75rem)] leading-[1.03] tracking-[-0.035em] text-foreground"
           >
             <span className="sr-only">{HEADLINE}</span>
             <span aria-hidden className="block">
@@ -142,7 +158,7 @@ export function Hero() {
           initial={reduce ? false : { opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.1, delay: reduce ? 0 : 0.12, ease: EASE_OUT_EXPO }}
-          className="relative hidden lg:col-span-5 lg:block"
+          className="relative hidden md:col-span-5 md:block"
         >
           <DetectionFigure className="mx-auto w-full max-w-[24rem]" stroke={MESH} />
 
@@ -198,7 +214,7 @@ export function Hero() {
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, delay: reduce ? 0 : 0.2, ease: EASE_OUT_EXPO }}
-        className="mx-auto mt-16 max-w-[1240px] lg:hidden"
+        className="mx-auto mt-10 max-w-[1240px] md:hidden"
       >
         <DetectionFigure className="w-2/3 max-w-[16rem]" stroke={MESH} />
       </motion.div>

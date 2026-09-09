@@ -111,8 +111,12 @@ export default function ContactPage() {
             </dl>
           </div>
 
-          <Reveal delay={0.1} className="lg:col-span-7">
-            <div className="rounded-card border border-border bg-surface p-6 sm:p-9">
+          {/* col-span-6 with a max-width, not col-span-7 at full bleed. The
+              card was wider and more heavily padded than the column beside
+              it, so it read as the page rather than as one of two ways to
+              get in touch. */}
+          <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-7">
+            <div className="max-w-[34rem] rounded-card border border-border bg-surface p-6 sm:p-7">
               <h2 className="text-xl tracking-[-0.02em] text-foreground">
                 Or send us the details
               </h2>

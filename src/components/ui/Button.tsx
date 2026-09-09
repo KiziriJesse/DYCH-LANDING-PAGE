@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import type { ComponentType, ReactNode } from "react";
+import { LiquidFill } from "@/components/ui/LiquidFill";
 
 /**
  * The one interactive element on this site.
@@ -62,7 +63,7 @@ function ButtonIcon({
     <span
       aria-hidden
       className={
-        `${SIZES[size].circle} ml-px grid shrink-0 place-items-center rounded-full ` +
+        `${SIZES[size].circle} relative ml-px grid shrink-0 place-items-center rounded-full ` +
         "border border-accent text-accent-on-light " +
         "transition-[transform,color,border-color] duration-150 ease-out " +
         "group-hover:border-accent-ink group-hover:text-accent-ink " +
@@ -123,12 +124,24 @@ export function Button({
   /* The 34px icon-to-label gap the spec measured. It is the one number here
      that is content-dependent rather than absolute: at `sm` it is halved,
      because a 34px void inside a 28px-tall pill reads as a mistake. */
+  // `relative` on both children: LiquidFill is absolutely positioned, so
+  // without it the gradient would paint over the glyph and the label.
   const label = (
-    <span className={size === "sm" ? "ml-4" : "ml-[2.125rem]"}>{children}</span>
+    <span className={size === "sm" ? "relative ml-4" : "relative ml-[2.125rem]"}>
+      {children}
+    </span>
   );
 
+  /*  The hover fill is now an animated gradient rather than a flat colour.
+      Structurally nothing changes: the button is still ghost at rest, still
+      1px bordered, still fills only on hover. LiquidFill mounts itself on
+      pointer-enter and focus, sits behind the glyph and label, and returns
+      null under prefers-reduced-motion - in which case `hover:bg-accent`
+      below is what shows, exactly as before. That flat fill stays in the
+      class list either way, as the floor the gradient paints on top of. */
   const inner = (
     <>
+      {!disabled && <LiquidFill />}
       <ButtonIcon Glyph={Glyph} size={size} />
       {label}
     </>

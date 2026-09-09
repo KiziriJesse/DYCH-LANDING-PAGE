@@ -27,7 +27,11 @@ const plexSans = IBM_Plex_Sans({
 const description =
   "DYCH Technologies builds Smart Vision: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
 
-const title = "DYCH Technologies | Smart Vision";
+/* The tab reads "DYCH Technologies" alone, and interior pages read
+   "Pricing | DYCH Technologies" through the template below. The product name
+   was in here twice over - the company name already identifies the tab, and
+   the page segment already says what the page is. */
+const title = "DYCH Technologies";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://dychtechnologies.com"),

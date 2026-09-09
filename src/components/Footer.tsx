@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   EnvelopeSimple,
+  LinkedinLogo,
   MapPin,
   PhoneCall,
   WhatsappLogo,
@@ -111,6 +112,43 @@ export function Footer() {
                   </span>
                   {CONTACT.email.display}
                 </a>
+              </li>
+
+              {/* LinkedIn is the only social platform confirmed, so it is the
+                  only one here. Facebook, Instagram and YouTube are not
+                  added on spec; when one is confirmed it extends this same
+                  pattern.
+
+                  Until the real URL lands (CONTACT.linkedin.href is "#") this
+                  renders as plain text rather than a link, so the footer
+                  never ships an anchor that goes nowhere. */}
+              <li>
+                {CONTACT.linkedin.href === "#" ? (
+                  <span className="inline-flex items-center gap-3 text-[0.9375rem] text-faint">
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-faint"
+                    >
+                      <LinkedinLogo {...ICON} />
+                    </span>
+                    LinkedIn &mdash; link to follow
+                  </span>
+                ) : (
+                  <a
+                    href={CONTACT.linkedin.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <LinkedinLogo {...ICON} />
+                    </span>
+                    {CONTACT.linkedin.display}
+                  </a>
+                )}
               </li>
             </ul>
           </div>

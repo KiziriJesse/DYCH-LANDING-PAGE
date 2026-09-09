@@ -71,20 +71,19 @@ export function HowItWorksTeaser() {
           </p>
         </Reveal>
 
-        <div className="relative mt-16">
-          {/* The rail. Horizontal on desktop, vertical on mobile. */}
-          <div
-            aria-hidden
-            className="absolute left-6 top-0 h-full w-px bg-border md:left-0 md:top-6 md:h-px md:w-full"
-          />
-
-          <ol className="relative grid gap-10 md:grid-cols-4 md:gap-6">
+        {/* The rail that used to run through these four icons is gone. It
+            drew a wire between the steps and told the reader nothing the
+            order of the items did not already say - and if removing a
+            connector loses no information, it was decoration. Spacing
+            carries the sequence now. */}
+        <div className="mt-16">
+          <ol className="grid gap-10 md:grid-cols-4 md:gap-6">
             {FLOW.map((step, i) => (
               <Reveal
                 key={step.title}
                 as="li"
                 delay={0.07 * i}
-                className="relative flex gap-5 pl-0 md:block"
+                className="flex gap-5 md:block"
               >
                 <span
                   aria-hidden

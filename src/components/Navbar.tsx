@@ -121,17 +121,25 @@ export function Navbar() {
             className="flex items-center rounded-full py-2 pr-2"
             aria-label="DYCH Technologies, home"
           >
-            {/* Between lg and xl the words come off and the mark carries the
-                home link alone. This was measured when the product trigger read
-                "Smart School Systems" and pushed "Book a Demo" 64px past the
-                right edge at 1024. The trigger is back to "Product" and the
-                button is smaller, so there is slack again - but the breakpoint
-                stays, because the mark alone is a perfectly good home link and
-                the pill is calmer for it. Re-measured after the change. */}
+            {/* The words are always on now.
+
+                They used to come off between lg and xl. That was measured
+                honestly - with the trigger reading "Smart School Systems",
+                "Book a Demo" ran 64px past the pill at 1024px - but the
+                trigger has been "Product" for a while and the slack came
+                back. Keeping the breakpoint after that was a call for visual
+                calm, and it cost the company its name on every tablet and
+                phone, which is the worse trade: a bare mark reads as
+                unbranded, not as restraint.
+
+                Below lg the desktop links and the CTA are hidden anyway, so
+                the pill has room to spare. lg (1024) is the tight case and it
+                is measured at every breakpoint in the audit. The motto stays
+                off below sm, where it is the one line that has nowhere to
+                go. */}
             <Wordmark
-              wordsClass="hidden xl:flex"
-              sublineClass="hidden xl:block"
-              textClass="text-base xl:text-[1.0625rem]"
+              sublineClass="hidden sm:block"
+              textClass="text-[0.9375rem] lg:text-base xl:text-[1.0625rem]"
               markHeight={32}
               priority
             />

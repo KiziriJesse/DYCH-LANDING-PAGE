@@ -279,6 +279,31 @@
       );
   }
 
+  /*  The ambient drift.
+
+      The field above is painted on a child layer that very slowly slides and
+      breathes, rather than on the section itself. 34 seconds a cycle, a few
+      percent of travel and 4% of scale: at any given second nothing is
+      visibly moving, but the light is never in quite the same place twice.
+      This is meant to be felt, not watched.
+
+      Transform only - no background-position, no filter - so it stays on the
+      compositor and costs nothing per frame. `will-change` is deliberately
+      absent: a permanently promoted full-bleed layer is worse than the
+      occasional repaint this avoids. */
+  .wash-drift {
+    animation: wash-drift 34s ease-in-out infinite alternate;
+  }
+
+  @keyframes wash-drift {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+    }
+    to {
+      transform: translate3d(1.5%, 1.5%, 0) scale(1.08);
+    }
+  }
+
   .skip-link {
     position: fixed;
     z-index: 70;
@@ -323,6 +348,14 @@
      note in Reveal.tsx. */
   .reveal {
     opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* The ambient field keeps its light and loses its motion. Left to the
+     blanket rule above it would snap to the end of its keyframe and sit
+     there offset; this returns it to rest. */
+  .wash-drift {
+    animation: none !important;
     transform: none !important;
   }
 
