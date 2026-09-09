@@ -293,22 +293,10 @@ export function DetectionFigure({
         ctx.stroke();
       }
 
-      // bounding box + corner ticks - the product's visual grammar
-      const inset = 6 - press * 4;
-      ctx.strokeStyle = `rgba(${rgb}, ${0.55 + press * 0.45})`;
-      ctx.lineWidth = 1;
-      ctx.strokeRect(inset, inset, W - inset * 2, H - inset * 2);
-      const corners: P[] = [
-        [inset, inset], [W - inset, inset],
-        [inset, H - inset], [W - inset, H - inset],
-      ];
-      ctx.lineWidth = 2 + press;
-      for (const [cx, cy] of corners) {
-        ctx.beginPath();
-        ctx.moveTo(cx - 8, cy); ctx.lineTo(cx + 8, cy);
-        ctx.moveTo(cx, cy - 8); ctx.lineTo(cx, cy + 8);
-        ctx.stroke();
-      }
+      // The bounding box and corner ticks that the original drew around the
+      // mesh are deliberately gone. They were decoration here, and the same
+      // grammar already carries real meaning on /product, where a box marks an
+      // actual tracked face. Repeating it around a decorative mesh diluted it.
 
       ctx.restore();
       raf = requestAnimationFrame(draw);

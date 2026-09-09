@@ -11,8 +11,8 @@ import Image from "next/image";
  * /logo/dych-lockup-on-white.png for light surfaces.
  */
 export function Wordmark({
-  /** Corporate tagline for the footer; the nav uses the product name instead. */
-  subline = "SMART SCHOOL SYSTEMS",
+  /** The company motto, carried in both the nav and the footer. */
+  subline = "AUTOMATING TOMORROW",
   markHeight = 34,
   /** The nav hides the subline below xl to keep its single line uncrowded. */
   sublineClass = "",
