@@ -7,7 +7,8 @@ import { useEffect, useRef } from "react";
  *
  * Ported from the prototype on `main`. A dense facial-landmark mesh rendered
  * to canvas: nodes drift on their own, react to the pointer, and snap into a
- * lock state while pressed, with a scan-line sweep. Fully static under
+ * lock state on a self-running cycle, with a scan-line sweep. Fully static
+ * under
  * prefers-reduced-motion.
  *
  * Geometry is hand-placed facial topology (cranium, jaw, brows, orbits, nasal
@@ -24,6 +25,13 @@ type P = [number, number];
 
 /** Dark-theme brand purple, matching --accent (#9570eb). */
 const DEFAULT_STROKE: [number, number, number] = [149, 112, 235];
+
+/* The self-running scan cycle, in seconds. Idle drift, then a sweep down the
+   mesh, a short lock, and a release back to idle. */
+const CYCLE = 9;
+const SCAN_START = 4.6;
+const SCAN_END = 6.8;
+const HOLD_END = 7.6;
 
 const W = 360;
 const H = 470;
@@ -151,10 +159,14 @@ export function DetectionFigure({
     }));
 
     let pointer = { x: -999, y: -999, inside: false };
-    let press = 0;      // eased 0..1
+    let press = 0;      // eased 0..1, driven by the pointer
     let pressing = false;
     let raf = 0;
     let t = 0;
+    // Real seconds, so the auto-cycle keeps the same tempo regardless of
+    // frame rate. `t` is a frame counter and is left alone for the drift.
+    let cycle = 0;
+    let last = performance.now();
 
     const scale = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -204,10 +216,38 @@ export function DetectionFigure({
       ctx.translate(ox, oy);
       ctx.scale(s, s);
 
+      const now = performance.now();
+      // Clamped so a backgrounded tab does not jump the cycle on return.
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
       t += 0.0125;
       press += ((pressing ? 1 : 0) - press) * 0.14;
 
-      const reach = 74 + press * 46;
+      // The figure runs its own scan on a loop, so it is alive on load with no
+      // input: it drifts, sweeps a scan line down the mesh, holds a brief lock,
+      // then releases. Under reduced motion the cycle does not advance at all,
+      // which leaves the whole figure static rather than merely slower.
+      if (!reduced) cycle = (cycle + dt) % CYCLE;
+      let autoLock = 0;
+      let scanY = -1;
+      if (!reduced && cycle >= SCAN_START) {
+        if (cycle < SCAN_END) {
+          const p = (cycle - SCAN_START) / (SCAN_END - SCAN_START);
+          scanY = 18 + p * (H - 36);
+          autoLock = Math.min(1, p * 2.2);
+        } else if (cycle < HOLD_END) {
+          autoLock = 1;
+        } else {
+          autoLock = 1 - (cycle - HOLD_END) / (CYCLE - HOLD_END);
+        }
+      }
+
+      // Pointer press and the auto-cycle drive the same visual state, so
+      // hovering and pressing still layer on top of the loop rather than
+      // replacing it.
+      const lock = Math.max(press, autoLock);
+      const reach = 74 + lock * 46;
 
       for (const n of state) {
         // idle drift
@@ -223,8 +263,8 @@ export function DetectionFigure({
           if (d < reach && d > 0.001) {
             const f = (1 - d / reach) ** 2;
             // hover pushes the mesh outward; pressing pulls it into a lock
-            const dir = press > 0.5 ? -1 : 1;
-            const mag = f * (9 + press * 11) * dir;
+            const dir = lock > 0.5 ? -1 : 1;
+            const mag = f * (9 + lock * 11) * dir;
             tx += (dx / d) * mag;
             ty += (dy / d) * mag;
           }
@@ -242,16 +282,16 @@ export function DetectionFigure({
       for (const [a, b] of EDGES) {
         const A = state[a];
         const B = state[b];
-        let alpha = 0.32;
-        let width = 0.5;
+        let alpha = 0.5 + lock * 0.28;
+        let width = 0.9 + lock * 0.5;
         if (pointer.inside && !reduced) {
           const mx = (A.x + B.x) / 2;
           const my = (A.y + B.y) / 2;
           const d = Math.hypot(mx - pointer.x, my - pointer.y);
           if (d < reach) {
             const f = 1 - d / reach;
-            alpha = 0.32 + f * (0.62 + press * 0.3);
-            width = 0.5 + f * (0.7 + press * 0.9);
+            alpha = Math.min(1, alpha + f * (0.45 + lock * 0.3));
+            width = width + f * (0.8 + lock * 0.9);
           }
         }
         ctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
@@ -265,13 +305,13 @@ export function DetectionFigure({
       // nodes
       for (let i = 0; i < state.length; i++) {
         const n = state[i];
-        let r = 1.5;
-        let alpha = 0.85;
+        let r = 1.9 + lock * 0.5;
+        let alpha = 1;
         if (pointer.inside && !reduced) {
           const d = Math.hypot(n.x - pointer.x, n.y - pointer.y);
           if (d < reach) {
             const f = 1 - d / reach;
-            r = 1.5 + f * (1.7 + press * 2.2);
+            r = r + f * (1.9 + lock * 2.2);
             alpha = 1;
           }
         }
@@ -282,11 +322,11 @@ export function DetectionFigure({
         ctx.fill();
       }
 
-      // scan line while pressed - the "reading" moment
-      if (press > 0.02 && !reduced) {
-        const y = 18 + ((t * 46) % (H - 36));
-        ctx.strokeStyle = `rgba(${rgb}, ${0.5 * press})`;
-        ctx.lineWidth = 1;
+      // The scan sweep, driven by the cycle rather than by a press.
+      if (scanY >= 0) {
+        const y = scanY;
+        ctx.strokeStyle = `rgba(${rgb}, 0.75)`;
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.moveTo(6, y);
         ctx.lineTo(W - 6, y);

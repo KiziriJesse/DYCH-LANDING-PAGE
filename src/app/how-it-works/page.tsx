@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { StepSpine } from "@/components/how-it-works/StepSpine";
+import { AdminDashboard } from "@/components/how-it-works/AdminDashboard";
 import { DeploymentTimeline } from "@/components/how-it-works/DeploymentTimeline";
 
 export const metadata: Metadata = {
   title: "How it works",
   description:
-    "How a DYCH Technologies deployment runs: recognition at entry, attendance capture, parent alerts, analytics, and what installation involves.",
+    "How a DYCH Technologies deployment runs: recognition at entry, attendance capture, parent alerts, analytics, the admin dashboard, and what installation involves.",
 };
 
 export default function HowItWorksPage() {
@@ -19,6 +20,7 @@ export default function HowItWorksPage() {
       />
 
       <StepSpine />
+      <AdminDashboard />
       <DeploymentTimeline />
 
       <CtaBand

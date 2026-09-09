@@ -21,8 +21,13 @@ export const metadata: Metadata = {
     STOP. READ BEFORE THIS PAGE GOES LIVE.
 
     Every statement below is a claim about how DYCH handles biometric data
-    belonging to children. None of it has been verified against the platform
-    as built, and none of it has been reviewed by a lawyer.
+    belonging to children. None of it has been reviewed by a lawyer.
+
+    ONE claim is now document-backed rather than proposed: "all face data is
+    matched and encrypted on-device, no photos ever leave the school" is stated
+    verbatim in the DYCH case-study deck, and the product spec corroborates it
+    ("no internet required, face recognition runs locally"). The rest of this
+    page is still positioning that engineering has not confirmed.
 
     Two of these five sections, "Isolation between schools" and "Export and
     deletion", were written from scratch. The build plan said to reuse that
@@ -43,20 +48,24 @@ export const metadata: Metadata = {
 const COMMITMENTS: CommitmentData[] = [
   {
     id: "biometric-data",
-    title: "Biometric data, handled carefully",
-    lead: "Enrolment does not keep a photograph of a child. It produces a mathematical template used for matching, and the template is what the system holds. It exists to recognise a pupil at an entry point and to mark a register, and it is not put to any other purpose.",
+    title: "Matched on your hardware. No photos leave the school.",
+    lead: "This is the commitment the rest of the page rests on, and it is the one DYCH states plainly in its own materials: all face data is matched and encrypted on-device, and no photos ever leave the school. Recognition happens on a unit on your site, not on a server somewhere else, so there is no upload of children’s faces to anywhere.",
     points: [
       {
+        label: "Enrolment does not keep a photograph",
+        body: "It produces a mathematical template used for matching, and the template is what the system holds. It exists to recognise a pupil at an entry point and to mark a register, and it is not put to any other purpose.",
+      },
+      {
         label: "What is actually held",
-        body: "A matching template derived from the face, the pupil record the school already keeps, and the entry and exit events that matching produces.",
+        body: "A matching template derived from the face, the pupil record the school already keeps, and the entry and exit events that matching produces. Face images are stored in a folder the school chooses on its own machine.",
       },
       {
         label: "What it is never used for",
         body: "It is not sold, not shared with advertisers, and not used to build or improve anything for another customer.",
       },
       {
-        label: "Where matching happens",
-        body: "On a unit at the school. Recognition does not depend on a round trip to a distant server, which is also why the gate keeps working when the line drops.",
+        label: "Why this also makes the gate more reliable",
+        body: "Because matching does not depend on a round trip to a distant server, the gate keeps reading through an internet outage. The privacy decision and the reliability behaviour are the same decision.",
       },
     ],
     Icon: UserFocus,
@@ -108,7 +117,7 @@ const COMMITMENTS: CommitmentData[] = [
     points: [
       {
         label: "Taking the records out",
-        body: "Attendance, entry logs and fee records export in a readable format, without a request to us and without a fee.",
+        body: "Attendance, entry logs and gate records export in a readable format, without a request to us and without a charge.",
       },
       {
         label: "Ending a contract",
@@ -158,7 +167,7 @@ export default function SecurityAndTrustPage() {
     <div className="theme-light">
       <PageHeader
         title="Children’s biometric data, handled carefully."
-        intro="Recognition means holding data about children, so how it is captured, stored, kept apart from other schools, exported and destroyed matters more than any feature on this site. This page sets out how that works, in terms a head teacher can take to a board meeting."
+        intro="Recognition means holding data about children, so how it is captured, stored, kept apart from other schools, exported and destroyed matters more than any feature on this site. The short version: matching happens on your own hardware, and no photos leave the school. The rest of this page is what that means in practice, in terms a head teacher can take to a board meeting."
       />
 
       <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">

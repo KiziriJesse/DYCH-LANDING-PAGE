@@ -3,6 +3,7 @@ import { Space_Grotesk, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -79,6 +80,9 @@ export default function RootLayout({
         <Navbar />
         <main id="main">{children}</main>
         <Footer />
+        {/* Mounted once here rather than per page, so it persists across
+            navigation and cannot be double-rendered. */}
+        <WhatsAppWidget />
       </body>
     </html>
   );

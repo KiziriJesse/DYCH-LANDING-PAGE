@@ -1,51 +1,68 @@
 import type { Metadata } from "next";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 
 export const metadata: Metadata = {
   title: "Schools",
   description:
-    "Schools using DYCH Technologies for security, attendance and parent communication across Uganda.",
+    "Where DYCH Technologies is deployed, what the first pilot involved, and what we will publish once a school has reported results.",
 };
 
-/*  TODO: nothing on this page is real yet.
+/*  WHAT CHANGED HERE, AND WHY IT MATTERS.
 
-    Every school name and every quotation below is a bracketed placeholder.
-    Social proof is the one part of a site where invented content does actual
-    damage: a school that discovers a fabricated peer will not come back. So
-    each tile and card must be either replaced with a real, permissioned
-    reference or deleted outright. Do not ship a partially filled wall.
+    This page used to carry "100+ schools connected", a wall of eight
+    [School name] tiles, and three invented testimonials with placeholder
+    attributions. All of it is gone.
 
-    For each testimonial you will need written permission to use the person's
-    name, role, school and photograph.  */
-const SCHOOL_SLOTS = 8;
+    The 100+ figure was inherited from the previous site and has never been
+    checked against a real deployment count. The only school reference in any
+    DYCH document is the case-study deck, and in that deck the school name is
+    literally "[School name]" and all three result figures — students enrolled,
+    time saved daily, attendance accuracy — are blank underscores waiting to be
+    filled in. So there is no verified count, no named reference school, and no
+    reported outcome to quote.
 
-const TESTIMONIALS = [
+    A wall of fabricated peers is the single worst thing to put on a site like
+    this: a head teacher who discovers one invented reference stops believing
+    everything else on the page, including the parts that are true. So the page
+    now says plainly that DYCH is early, and treats that as a reason to talk to
+    us rather than something to paper over.
+
+    TODO BEFORE THIS SECTION CAN CARRY REAL CONTENT:
+      1. Confirm with DYCH whether the pilot deployment in the deck has
+         actually run, and at which school.
+      2. Get written permission to name that school.
+      3. Get the school's own figures for enrolment, time saved and attendance
+         accuracy. Do not estimate them.
+      4. Only then replace the blanks below.
+    Until all four are done, nothing here should be presented as a result.  */
+
+/*  The one claim the deck does make about the problem, in its own words:
+    "manual registers can cost up to 20 minutes of class time a day — and still
+    can't confirm who collected a child." Kept as the framing of the challenge,
+    not restated as a measured outcome at any particular school.  */
+const PILOT_METRICS = [
+  { label: "Students enrolled", note: "Not yet reported" },
+  { label: "Time saved daily", note: "Not yet reported" },
+  { label: "Attendance accuracy", note: "Not yet reported" },
+];
+
+const SUITABILITY = [
   {
-    quote:
-      "The gate log used to be a book nobody read. Now I can tell a parent exactly when their child arrived, while they are still on the phone.",
-    name: "[Full name]",
-    role: "Head Teacher",
-    school: "[School name]",
-    photo: "a portrait of the head teacher at their school",
+    title: "One gate or four",
+    body: "The same platform runs a single-stream primary and a school with several entry points. Cameras are added per entry point, so the cost follows the site rather than a licence tier.",
   },
   {
-    quote:
-      "We stopped reconstructing the register from memory at break. It is simply correct when the teacher opens it.",
-    name: "[Full name]",
-    role: "Deputy Head",
-    school: "[School name]",
-    photo: "a portrait of the deputy head",
+    title: "Day schools and boarding schools",
+    body: "A day school uses arrival, departure and pickup. A boarding school adds campus status and dorm check-in on top of the same records, rather than running a second system alongside.",
   },
   {
-    quote:
-      "Parents stopped calling the office to ask whether their child made it in. The message reaches them before they think to ask.",
-    name: "[Full name]",
-    role: "School Administrator",
-    school: "[School name]",
-    photo: "a portrait of the school administrator",
+    title: "Schools where the internet is not dependable",
+    body: "Matching runs on your own hardware. The gate keeps reading and the register keeps writing through an outage, and records sync when the line returns.",
   },
 ];
 
@@ -53,103 +70,145 @@ export default function SchoolsPage() {
   return (
     <div className="theme-light">
       <PageHeader
-        title="The schools already running on DYCH."
-        intro="Who is using the system, what changed for them, and what they say about it in their own words."
+        title="We are early, and we would rather say so."
+        intro="This is the page where most suppliers would show you a wall of school badges. We are not going to invent one. Here is where DYCH actually is, what the first deployment involved, and what we will publish the moment a school has reported it."
       />
 
-      {/* TODO: same unverified figure as the homepage and /about. Replace with
-          a real deployment count or remove the stat from all three places. */}
-      <section className="bg-background px-4 pb-20 pt-12 sm:px-6 lg:px-10">
-        <Reveal className="mx-auto max-w-[1240px] border-y border-border py-12">
-          <p className="nums text-[clamp(3.5rem,10vw,7rem)] font-bold leading-none tracking-[-0.04em] text-foreground">
-            100+
-          </p>
-          <p className="mt-4 text-lg font-medium text-accent">Schools connected</p>
-        </Reveal>
+      {/* The pilot, stated as a pilot. No numbers, because none exist. */}
+      <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+            <Reveal className="lg:col-span-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
+                First deployment
+              </p>
+              <h2 className="mt-5 max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+                One school, one gate, and a register that stopped eating the first
+                lesson.
+              </h2>
+              <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-muted">
+                The problem was the ordinary one. A manual register can take up to
+                twenty minutes of class time a day, and at the end of it the school
+                still cannot prove who collected a child. Cameras at the entry point
+                verify the pupil, the register writes itself, and the parent hears
+                about it before they have thought to ring the office.
+              </p>
+              <p className="mt-5 max-w-[54ch] leading-relaxed text-muted">
+                What went in: a weatherproof gate camera with on-device matching, the
+                admin dashboard, and parent alerts. Installation and staff training
+                were part of it, not a separate engagement.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08} className="lg:col-span-6">
+              <PlaceholderMedia
+                description="a photograph taken at the school during installation, showing the camera at the entry point"
+                aspect="aspect-[4/3]"
+              />
+            </Reveal>
+          </div>
+
+          {/* Empty by design. The blanks are the honest answer, and labelling
+              them beats hiding the row until numbers arrive. */}
+          <Reveal delay={0.12}>
+            <div className="mt-16 grid gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-3">
+              {PILOT_METRICS.map((metric) => (
+                <div key={metric.label} className="bg-surface px-7 py-9">
+                  <p
+                    aria-hidden
+                    className="nums text-[clamp(2rem,4vw,2.75rem)] font-bold leading-none tracking-[-0.04em] text-faint"
+                  >
+                    &mdash;
+                  </p>
+                  <p className="mt-4 font-medium text-foreground">{metric.label}</p>
+                  {/* text-muted rather than text-faint. --faint does clear AA
+                      here (4.94:1 on white), but this line is the whole point
+                      of the row - it says why the figure is missing - so it
+                      gets 6.99:1 instead. The em-dash above stays faint: it is
+                      decorative, aria-hidden and large. */}
+                  <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-muted">
+                    {metric.note}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 max-w-[62ch] leading-relaxed text-muted">
+              These are blank because the school has not reported them yet. When it
+              does, the figures will appear here with the school&rsquo;s name on them
+              and its permission behind them. We would rather show you nothing than
+              show you a number we made up.
+            </p>
+          </Reveal>
+        </div>
       </section>
 
+      {/* Replaces the school-name grid: capability, not borrowed credibility. */}
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-              Primary and secondary, single site and multi-campus.
+              The kind of school this fits.
             </h2>
             <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
-              The same platform runs a single-stream primary and a school with four
-              entry points, because the hardware scales down as readily as it scales
-              up.
+              Not a list of names you would have to take on trust. What the system
+              actually copes with, so you can tell in a minute whether it is worth an
+              hour of your time.
             </p>
           </Reveal>
 
-          {/* Names only, no category labels underneath: the reference is the
-              credibility, a label adds nothing. */}
-          <ul className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: SCHOOL_SLOTS }, (_, i) => (
-              <li
-                key={i}
-                className="flex min-h-[7.5rem] items-center justify-center bg-surface px-5 py-8 text-center"
+          <dl className="mt-14 border-t border-border">
+            {SUITABILITY.map((item, i) => (
+              <Reveal
+                key={item.title}
+                delay={0.06 * i}
+                className="grid gap-x-12 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
               >
-                <span className="text-[0.9375rem] leading-relaxed text-faint">
-                  [School name]
-                </span>
-              </li>
+                <dt className="text-lg font-medium leading-snug text-foreground lg:col-span-5">
+                  {item.title}
+                </dt>
+                <dd className="max-w-[62ch] leading-relaxed text-muted lg:col-span-6 lg:col-start-7">
+                  {item.body}
+                </dd>
+              </Reveal>
             ))}
-          </ul>
+          </dl>
         </div>
       </section>
 
+      {/* Turns the stage of the company into the offer, rather than a gap. */}
       <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
-        <div className="mx-auto max-w-[1240px]">
-          <Reveal>
-            <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-              In their own words.
-            </h2>
-          </Reveal>
-
-          {/* SpotlightCard is used for sets of comparable objects the reader
-              scans across: features, plans, references. The team grid on
-              /about deliberately does not use it, because colleagues are a
-              directory rather than a set being compared. */}
-          <ul className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((item, i) => (
-              <Reveal as="li" key={item.role} delay={0.07 * i}>
-                <SpotlightCard className="h-full">
-                  <figure className="flex h-full flex-col">
-                    <blockquote className="text-lg leading-relaxed text-foreground">
-                      <p>“{item.quote}”</p>
-                    </blockquote>
-
-                    <figcaption className="mt-auto flex items-center gap-4 pt-8">
-                      {/* A fixed round slot rather than PlaceholderMedia, which
-                          is a full-width block element and blows the caption
-                          out of the card at this size. */}
-                      <span
-                        role="img"
-                        aria-label={`Placeholder for ${item.photo}`}
-                        className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-dashed border-border-strong bg-surface-raised/40 text-center text-[0.5rem] leading-tight text-faint"
-                      >
-                        Photo
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block font-semibold text-foreground">
-                          {item.name}
-                        </span>
-                        <span className="block text-[0.9375rem] leading-relaxed text-muted">
-                          {item.role}, {item.school}
-                        </span>
-                      </span>
-                    </figcaption>
-                  </figure>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
+        <Reveal className="mx-auto max-w-[1240px]">
+          <h2 className="max-w-[24ch] text-[clamp(1.5rem,3.2vw,2.25rem)] leading-[1.12] tracking-[-0.03em] text-foreground">
+            What being early actually gets you.
+          </h2>
+          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
+            A short list of schools means the people who built this are the people
+            who install it, and they have time to do it properly. You get their
+            attention at the gate, a say in what gets built next term, and a
+            reference school you can ring rather than a case study you cannot verify.
+          </p>
+          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+            It also means we will tell you if your school is not a good fit. We can
+            afford to, and we would rather not learn it after the cameras are up.
+          </p>
+          <Link
+            href="/contact"
+            className="group mt-10 inline-flex items-center gap-3 rounded-full border border-border-strong py-3.5 pl-6 pr-4 text-[0.9375rem] font-semibold text-foreground transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent-line active:scale-[0.98]"
+          >
+            Talk to the people who would install it
+            <ArrowUpRight
+              size={17}
+              weight="bold"
+              aria-hidden
+              className="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[2px]"
+            />
+          </Link>
+        </Reveal>
       </section>
 
       <CtaBand
-        title="Ask one of them what the first term was like."
-        body="We will put you in touch with a school of a similar size, and you can hear it without us in the room."
+        title="Be the school whose name goes on this page."
+        body="We have capacity for a small number of installations this term, which means the people who built the system do the work themselves. A site visit costs nothing and ends with a written scope."
       />
     </div>
   );

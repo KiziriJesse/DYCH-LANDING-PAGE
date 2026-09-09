@@ -23,7 +23,10 @@ export function Footer() {
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
               {BRAND.blurb}
             </p>
-            <p className="mt-5 flex items-center gap-2 text-sm text-faint">
+            {/* text-muted, not text-faint: --faint (#64748b) on the footer's
+                --surface-sunk (#070a0f) measures 4.17:1 at 14px, which misses
+                AA. --muted clears it at 7.81:1 on the same ground. */}
+            <p className="mt-5 flex items-center gap-2 text-sm text-muted">
               <MapPin {...ICON} aria-hidden />
               {CONTACT.location}
             </p>
@@ -112,7 +115,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-border pt-6 text-sm text-faint">
+        <div className="mt-14 border-t border-border pt-6 text-sm text-muted">
           <p>
             <span className="nums">{new Date().getFullYear()}</span> {BRAND.name}. All
             rights reserved.

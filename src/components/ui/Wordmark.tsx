@@ -17,6 +17,14 @@ export function Wordmark({
   /** The nav hides the subline below xl to keep its single line uncrowded. */
   sublineClass = "",
   textClass = "text-[1.0625rem]",
+  /**
+   * Applied to the whole words block. The nav drops it entirely between the
+   * lg and xl breakpoints, where the product label "Smart School Systems" is
+   * long enough that the words plus seven links plus the CTA overflow the
+   * pill. The mark alone still reads as the home link, and the anchor keeps
+   * its own aria-label, so nothing is lost but width.
+   */
+  wordsClass = "flex",
   /** True only in the navbar, which is above the fold. */
   priority = false,
 }: {
@@ -24,6 +32,7 @@ export function Wordmark({
   markHeight?: number;
   sublineClass?: string;
   textClass?: string;
+  wordsClass?: string;
   priority?: boolean;
 }) {
   return (
@@ -39,13 +48,16 @@ export function Wordmark({
         style={{ height: markHeight, width: "auto" }}
         className="shrink-0"
       />
-      <span className="flex flex-col whitespace-nowrap leading-none">
+      <span className={`${wordsClass} flex-col whitespace-nowrap leading-none`}>
         <span className={`${textClass} font-bold tracking-[-0.02em] text-foreground`}>
           DYCH TECHNOLOGIES
         </span>
         {subline && (
           <span
-            className={`mt-1 text-[0.625rem] font-medium tracking-[0.14em] text-faint ${sublineClass}`}
+            /* text-muted, not text-faint. At 10px the motto needs the full
+               4.5:1, and --faint on the footer's --surface-sunk measures
+               4.17:1. --muted keeps it quiet without failing. */
+            className={`mt-1 text-[0.625rem] font-medium tracking-[0.14em] text-muted ${sublineClass}`}
           >
             {subline}
           </span>

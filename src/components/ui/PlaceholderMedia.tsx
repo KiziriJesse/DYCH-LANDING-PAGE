@@ -23,7 +23,10 @@ export function PlaceholderMedia({
       aria-label={`Placeholder for ${description}`}
       className={`flex ${aspect} w-full items-center justify-center rounded-card border border-dashed border-border-strong bg-surface-raised/40 p-8 text-center ${className}`}
     >
-      <span className="max-w-[36ch] text-[0.8125rem] leading-relaxed text-faint">
+      {/* text-muted, not text-faint: --faint on a dark --surface measures
+          3.74:1 at 13px and misses AA. The slot is temporary, but it is on
+          the page today and has to be readable today. */}
+      <span className="max-w-[36ch] text-[0.8125rem] leading-relaxed text-muted">
         [Placeholder image: {description}]
       </span>
     </div>

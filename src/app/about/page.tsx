@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
@@ -131,19 +132,30 @@ export default function AboutPage() {
               support line, and it keeps the promise of a site visit honest.
             </p>
 
-            {/* TODO: same unverified figure as the homepage. Replace with a real
-                deployment count or remove the stat entirely. */}
+            {/* The "100+ schools connected" stat that stood here has been
+                removed, along with its copies on the homepage and /schools.
+                It came from the previous site and no DYCH document supports
+                it. Nothing has been substituted, because a company this early
+                has no honest number to put in its place. */}
             <div className="mt-10 border-t border-border pt-8">
-              <p className="nums text-[clamp(2.5rem,6vw,4rem)] font-bold leading-none tracking-[-0.04em] text-foreground">
-                100+
+              <p className="max-w-[46ch] leading-relaxed text-muted">
+                We are early, and the deployment list is short. That is on purpose
+                for now: the people who built the system are the ones installing
+                it, and there is a limit to how many gates that can cover well in
+                a term.
               </p>
-              <p className="mt-3 font-medium text-accent">Schools connected</p>
+              <Link
+                href="/schools"
+                className="mt-5 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
+              >
+                Where we are so far
+              </Link>
             </div>
           </Reveal>
 
           <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
             <PlaceholderMedia
-              description="a simple map of Uganda marking the districts with live deployments"
+              description="a photograph of the team on site at a school gate during an installation"
               aspect="aspect-[4/3]"
             />
           </Reveal>

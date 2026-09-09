@@ -2,7 +2,7 @@ import {
   ArrowRight,
   ListChecks,
   PaperPlaneTilt,
-  Receipt,
+  Devices,
   ScanSmiley,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/ui/Reveal";
@@ -31,7 +31,7 @@ const FEATURES = [
   },
   {
     title: "Real-Time Parent Alerts",
-    body: "A message on arrival, on departure, and when a pupil is missing from the register. Over SMS or WhatsApp, so no app is needed.",
+    body: "A push notification within seconds of the scan, carrying the pupil’s photo so a parent can see it is their child. SMS follows as a fallback if the push goes unopened.",
     href: "/product#communication",
     accent: "var(--accent-communication)",
     Icon: PaperPlaneTilt,
@@ -39,11 +39,14 @@ const FEATURES = [
     shape: "standard" as const,
   },
   {
-    title: "Fees & Finance",
-    body: "Each student profile carries its own payment record, with reminders reaching parents on the same channel as the attendance alerts.",
-    href: "/product#finance",
-    accent: "var(--accent-finance)",
-    Icon: Receipt,
+    // Fees & Finance was removed: no source document describes a billing
+    // feature. The Guard App takes the slot, matching the deck's own list of
+    // what a school is buying: camera, software, parent app, guard app.
+    title: "The Guard App",
+    body: "One screen at the gate instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival, and keeps working when the connection drops.",
+    href: "/product#guard-app",
+    accent: "var(--accent-security)",
+    Icon: Devices,
     span: "md:col-span-12",
     shape: "wide" as const,
   },
@@ -151,7 +154,7 @@ export function ProductSnapshot() {
                         aria-label="Placeholder for a photograph of facial recognition at a school entry point"
                         className="mt-7 flex flex-1 items-center justify-center rounded-[calc(var(--radius-card)-0.75rem)] border border-dashed border-border-strong bg-surface-raised/40 p-6 text-center"
                       >
-                        <span className="max-w-[32ch] text-[0.8125rem] leading-relaxed text-faint">
+                        <span className="max-w-[32ch] text-[0.8125rem] leading-relaxed text-muted">
                           [Placeholder image: recognition view at the school gate,
                           camera hardware or the entry dashboard]
                         </span>

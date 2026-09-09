@@ -52,7 +52,7 @@
   --accent-security: #3ec8da; /* hsl(187 68% 55%) - 9.65:1 */
   --accent-attendance: #4d8adb; /* hsl(214 66% 58%) - 5.50:1 */
   --accent-communication: #37be8c; /* hsl(158 55% 48%) - 8.20:1 */
-  --accent-finance: #e1a847; /* hsl(38 72% 58%)  - 9.11:1 */
+  --accent-operations: #e1a847; /* hsl(38 72% 58%)  - 9.11:1 */
 
   /* Primary brand accent: the DYCH purple, lifted for a dark substrate.
      The logo master is hsl(258 89% 35%), which measures 1.67:1 here and is
@@ -175,7 +175,7 @@
   --color-accent-security: var(--accent-security);
   --color-accent-attendance: var(--accent-attendance);
   --color-accent-communication: var(--accent-communication);
-  --color-accent-finance: var(--accent-finance);
+  --color-accent-operations: var(--accent-operations);
 
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
@@ -262,6 +262,12 @@
   .z-raise {
     z-index: 10;
   }
+  /* Floating page-level affordances, currently the WhatsApp widget. Below the
+     menu overlay on purpose: opening the mobile menu should cover the bubble,
+     not have it float on top of the navigation. */
+  .z-float {
+    z-index: 30;
+  }
   .z-menu {
     z-index: 40;
   }
@@ -316,6 +322,20 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The scroll-in reveals, forced to their finished state.
+
+     The rules above only flatten CSS animation and transition. They do
+     nothing about framer-motion, which writes opacity and transform as
+     inline styles on the node. Those beat any normal rule, survive a
+     re-render, and are already in the prerendered HTML before a line of JS
+     has run - so without this, a reader with reduced motion loads a page
+     whose content is invisible until the viewport observer fires. See the
+     note in Reveal.tsx. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

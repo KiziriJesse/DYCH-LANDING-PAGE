@@ -11,20 +11,26 @@ import {
   useScroll,
 } from "framer-motion";
 import { CaretDown } from "@phosphor-icons/react";
-import { NAV_LINKS, CONTACT } from "@/lib/site";
+import { NAV_LINKS, CONTACT, BRAND } from "@/lib/site";
 import { Cta } from "@/components/ui/Cta";
 import { Wordmark } from "@/components/ui/Wordmark";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
 
-/** The five capabilities, as anchors into /product. */
+/**
+ * The seven capabilities, as anchors into /product. "Fees & Finance" is gone
+ * along with the capability itself: no source document describes a billing
+ * feature, so the site no longer claims one.
+ */
 const PRODUCT_MENU = [
   { label: "Facial Recognition", href: "/product#security" },
   { label: "Attendance", href: "/product#attendance" },
-  { label: "Parent Alerts", href: "/product#communication" },
-  { label: "Fees & Finance", href: "/product#finance" },
-  { label: "Analytics", href: "/product#analytics" },
+  { label: "Parent Communication", href: "/product#communication" },
+  { label: "Boarding Management", href: "/product#boarding" },
+  { label: "Guard App", href: "/product#guard-app" },
+  { label: "Admin Dashboard", href: "/product#admin-dashboard" },
+  { label: "Report Cards", href: "/product#grading" },
 ];
 
 export function Navbar() {
@@ -106,7 +112,14 @@ export function Navbar() {
             className="flex items-center rounded-full py-2 pr-2"
             aria-label="DYCH Technologies, home"
           >
+            {/* Between lg and xl the words come off and the mark carries the
+                home link alone. Measured at 1024: with the words in, "Book a
+                Demo" ended 64px past the right edge of the viewport once the
+                product trigger grew from "Product" to "Smart School Systems".
+                Dropping the words there returns about 135px, which is the
+                whole overflow and then some. */}
             <Wordmark
+              wordsClass="hidden xl:flex"
               sublineClass="hidden xl:block"
               textClass="text-base xl:text-[1.0625rem]"
               markHeight={32}
@@ -142,7 +155,7 @@ export function Navbar() {
                   (productActive ? "text-foreground" : "text-muted hover:text-foreground")
                 }
               >
-                Product
+                {BRAND.product}
                 <motion.span
                   aria-hidden
                   animate={{ rotate: menuOpen ? 180 : 0 }}

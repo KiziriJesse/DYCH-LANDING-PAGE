@@ -9,61 +9,79 @@ import { SpotlightCard } from "@/components/ui/SpotlightCard";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "DYCH Technologies pricing: a trial on one entry point, or a full school deployment, with hardware and support included.",
+    "DYCH Technologies plans: Basic, Standard and Enterprise. The figure is confirmed after a free, no-obligation site visit.",
 };
 
-/*  TODO: no real prices exist on this page.
+/*  NO FIGURES ON THIS PAGE, DELIBERATELY.
 
-    Every figure is the literal string "[Placeholder price]". Nothing here has
-    been costed, and the feature splits below are a proposal about what each
-    tier should contain, not a commercial decision DYCH has made. Confirm the
-    tiers, what is in each, and the numbers before this page is reachable by
-    anyone outside the team.  */
+    The tier names and their contents come from the DYCH case-study deck, which
+    also states the company's own pricing approach verbatim: "We confirm the
+    exact figure after a free, no-obligation site visit." So the absence of a
+    number here is not a gap to fill later; it is the stated approach, and the
+    page says why rather than staying quiet about it.
+
+    The internal spec does contain a per-SMS cost. That is an internal costing
+    input, not customer-facing pricing, and it is not reproduced here. What IS
+    said is that SMS carries a real per-message cost and is an add-on, because
+    the spec is explicit that it must never be absorbed into a flat fee.  */
 const PLANS = [
   {
-    name: "One gate",
-    tagline: "A trial on a single entry point, so the school can judge it on its own site.",
-    price: "[Placeholder price]",
-    unit: "per term",
+    name: "Basic",
+    tagline: "The gate, the register and the parent line. Where most schools start.",
     features: [
-      "One entry point: camera, reader and local matching unit",
-      "Enrolment for the classes that use that gate",
-      "Automatic attendance for enrolled pupils",
-      "Arrival, departure and missing-pupil alerts",
+      "Weatherproof gate camera with on-device face matching",
+      "Automatic attendance from the gate scan",
+      "Arrival, absence and late-arrival alerts to parents",
+      "Admin dashboard for records, cameras and reporting",
       "Installation and staff training included",
-      "Support by phone and WhatsApp during term",
     ],
     recommended: false,
   },
   {
-    name: "Whole school",
-    tagline: "Every entry point, the full register, fees and reporting across the site.",
-    price: "[Placeholder price]",
-    unit: "per term",
+    name: "Standard",
+    tagline: "Adds the Guard App, so the gate stops running on paper entirely.",
     features: [
-      "Every entry point on the site, including secondary gates",
-      "Enrolment for the full roll, run class by class",
-      "Attendance, alerts, fees and finance",
-      "Analytics and exports for board papers and ministry returns",
-      "Installation, staff training and parent enrolment support",
-      "Priority support, with a named contact who has seen your site",
+      "Everything in Basic",
+      "Guard App on a tablet at the gate",
+      "Authorised pickup handling",
+      "Digital visitor log, replacing the paper book",
+      "Guard overrides, logged against an individual PIN",
+      "SMS fallback available as a metered add-on",
     ],
     recommended: true,
   },
+  {
+    name: "Enterprise",
+    tagline: "More than one site, or a school that needs us closer than a phone line.",
+    features: [
+      "Everything in Standard",
+      "Multi-site coverage across campuses",
+      "Dedicated support contact who has walked your sites",
+      "Custom integrations with systems you already run",
+      "Boarding management where a school has boarders",
+    ],
+    recommended: false,
+  },
 ];
 
-// TODO: confirm each answer with DYCH. Contract length and support hours in
-// particular are commercial commitments, not copy.
+// TODO: confirm contract length, notice period and support response times with
+// DYCH. These are commercial commitments, not copy, and the two bracketed
+// answers below must not ship as they stand.
 const FAQS = [
   {
     question: "What hardware do we need to provide?",
     answer:
-      "Mains power at each entry point and somewhere weatherproof to mount a camera. We supply the cameras, readers and the local matching unit as part of the installation. A school does not buy hardware separately.",
+      "Mains power at each entry point and somewhere weatherproof to mount a camera. We supply the cameras, the local matching unit and the gate tablet as part of the installation. A school does not buy hardware separately.",
   },
   {
     question: "Do we need reliable internet?",
     answer:
-      "No. Matching runs on site and records are written locally, so the gate and the register keep working through an outage. Connectivity is what lets messages reach parents and records synchronise afterwards.",
+      "No. Matching runs on your own hardware and records are written locally, so the gate and the register keep working through an outage. Connectivity is what carries messages to parents and syncs records afterwards.",
+  },
+  {
+    question: "Why is SMS priced separately?",
+    answer:
+      "Push notifications reach a parent within seconds and cost nothing per message, so they are the primary channel. SMS exists so parents without a smartphone are still reached, and it carries a real per-message cost. Charging for it honestly is better than folding it into a flat fee and quietly rationing it.",
   },
   {
     question: "How long is the commitment?",
@@ -81,43 +99,32 @@ export default function PricingPage() {
   return (
     <div className="theme-light">
       <PageHeader
-        title="Start with one gate. Decide after that."
-        intro="Two ways in: a trial on a single entry point, or a full deployment across the school. Hardware, installation and training are part of the plan rather than a separate invoice."
+        title="Three plans. The figure comes after we have seen your site."
+        intro="Hardware, installation and training are part of a plan rather than a separate invoice. What changes the number is your site: how many entry points, how many pupils, and what is already there."
       />
 
       <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
-        <div className="mx-auto grid max-w-[1100px] gap-6 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-[1240px] gap-6 lg:grid-cols-3">
           {PLANS.map((plan, i) => (
             <Reveal key={plan.name} delay={0.07 * i}>
               <SpotlightCard
-                className={
-                  "h-full " + (plan.recommended ? "border-accent-line" : "")
-                }
+                className={"h-full " + (plan.recommended ? "border-accent-line" : "")}
               >
                 <div className="flex h-full flex-col">
-                  {/* Fixed-height head, so the feature lists in both cards
+                  {/* Fixed-height head, so the feature lists in all three cards
                       start at the same Y position. */}
-                  <div className="min-h-[9.5rem]">
-                    <div className="flex items-baseline justify-between gap-4">
+                  <div className="min-h-[8.5rem] border-b border-border pb-6">
+                    <div className="flex items-baseline justify-between gap-3">
                       <h2 className="text-2xl tracking-[-0.02em] text-foreground">
                         {plan.name}
                       </h2>
                       {plan.recommended && (
                         <span className="shrink-0 text-[0.8125rem] font-semibold text-accent">
-                          Most schools end up here
+                          Most schools
                         </span>
                       )}
                     </div>
-                    <p className="mt-3 max-w-[42ch] leading-relaxed text-muted">
-                      {plan.tagline}
-                    </p>
-                  </div>
-
-                  <div className="border-y border-border py-6">
-                    <p className="text-2xl font-bold tracking-[-0.02em] text-foreground">
-                      {plan.price}
-                    </p>
-                    <p className="mt-1 text-[0.9375rem] text-muted">{plan.unit}</p>
+                    <p className="mt-3 leading-relaxed text-muted">{plan.tagline}</p>
                   </div>
 
                   <ul className="mt-7 flex flex-col gap-4">
@@ -134,19 +141,24 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  {/* Pinned to the bottom, so both buttons line up however
+                  {/* Pinned to the bottom, so all three buttons line up however
                       long the lists above them are. */}
                   <div className="mt-auto pt-9">
                     <Link
                       href="/contact"
                       className={
-                        "group inline-flex w-full items-center justify-center gap-3 rounded-full py-3.5 pl-6 pr-4 text-[0.9375rem] font-semibold transition-[transform,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] " +
+                        // `border` is on both variants, transparent on the
+                        // accent one. Without it the filled button measures
+                        // 52px against the outlined 54px, and because these
+                        // are bottom-pinned the recommended card's CTA sits
+                        // 2px lower than its neighbours.
+                        "group inline-flex w-full items-center justify-center gap-3 rounded-full border py-3.5 pl-6 pr-4 text-[0.9375rem] font-semibold transition-[transform,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] " +
                         (plan.recommended
-                          ? "bg-accent text-accent-ink shadow-[var(--glow-cta)] hover:shadow-[var(--glow-cta-hover)]"
-                          : "border border-border-strong text-foreground hover:border-accent-line")
+                          ? "border-transparent bg-accent text-accent-ink shadow-[var(--glow-cta)] hover:shadow-[var(--glow-cta-hover)]"
+                          : "border-border-strong text-foreground hover:border-accent-line")
                       }
                     >
-                      Book a Demo
+                      Book a site visit
                       <ArrowUpRight
                         size={17}
                         weight="bold"
@@ -162,9 +174,30 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* A two-column list rather than an accordion: four answers are worth
+      {/* Says why there is no number, rather than leaving a conspicuous gap. */}
+      <section className="bg-surface-raised px-4 py-20 sm:px-6 lg:px-10 lg:py-24">
+        <Reveal className="mx-auto max-w-[1240px]">
+          <h2 className="max-w-[24ch] text-[clamp(1.5rem,3.2vw,2.25rem)] leading-[1.12] tracking-[-0.03em] text-foreground">
+            Why there is no price on this page.
+          </h2>
+          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
+            Because we would be guessing. The number depends on how many entry points
+            you have, how many pupils are on the roll, whether there are boarders,
+            what power and network already reach the gate, and how much of it we can
+            reuse. A figure quoted before any of that is known is either padded to be
+            safe or revised upwards later, and neither is a good way to begin.
+          </p>
+          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+            So we confirm the exact figure after a free, no-obligation site visit. The
+            visit costs nothing whether or not you go ahead, and it ends with a
+            written scope you can take to your board.
+          </p>
+        </Reveal>
+      </section>
+
+      {/* A two-column list rather than an accordion: these answers are worth
           reading, and hiding them behind a click helps nobody. */}
-      <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
+      <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
@@ -179,7 +212,7 @@ export default function PricingPage() {
                 delay={0.05 * i}
                 className="grid gap-x-12 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
               >
-                <dt className="text-lg font-semibold leading-snug text-foreground lg:col-span-5">
+                <dt className="text-lg font-medium leading-snug text-foreground lg:col-span-5">
                   {faq.question}
                 </dt>
                 <dd className="max-w-[62ch] leading-relaxed text-muted lg:col-span-6 lg:col-start-7">
@@ -192,8 +225,8 @@ export default function PricingPage() {
       </section>
 
       <CtaBand
-        title="We will quote after we have seen the site, not before."
-        body="Entry points, power and the size of your roll all change the number. A site assessment costs nothing and ends with a written scope."
+        title="Book the site visit. It costs nothing either way."
+        body="An hour walking your entry points, and a written scope at the end of it. If it is not right for your school, we will say so."
       />
     </div>
   );

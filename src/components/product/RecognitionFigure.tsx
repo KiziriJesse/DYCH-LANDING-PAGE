@@ -73,7 +73,7 @@ export function RecognitionFigure() {
             />
             Matched
           </dt>
-          <dd className="text-sm text-faint">Known, enrolled identity</dd>
+          <dd className="text-sm text-muted">Known, enrolled identity</dd>
         </div>
         <div className="flex items-baseline gap-2.5">
           <dt className="flex items-center gap-2 text-sm text-muted">
@@ -84,11 +84,11 @@ export function RecognitionFigure() {
             />
             Unmatched
           </dt>
-          <dd className="text-sm text-faint">Flagged for the gate to check</dd>
+          <dd className="text-sm text-muted">Flagged for the gate to check</dd>
         </div>
       </dl>
 
-      <figcaption className="mt-4 text-sm text-faint">
+      <figcaption className="mt-4 text-sm text-muted">
         Illustrative camera view, not a product screenshot.
       </figcaption>
     </figure>

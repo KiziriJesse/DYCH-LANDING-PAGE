@@ -4,24 +4,24 @@
  */
 
 export const NAV_LINKS = [
-  { label: "Product", href: "/product" },
+  { label: "Smart School Systems", href: "/product" },
   { label: "How it works", href: "/how-it-works" },
   { label: "Security", href: "/security-and-trust" },
   { label: "Schools", href: "/schools" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact Us", href: "/contact" },
 ] as const;
 
 /** Full labels, used where horizontal space is not constrained. */
 export const SITEMAP = [
-  { label: "Product", href: "/product" },
+  { label: "Smart School Systems", href: "/product" },
   { label: "How it works", href: "/how-it-works" },
   { label: "Security & trust", href: "/security-and-trust" },
   { label: "Schools", href: "/schools" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact Us", href: "/contact" },
 ] as const;
 
 export const CONTACT = {
