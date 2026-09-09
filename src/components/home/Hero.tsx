@@ -72,7 +72,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden bg-background px-4 pb-20 pt-32 sm:px-6 lg:px-10 lg:pb-28 lg:pt-40"
+      className="relative overflow-hidden bg-background px-4 pb-12 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-10 lg:pb-28 lg:pt-40"
     >
       {/* The lavender field, on its own layer so it can drift. Painting it on
           the section itself would mean animating a background, which cannot
@@ -84,19 +84,25 @@ export function Hero() {
         aria-hidden
         className="wash-field wash-drift pointer-events-none absolute -inset-x-24 -inset-y-32 -z-10"
       />
-      {/* Two columns from md (768) rather than lg (1024). Below lg the
-          layout used to collapse straight to one column, which left the
-          headline and CTA sitting alone above a large gap with the mesh far
-          below - two disconnected blocks on every tablet. The headline scale
-          is pulled back between md and lg so it still breaks sensibly in the
-          narrower column. */}
-      <div className="mx-auto grid max-w-[1240px] items-center gap-14 md:grid-cols-12 md:gap-8 lg:gap-10">
-        <div className="md:col-span-7">
+      {/* Side by side at EVERY width, phones included - the mesh is never
+          pushed onto its own line below the copy.
+
+          It used to stack below lg, then below md. Both left the headline and
+          CTA sitting alone above a gap with the mesh far beneath, which reads
+          as two unrelated blocks rather than one composition.
+
+          The split widens as room appears: 8/4 on a phone, where the copy
+          needs every pixel and the mesh is an accent, 7/5 from sm up. The
+          column gap and the headline scale both come down at the narrow end
+          so the headline still breaks sensibly in 8 columns of a 375px
+          screen. */}
+      <div className="mx-auto grid max-w-[1240px] grid-cols-12 items-center gap-x-3 gap-y-0 sm:gap-x-6 md:gap-8 lg:gap-10">
+        <div className="col-span-7">
           {/* One h1 for assistive tech, then the animated words hidden from
               it, so a screen reader gets the sentence once and unbroken. */}
           <h1
             id="hero-heading"
-            className="max-w-[16ch] text-[clamp(2.5rem,5.2vw,4.75rem)] leading-[1.03] tracking-[-0.035em] text-foreground"
+            className="max-w-[16ch] text-[clamp(1.375rem,5.4vw,4.75rem)] leading-[1.08] tracking-[-0.025em] text-foreground sm:leading-[1.03] sm:tracking-[-0.035em]"
           >
             <span className="sr-only">{HEADLINE}</span>
             <span aria-hidden className="block">
@@ -127,7 +133,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: reduce ? 0 : 0.55, ease: EASE_OUT_EXPO }}
-            className="mt-8 max-w-[48ch] text-lg leading-relaxed text-muted sm:text-xl"
+            className="mt-5 max-w-[48ch] text-[0.9375rem] leading-relaxed text-muted sm:mt-8 sm:text-lg lg:text-xl"
           >
             Facial-recognition entry, automatic attendance and real-time alerts.
             For schools at the gate and for businesses at reception, built where
@@ -138,7 +144,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: reduce ? 0 : 0.66, ease: EASE_OUT_EXPO }}
-            className="mt-11 flex flex-wrap items-center gap-3"
+            className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-4 sm:mt-11"
           >
             <Button href="/contact" size="lg">
               Book a Demo
@@ -152,13 +158,14 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Desktop: the mesh sits beside the copy, with the fragments drifting
-            around it. Hidden below lg, where they would crowd the headline. */}
+        {/* The mesh, beside the copy at every width. The fragments that
+            drift around it stay off below md: they carry two lines of text
+            each and would be wider than the mesh they annotate on a phone. */}
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.1, delay: reduce ? 0 : 0.12, ease: EASE_OUT_EXPO }}
-          className="relative hidden md:col-span-5 md:block"
+          className="relative col-span-5"
         >
           <DetectionFigure className="mx-auto w-full max-w-[24rem]" stroke={MESH} />
 
@@ -166,7 +173,7 @@ export function Hero() {
             <motion.div
               key={f.label}
               aria-hidden
-              className={`drift absolute ${f.place} pointer-events-none flex items-center gap-2.5 rounded-full border border-border-strong bg-surface py-2 pl-2 pr-4`}
+              className={`drift absolute ${f.place} pointer-events-none hidden items-center gap-2.5 rounded-full border border-border-strong bg-surface py-2 pl-2 pr-4 md:flex`}
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={
                 reduce
@@ -208,16 +215,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Mobile: stacked below the copy at a reduced size, without the
-          fragments. */}
-      <motion.div
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, delay: reduce ? 0 : 0.2, ease: EASE_OUT_EXPO }}
-        className="mx-auto mt-10 max-w-[1240px] md:hidden"
-      >
-        <DetectionFigure className="w-2/3 max-w-[16rem]" stroke={MESH} />
-      </motion.div>
     </section>
   );
 }
