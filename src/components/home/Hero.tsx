@@ -11,7 +11,14 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
     it on every paper tone (3.94-4.70:1). */
 const MESH: [number, number, number] = [124, 92, 224];
 
-const HEADLINE = "The face at the door is the safest record you’ll ever keep.";
+/*  DYCH's own approved hero line, used as written. The previous headline -
+    "The face at the door is the safest record you'll ever keep" - was a
+    better sentence but it sold a record. This sells knowing, which is what
+    the buyer is actually short of. */
+/* Non-breaking space before the dash: the headline is split on spaces
+   for the word-by-word reveal, so a bare "—" becomes its own token and can
+   start a line on its own, which looks like a mistake. */
+const HEADLINE = "Know who is on your premises — in real time.";
 
 /*  The three drifting fragments.
 
@@ -135,9 +142,10 @@ export function Hero() {
             transition={{ duration: 0.85, delay: reduce ? 0 : 0.55, ease: EASE_OUT_EXPO }}
             className="mt-5 max-w-[48ch] text-[0.9375rem] leading-relaxed text-muted sm:mt-8 sm:text-lg lg:text-xl"
           >
-            Facial-recognition entry, automatic attendance and real-time alerts.
-            For schools at the gate and for businesses at reception, built where
-            the power cuts and the line drops.
+            Cards, PINs and paper registers are easy to share, forget or fake.
+            Our system uses the face as the credential: cameras recognise enrolled
+            people as they walk in, mark presence automatically, and flag anyone
+            the system does not know.
           </motion.p>
 
           <motion.div

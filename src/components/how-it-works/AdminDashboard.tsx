@@ -36,37 +36,73 @@ const AREAS = [
   {
     Icon: IdentificationBadge,
     title: "People and permissions",
-    body: "Roles decide what each account can open, and anything outside a role is hidden or refused outright rather than merely discouraged. A bursar, a class teacher and a head teacher are not sharing one login and hoping nobody wanders. Roles are yours to create and rename, not a fixed list of three.",
+    body: "Roles decide what each account can open, and anything outside a role is hidden or refused outright rather than merely discouraged. Reception, a duty manager and whoever runs payroll are not sharing one login and hoping nobody wanders. Roles are yours to create and rename, not a fixed list of three.",
   },
   {
     Icon: SecurityCamera,
     title: "The cameras, and what they plug into",
-    body: "Up to twenty camera positions at once. As well as cameras we supply, the dashboard reads an existing NVR or DVR over the network - it will discover the channels and assign them to slots for you - or takes a single stream by URL. A school with CCTV already at the gate is not necessarily buying it twice.",
+    body: "Up to twenty camera positions at once. As well as cameras we supply, the console reads an existing NVR or DVR over the network - it will discover the channels and assign them to slots for you - or takes a single stream by URL. A site with CCTV already at the entrance is not necessarily buying it twice.",
   },
   {
     Icon: Devices,
-    title: "The gate tablets, issued and revoked from here",
-    body: "A tablet is registered, then paired with a one-time code that expires after a day. From the same screen it can be enabled, paused, or revoked outright, and granted or denied a live view of the first four cameras. Guard accounts are created and their passwords reset here too, and there is a single-use admin code for the case where a guard is on the gate without their own PIN.",
+    title: "The door tablets, issued and revoked from here",
+    body: "A tablet is registered, then paired with a one-time code that expires after a day. From the same screen it can be enabled, paused, or revoked outright, and granted or denied a live view of the first four cameras. Officer accounts are created and their passwords reset here too, and there is a single-use admin code for the case where somebody is on the door without their own PIN.",
   },
   {
     Icon: UserCircleCheck,
-    title: "Parents get accounts, and you decide when",
-    body: "A parent registers themselves in the portal and then waits for you. Until an administrator approves the account they can sign in and see nothing about any pupil. The list also separates parents who have signed in this week from those who have not opened it in six months, which is the difference between a channel that works and one the school only thinks works.",
+    title: "Linked contacts get accounts, and you decide when",
+    body: "The people linked to someone on your roll - a guardian, a next of kin, a sponsor - register themselves and then wait for you. Until an administrator approves the account it can sign in and see nothing at all. The list separates those who signed in this week from those who have not opened it in six months, which is the difference between a channel that works and one you only think works.",
   },
   {
     Icon: Broadcast,
     title: "Communication",
-    body: "Staff group threads, one-to-one conversations with individual parents, and school-wide announcements, all from the same place the records live. Events are published to the parent portal as a document, so a term letter or a fixture list arrives as the PDF you already wrote. Early-pickup requests arrive as something to approve or decline rather than as a phone call to the office.",
+    body: "Staff group threads, one-to-one conversations with linked contacts, and site-wide announcements, all from the same place the records live. Notices publish to the contact portal as a document, so the PDF you already wrote arrives as the PDF you already wrote. Requests come in as something to approve or decline rather than as a phone call to the office.",
   },
   {
     Icon: Archive,
     title: "It leaves in a format you already own",
-    body: "Attendance writes itself to a folder you choose, on a schedule you set, every day without anyone remembering. Today's register exports on demand as a spreadsheet, report cards export to Excel and to PDF for print, and a backup takes the whole database and every face image with it. Nothing here needs a request to us.",
+    body: "Attendance writes itself to a folder you choose, on a schedule you set, every day without anyone remembering. Today's record exports on demand as a spreadsheet, and a backup takes the whole database and every face image with it. Nothing here needs a request to us.",
   },
   {
     Icon: PlugsConnected,
     title: "Reliability",
-    body: "The recognition and gate flow run on the school's own network and do not wait on an internet connection. The parent, teacher and gate applications all talk to services on that same machine, so a dropped line stops messages leaving rather than stopping the gate. Records sync once it returns.",
+    body: "Recognition and the door flow run on your own network and do not wait on an internet connection. The companion applications all talk to services on that same machine, so a dropped line stops messages leaving rather than stopping the door. Records sync once it returns.",
+  },
+];
+
+/*  Four screens, with their own intrinsic ratios so none of them is cropped.
+
+    Every one of these was redacted before it went into public/: the captures
+    arrived carrying pupil names beside parent phone numbers, visitor names
+    and numbers, and admin email addresses. See the README in that folder.  */
+const GALLERY = [
+  {
+    src: "/how-it-works/cameras.png",
+    aspect: "aspect-[1375/633]",
+    alt: "the camera management screen, with the capture source options and the NVR or DVR connection fields",
+    title: "Cameras",
+    body: "Where a built-in webcam, USB cameras or an existing NVR or DVR get attached, tested and assigned to grid slots.",
+  },
+  {
+    src: "/how-it-works/gate.png",
+    aspect: "aspect-[1372/879]",
+    alt: "the gate management screen showing recent entry events and who is currently on site, with visitor names and numbers blurred",
+    title: "The entry point",
+    body: "Recent events by type, and a live list of who is still on site. Unknown faces and overrides are events in their own right, not silent gaps.",
+  },
+  {
+    src: "/how-it-works/chat.png",
+    aspect: "aspect-[1917/1029]",
+    alt: "the messaging screen with staff groups on the left and linked-contact conversations on the right, names blurred",
+    title: "Messaging",
+    body: "Group threads for staff and one-to-one conversations with the contacts linked to each person, in the same place as the records.",
+  },
+  {
+    src: "/how-it-works/system.png",
+    aspect: "aspect-[1373/875]",
+    alt: "the system settings screen showing the local database connection and the settings sections",
+    title: "Settings",
+    body: "Hours and late rules, notification timing, export folder and schedule, and the database - which is on your machine, as the server line shows.",
   },
 ];
 
@@ -76,12 +112,15 @@ export function AdminDashboard() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
           <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-            What the school&rsquo;s admin actually sees.
+            What the operations console actually looks like.
           </h2>
           <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
-            The gate is the part everyone notices. The dashboard is the part the
-            office lives in: one desktop application covering cameras, records,
-            staff and parent accounts, the gate, and every message that goes out.
+            The entrance is the part everyone notices. The console is the part the
+            office lives in: one desktop application covering cameras, people,
+            attendance, the door, linked contacts and every message that goes out.
+            The captures below come from a school install, because that is the
+            deployment documented in full; the screens are the same wherever it
+            runs.
           </p>
         </Reveal>
 
@@ -106,13 +145,13 @@ export function AdminDashboard() {
             </p>
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-6">
-            {/* When the screenshot lands, uncomment src. That is the whole
-                swap - PlaceholderMedia renders a real next/image from it and
-                uses the description above as alt text. */}
+            {/* Aspect matches the file's own ratio, so nothing is cropped.
+                Do not switch these to 4/3 - the captures are ~1.9:1 and
+                object-cover would eat the panels at both ends. */}
             <PlaceholderMedia
-              // src="/how-it-works/live-operations.png"
+              src="/how-it-works/live-operations.png"
               description="the live camera grid with recognition overlays and the recent-match log beneath it"
-              aspect="aspect-[4/3]"
+              aspect="aspect-[1911/1010]"
             />
           </Reveal>
         </div>
@@ -140,9 +179,9 @@ export function AdminDashboard() {
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-6 lg:row-start-1">
             <PlaceholderMedia
-              // src="/how-it-works/records.png"
-              description="the pupil database table with class, parent contact and attendance columns"
-              aspect="aspect-[4/3]"
+              src="/how-it-works/records.png"
+              description="the records table, with pupil names and parent contact details blurred"
+              aspect="aspect-[1380/900]"
             />
           </Reveal>
         </div>
@@ -192,13 +231,53 @@ export function AdminDashboard() {
           ))}
         </dl>
 
+        {/* The rest of the console, at a size where the shape of each screen
+            reads without pretending anyone can use it from a thumbnail. Four
+            screens rather than every screen: these are the ones a buyer asks
+            about.
+
+            Deliberately absent: the security-settings capture. See the note
+            in public/how-it-works/README.md - it shows the idle timeout set
+            to "never" and an AUDIT_CHAIN_INVALID row, neither of which is
+            what a page about session limits and audit trails should be
+            illustrated with. */}
+        <Reveal delay={0.1}>
+          <h3 className="mt-20 text-2xl leading-tight tracking-[-0.02em] text-foreground">
+            The rest of the console
+          </h3>
+        </Reveal>
+
+        <ul className="mt-8 grid gap-8 md:grid-cols-2">
+          {GALLERY.map((shot, i) => (
+            <Reveal as="li" key={shot.src} delay={0.06 * i}>
+              <figure>
+                <PlaceholderMedia
+                  src={shot.src}
+                  description={shot.alt}
+                  aspect={shot.aspect}
+                />
+                <figcaption className="mt-4">
+                  <span className="block font-medium text-foreground">
+                    {shot.title}
+                  </span>
+                  <span className="mt-1 block max-w-[46ch] text-[0.9375rem] leading-relaxed text-muted">
+                    {shot.body}
+                  </span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </ul>
+
         <Reveal delay={0.16}>
           {/* text-muted, not text-faint. Under the old dark palette --faint
               measured 3.74:1 on --surface and missed AA at this size. The
               palette has changed since; the more readable token stays. */}
-          <p className="mt-10 max-w-[62ch] leading-relaxed text-muted">
-            A full administrator guide covers every screen and button in the
-            dashboard. It is provided during onboarding rather than published here.
+          <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
+            Screenshots are from a working install with names, contact numbers
+            and email addresses blurred out. A full administrator guide covers
+            every screen and button in the dashboard; it is provided during
+            onboarding rather than published here.
           </p>
         </Reveal>
       </div>

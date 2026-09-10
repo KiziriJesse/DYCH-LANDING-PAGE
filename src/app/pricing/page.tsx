@@ -69,9 +69,19 @@ const PLANS = [
 // answers below must not ship as they stand.
 const FAQS = [
   {
-    question: "What hardware do we need to provide?",
+    question: "Do we need new cameras?",
     answer:
-      "Mains power at each entry point and somewhere weatherproof to mount a camera. We supply the cameras, the local matching unit and the gate tablet as part of the installation. A school does not buy hardware separately.",
+      "Not always. A built-in webcam, USB cameras, or the NVR or DVR you already have can all feed the system over the network. Where cameras are needed we supply them, along with the machine that does the matching and the tablet for the door, as part of the plan rather than as a separate invoice. What each site needs is what the visit is for.",
+  },
+  {
+    question: "Does it only work for schools?",
+    answer:
+      "No. The same recognition, attendance, entry and visitor tools apply anywhere you need to know who came in and when — offices, factories, warehouses, clinics, hotels, estates, places of worship. Schools are one sector we serve, and the one we have the deepest documentation for.",
+  },
+  {
+    question: "What happens if someone is not enrolled?",
+    answer:
+      "The event is recorded as unknown. Somebody has to act on it: log them as a visitor, or record a supervised override with a reason against a named account. There is no path where an unrecognised person simply passes without a trace.",
   },
   {
     question: "Do we need reliable internet?",

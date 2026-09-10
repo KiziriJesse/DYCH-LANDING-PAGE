@@ -1,21 +1,32 @@
 import { Reveal } from "@/components/ui/Reveal";
 
-// TODO: confirm these three pain points with a head teacher and with an
-// operations manager before launch. They are written from the school case,
-// which is the one DYCH has documented; the business echo in each is an
-// inference, not something a business customer has said.
+/*  DYCH's own "old way / what changes" list, which is a sharper frame than
+    the three pain points that were here: it names the thing being replaced
+    rather than describing a bad morning. Six rows, in their order. */
 const PROBLEMS = [
   {
-    lead: "The entry log is a book.",
-    body: "Someone writes a name in a ledger on the way in. Nobody checks it against anything, and by the afternoon the page is full and the morning is unreadable. A school gate and an office reception have exactly the same book.",
+    lead: "Shared access cards",
+    body: "The credential is the person, not a badge that can be lent, copied or left at home.",
   },
   {
-    lead: "The register is filled in from memory.",
-    body: "A teacher marks it at break, or a manager reconstructs a timesheet on Friday. Either way the errors surface at the end of the term or the month, by which point nobody can say who was actually in the room.",
+    lead: "Manual registers",
+    body: "Cameras mark presence as people pass. Nobody fills anything in, so there is nothing to fill in late.",
   },
   {
-    lead: "The person who needed to know hears last.",
-    body: "A pupil who never arrived is noticed when the day ends; a contractor who never left is noticed when the alarm is set. The call lands hours after the moment it would have mattered.",
+    lead: "No idea who is on site",
+    body: "A live on-site list and a live visitor list, both of which answer the question in the moment somebody asks it.",
+  },
+  {
+    lead: "Disputes over time",
+    body: "Check-in and check-out timestamps, and an export you can put in front of whoever is disputing them.",
+  },
+  {
+    lead: "Unknown walk-ins",
+    body: "An unrecognised face raises a stop event. Somebody has to log a visitor or record an override; nobody simply walks through.",
+  },
+  {
+    lead: "A weak door process",
+    body: "Paired devices, named guard accounts, PIN overrides with a written reason, and an audit log none of them can edit.",
   },
 ];
 
@@ -30,11 +41,11 @@ export function Problem() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
           <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
-            Right now, security and attendance run on trust and paper.
+            Right now, access and attendance run on trust and paper.
           </h2>
           <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-muted">
-            In a school it looks like this. In an office it looks almost
-            identical, with different nouns.
+            Six things most premises still do the hard way, and what each one
+            becomes.
           </p>
         </Reveal>
 

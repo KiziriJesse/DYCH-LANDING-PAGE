@@ -1,95 +1,95 @@
 # /how-it-works screenshots
 
-Screenshots of the admin dashboard for the "What the school's admin actually
-sees" block on `/how-it-works`.
+Screenshots of the operations console, captured from a working install and
+placed on `/how-it-works`. Names match the screens in the **Admin Dashboard
+User Guide** (20pp).
 
-Filenames below are matched to the screens as they appear in the **Admin
-Dashboard User Guide** (Smart School Vision, 20pp), so whoever captures them
-knows exactly which window is wanted.
+## In use
 
----
-
-## Wanted now — the page has two slots
-
-Both render at `aspect-[4/3]`, so capture landscape and crop to 4:3 rather
-than shipping a 16:9 window that will be cropped for you.
-
-| File | The screen | Guide |
+| File | Where | Screen |
 |---|---|---|
-| `live-operations.png` | **Live Display.** The 20-slot camera grid with recognition overlays, the `Live Recognition Log` strip beneath it, and the `Refresh / Enable Detection / Parameter Settings / Full Screen / Clear All` toolbar. | p.4 |
-| `records.png` | **Database Management.** The student table — Student ID, Name, Age, Gender, Class, Parent Name, Parent Contact, Face Images, Status — with the filter bar and the `Refresh Data / Export Data / Export Today's Attendance / Backup Database` bar along the bottom. | p.11 |
+| `live-operations.png` | media split, "Live operations" | Live Display — camera grid, overlays, recognition log |
+| `records.png` | media split, "Records" | Database Management — the people table |
+| `cameras.png` | gallery | Camera Management — capture source, NVR/DVR fields |
+| `gate.png` | gallery | Gate Management — recent events, who is on site |
+| `chat.png` | gallery | Messaging — staff groups and linked-contact threads |
+| `system.png` | gallery | System — local database, settings sections |
 
-Dropping a file in is not enough on its own — uncomment one line in
-`src/components/how-it-works/AdminDashboard.tsx`:
+Each is rendered at its own intrinsic ratio (`aspect-[W/H]` matching the file)
+so nothing is cropped. **Do not change these to `4/3`** — the captures run from
+1.53:1 to 2.17:1 and `object-cover` would eat the panels at both ends.
+
+## Held back
+
+**`security-settings.png` — not used, three reasons.**
+
+1. It shows **Idle timeout: never**. `/security-and-trust` tells readers that
+   sessions end. Illustrating that with a screenshot of the timeout disabled
+   argues the opposite.
+2. The audit table contains an **`AUDIT_CHAIN_INVALID` / `row_hash_mismatch`**
+   row — the tamper-evidence reporting itself broken. That is the worst
+   possible frame for a picture of an audit trail.
+3. My redaction of the Actor column clipped the first few characters of the
+   Reason column beside it.
+
+Worth a fresh capture: timeout set to something real, a clean audit run, and
+the Actor column already anonymised in the data rather than blurred after.
+
+**`parent-accounts.png` — kept, unused.** It is education-specific (parent
+approvals), and `/how-it-works` is now sector-neutral. It belongs on
+`/product/schools` if that page ever grows a media slot.
+
+## What was redacted, and why
+
+The captures arrived carrying live personal data. Everything below was blurred
+before the files went into this folder, and the un-redacted originals were
+deliberately **not** kept in the repo:
+
+- `records.png` — three pupils by name, aged 10, with their parents' names and
+  phone numbers
+- `chat.png` — two parent names and an admin Gmail address
+- `parent-accounts.png` — two parent usernames and their Gmail addresses
+- `security-settings.png` — an admin Gmail address, six times, in the audit log
+- `gate.png` — visitor names and two mobile numbers
+- `live-operations.png` — a personal export directory path
+
+A few pixels also came off each edge: every capture had the guide's red
+annotation frame around it, which is not product UI.
+
+**If these are ever re-captured, capture against a demo dataset instead.**
+Blurring is a patch. Real names of children beside their parents' phone
+numbers should not be in a public folder on a marketing site even briefly, and
+`public/` is served verbatim.
+
+## Two things still visible in the captures
+
+Neither is fixable by redaction; both need a build or a re-capture.
+
+1. **The product names disagree.** The bottom bar reads **Smart School Vision
+   v1.0**, the sign-in splash reads **Smart School Systems**, the window title
+   reads **Th3 Attend**, and this site calls the software **Smart Vision**.
+   Four names for one product, one of them on screen in `live-operations.png`.
+2. **The install is nearly empty and shows a disk warning.** Camera slots read
+   "Initializing…", counts are near zero, and the recognition log repeats
+   `ALERT: Disk space warning: 89.5% used`. A populated demo with a healthy
+   disk would sell considerably better.
+
+## Adding one
+
+`PlaceholderMedia` takes an optional `src`. Pass it and the component renders a
+real `next/image`, using the `description` already at the call site as alt
+text; leave it off and the marked placeholder renders instead.
 
 ```tsx
 <PlaceholderMedia
   src="/how-it-works/live-operations.png"
   description="the live camera grid with recognition overlays and the recent-match log beneath it"
-  aspect="aspect-[4/3]"
+  aspect="aspect-[1911/1010]"
 />
 ```
 
-`description` is already written at each call site and becomes the alt text,
-so it does not need changing. Until `src` is passed, the slot keeps rendering
-the marked placeholder.
+## A note on how these look
 
-## Not wanted yet
-
-The old version of this file also asked for `permissions.png`,
-`communication.png` and `reliability.png`. Those three subsections are
-hairline text rows on the page with no media slot, so the files would have sat
-here unused. They are listed under "if more slots are added" below instead.
-
----
-
-## Four things to fix before any of these can ship
-
-These are all visible in the guide's own screenshots, so they will be in a
-fresh capture too.
-
-**1. The product name in the app does not match the site.** The sign-in splash
-reads **"Smart School Systems · By Dych Technologies"** and the window title
-bar reads **"Th3 Attend"**. This site calls the software **Smart Vision**. Any
-screenshot showing either string contradicts the page it sits on. Either
-capture screens that avoid the splash and the title bar, or get the build
-relabelled first. Worth resolving regardless of screenshots — it is the same
-name in three places and three different answers.
-
-**2. Every screen in the guide is an empty install.** "No content in table",
-"No records yet", `Pending 0 / Approved 0 / Total Parents 0`, camera slots
-reading "Initializing...". An empty product is a bad advert. Capture against a
-populated demo school, not a fresh install.
-
-**3. A real personal email is on almost every screen.** The top bar shows
-`Signed in as saidasalim123456@gmail.com` in most of the guide's captures.
-Sign in as a demo account before capturing, or scrub it.
-
-**4. Populated screens will contain real children.** Pupil names, parent phone
-numbers and faces. Blur, substitute, or use a demo dataset — do not commit a
-screenshot of a live school's roll to a public folder.
-
----
-
-## If more slots are added later
-
-The other screens from the guide, should the page ever grow media for them.
-Same folder, same convention.
-
-| File | The screen | Guide |
-|---|---|---|
-| `cameras.png` | **Camera Management** — capture source, and the NVR/DVR fields with `Test connection` and `Discover channels`. This is the one that shows existing CCTV being adopted, which is a selling point the page now makes in words only. | p.5 |
-| `gate.png` | **Gate Management** — the `Live Gate Board / Devices / Guards / Visitor Log / Policy` tabs and recent gate events. | p.10 |
-| `parent-accounts.png` | **Parent Accounts** — pending vs approved counts and the approval table. | pp.7, 9 |
-| `security-settings.png` | **Security settings** — idle timeout, login credentials, admin login lock recovery, and the audit table with `Export CSV`. | p.8 |
-| `chat.png` | **Chat** — staff groups on the left, parent groups on the right. | p.6 |
-| `system.png` | **System Management** — database connection, attendance export settings, school day schedule. | p.14 |
-
----
-
-## A note on how these will look
-
-The dashboard is a dark desktop application and this site is a near-white
-paper palette. A dark screenshot inside a light page is correct — it is a
-picture of the product, and it should look like the product. The slot draws a
-hairline border around it so the edge does not float.
+The console is a dark desktop application and this site is a near-white paper
+palette. A dark screenshot inside a light page is correct — it is a picture of
+the product, and it should look like the product.

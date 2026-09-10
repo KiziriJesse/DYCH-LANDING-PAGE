@@ -13,24 +13,24 @@ const ICON = { size: 26, weight: "light" } as const;
 
 const FEATURES = [
   {
-    title: "Facial Recognition Security",
-    body: "Biometric and digital identification tied to the entry point, so the school knows who is on the grounds and who is not, without anyone walking a clipboard to the perimeter.",
+    title: "Recognition at the entrance",
+    body: "A face matched against your own enrolled people as they walk in, so you know who is on the premises and who is not, without anyone walking a clipboard to the perimeter.",
     href: "/product/schools#security",
     Icon: ScanSmiley,
     span: "md:col-span-7 lg:row-span-2",
     shape: "lead" as const,
   },
   {
-    title: "Automatic Attendance",
-    body: "Arrival and departure are recorded as they happen. No manual register, so no transcription errors to chase at the end of term.",
+    title: "Attendance and timekeeping",
+    body: "Arrival and departure recorded as they happen, against your own hours and late rules. No manual register, so no transcription errors to chase at the end of the month.",
     href: "/product/schools#attendance",
     Icon: ListChecks,
     span: "md:col-span-5",
     shape: "standard" as const,
   },
   {
-    title: "Real-Time Parent Alerts",
-    body: "A push notification carrying the pupil’s photo, so a parent can see it is their child. The school sets how soon after the scan it goes; SMS follows where the push goes unopened.",
+    title: "Alerts to the right people",
+    body: "A notification carrying the photo, so whoever gets it can see the match was right. You set how soon after the scan it goes; SMS and WhatsApp follow where it goes unopened.",
     href: "/product/schools#communication",
     Icon: PaperPlaneTilt,
     span: "md:col-span-5",
@@ -40,8 +40,8 @@ const FEATURES = [
     // Fees & Finance was removed: no source document describes a billing
     // feature. The Guard App takes the slot, matching the deck's own list of
     // what a school is buying: camera, software, parent app, guard app.
-    title: "The Guard App",
-    body: "One screen at the gate instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival, and keeps working when the connection drops.",
+    title: "The screen on the door",
+    body: "One tablet instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival — allow, late, stop, unknown — and keeps working when the connection drops.",
     href: "/product/schools#guard-app",
     Icon: Devices,
     span: "md:col-span-12",
@@ -100,16 +100,17 @@ export function ProductSnapshot() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
           <h2 className="max-w-[18ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
-            Four jobs the school office stops doing by hand.
+            Four jobs the front desk stops doing by hand.
           </h2>
           {/* This line used to end "...the parent line and the fees ledger."
               There is no fees ledger. The finance capability was removed from
               the product for want of any source document describing it, and
               this sentence was the last place the claim survived. */}
           <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
-            One installation covers the gate, the register, the parent line and the
-            guard&rsquo;s screen. Each part works on its own and gets sharper
-            alongside the others.
+            One installation covers the entrance, the attendance record, the people
+            who need telling, and the screen the officer on the door actually
+            holds. Each part works on its own and gets sharper alongside the
+            others.
           </p>
         </Reveal>
 
@@ -192,9 +193,9 @@ export function ProductSnapshot() {
             page comes back. */}
         <Reveal delay={0.28}>
           <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
-            Not a school? The same recognition, attendance and alerting runs at a
-            business entrance, with staff and contractors in place of pupils and
-            a duty manager in place of a parent.{" "}
+            The same four run at a school gate, a factory turnstile, a clinic
+            reception and an estate boom. What changes is the vocabulary, not the
+            system.{" "}
             <Link
               href="/contact"
               className="border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-150 hover:border-accent"

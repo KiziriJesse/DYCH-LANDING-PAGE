@@ -45,7 +45,7 @@ export default function AboutPage() {
     <>
       <PageHeader
         title="Intelligent automation, built by DYCH Technologies."
-        intro="DYCH Technologies is a software solutions company. We build automation and system management for industry and education across Africa, from Kampala. Smart Vision is what that work looks like pointed at an entry point - a school gate, or a reception desk."
+        intro="DYCH Technologies is a software solutions company, building automation and system management for industry and education across Africa, from Kampala. Smart Vision is our live face-recognition platform: it identifies people at your entrance, records when they arrive and leave, and gives managers a clear record of who is on site."
       />
 
       {/* Text-led, no cards: the reason the company exists should not be

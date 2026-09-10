@@ -28,7 +28,7 @@ export default function HowItWorksPage() {
       <DeploymentTimeline />
 
       <CtaBand
-        title="Ready to see this running at your school?"
+        title="Ready to see this running at your entrance?"
         body="A site assessment is a walk around your entry points and an hour of questions. It costs nothing and it ends with a written scope."
       />
     </>
