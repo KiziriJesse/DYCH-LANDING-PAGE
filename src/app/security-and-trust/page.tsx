@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   Export,
+  EyeSlash,
   HandPalm,
   PlugsConnected,
   UserFocus,
@@ -23,18 +24,30 @@ export const metadata: Metadata = {
     Every statement below is a claim about how DYCH handles biometric data
     belonging to children. None of it has been reviewed by a lawyer.
 
-    ONE claim is now document-backed rather than proposed: "all face data is
-    matched and encrypted on-device, no photos ever leave the school" is stated
-    verbatim in the DYCH case-study deck, and the product spec corroborates it
-    ("no internet required, face recognition runs locally"). The rest of this
-    page is still positioning that engineering has not confirmed.
+    WHAT IS NOW DOCUMENT-BACKED, after reading the Admin Dashboard user guide:
 
-    Two of these five sections, "Isolation between schools" and "Export and
-    deletion", were written from scratch. The build plan said to reuse that
-    copy from Trust.tsx, but Trust.tsx contains no such copy: it only ever
-    covered offline-first operation and SMS/WhatsApp delivery. So those two
-    sections are proposed positioning, not a restatement of anything DYCH has
-    previously said.
+      - On-device matching. "All face data is matched and encrypted
+        on-device, no photos ever leave the school" is verbatim in the
+        case-study deck; the spec corroborates it, and the guide shows the
+        parent, teacher and gate services running on the school's own machine.
+      - Scoped accounts. The guide opens by stating that what an admin can see
+        depends on their role, and that anything outside it is hidden or
+        refused. Roles are created and edited by the school.
+      - Enrolment and access are logged. There is an audit trail of security
+        events with its own filter and a CSV export.
+      - Export without asking us. Attendance, entry logs, report cards and a
+        full database-and-images backup all export from the dashboard.
+      - Sessions end. Idle timeout is configurable and an eight-hour maximum
+        session applies regardless.
+      - Parents see nothing until approved - see the "Consent and control"
+        section, which now says so.
+
+    STILL NOT BACKED, and still positioning: deletion on request and written
+    confirmation of what was destroyed; the promise that support access is
+    requested and recorded; the claim that one school's records are never
+    combined into a wider index. The guide is a manual for one school's
+    installation, so it neither confirms nor denies what happens between
+    schools or at our end. Engineering must confirm those three.
 
     Before launch, each point needs to be either confirmed by engineering,
     corrected, or removed. Deliberately absent, because inventing them would
@@ -85,10 +98,54 @@ const COMMITMENTS: CommitmentData[] = [
       },
       {
         label: "Who can enrol",
-        body: "Named staff accounts only, and every enrolment is written to a log the school can read.",
+        body: "Named staff accounts only, and every enrolment is written to a log the school can read. That log is filterable and exports to a spreadsheet, so it is evidence rather than a screen someone has to sit and watch.",
+      },
+      {
+        label: "A parent account sees nothing until you say so",
+        body: "Parents register themselves, and then wait. Until an administrator approves the account it can sign in and see no pupil data at all - not their own child's. Approval is a deliberate act by a named member of staff, not something that happens because a form was filled in correctly.",
+      },
+      {
+        label: "Sessions do not stay open forever",
+        body: "An idle dashboard signs itself out on a timeout the school sets, and no session survives past eight hours whatever that timeout says. Opening the account and permissions screen asks for the password again even mid-session.",
       },
     ],
     Icon: HandPalm,
+  },
+  {
+    /*  This section exists because the guide documents a feature that is a
+        genuine privacy question and that no other DYCH document mentions:
+        Gate -> Policy -> Visitor Auto-Registration. When it is on, a face the
+        system does not recognise, that stays in view long enough, is saved as
+        a placeholder identity so it is recognised next time.
+
+        That is enrolment of somebody who never consented to anything, so it
+        is described here plainly rather than left for a school to discover in
+        a settings screen. Everything below is stated in the guide: it is
+        opt-in, it does not mark attendance, it does not notify parents, the
+        sighting threshold and retention period are set by the school, and a
+        banner stays on screen the whole time it is enabled.  */
+    id: "unknown-faces",
+    title: "Faces the system does not know",
+    lead: "A recognition system has to do something when it sees somebody it has never seen. Ours can be told to remember them, and that setting is off unless a school turns it on deliberately.",
+    points: [
+      {
+        label: "What the setting actually does",
+        body: "With visitor auto-registration on, a face that is unrecognised and stays in view long enough is saved as a numbered placeholder, so the same person is recognised as the same person on a return visit. No name is attached. A member of staff can give it one later, or leave it.",
+      },
+      {
+        label: "What it deliberately does not do",
+        body: "It does not mark attendance for that person, and it does not notify any parent. It is a record that somebody came back, not an accusation and not a register entry.",
+      },
+      {
+        label: "The school sets the thresholds, and cannot forget it is on",
+        body: "How similar a return sighting must be, how long a face must be in view before it is kept, and how many days it is kept for are all yours to set. While the feature is enabled a warning banner stays visible on every gate screen, which is deliberate: a setting this consequential should not be quietly on.",
+      },
+      {
+        label: "Our recommendation",
+        body: "Leave it off unless there is a specific reason. A school that wants to know about repeat unknown visitors at the gate has a real use for it; a school that just wants attendance does not, and should not be holding face records for people who are not part of the school.",
+      },
+    ],
+    Icon: EyeSlash,
   },
   {
     id: "isolation",
@@ -160,6 +217,7 @@ const QUESTIONS = [
   "How do we withdraw a pupil from recognition, and what does that pupil’s day look like afterwards?",
   "If we leave, what do we get back, in what format, and how do you prove your copies are gone?",
   "Who at your company can see our data, under what circumstances, and where is that recorded?",
+  "Does the system ever record a face belonging to someone who is not enrolled, and if so, who switched that on and when does it expire?",
 ];
 
 export default function SecurityAndTrustPage() {

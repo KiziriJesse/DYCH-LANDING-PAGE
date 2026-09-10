@@ -10,7 +10,7 @@ const STAGES = [
   },
   {
     title: "Hardware install",
-    body: "Cameras, readers and the local unit go in, out of teaching hours where the school prefers it.",
+    body: "Cameras and the local machine go in, out of teaching hours where the school prefers it. Where a school already has an NVR or DVR at the gate, that can be read over the network instead of running new cable.",
   },
   {
     title: "Staff training",

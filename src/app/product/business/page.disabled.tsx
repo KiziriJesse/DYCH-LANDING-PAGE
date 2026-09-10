@@ -128,7 +128,7 @@
 //     // is generalised from a parent to a manager or a security desk.
 //     id: "alerts",
 //     title: "The desk knows before anyone walks over to ask",
-//     lead: "A push notification reaches whoever needs to know within seconds of the scan, carrying the person's photo so the recipient can see at a glance that it matched the right individual. Push is the primary channel: it is immediate and costs nothing per message.",
+//     lead: "A push notification reaches whoever needs to know, carrying the person's photo so the recipient can see at a glance that it matched the right individual. Push is the primary channel because it costs nothing per message; how soon after the scan it goes is a setting.",
 //     points: [
 //       {
 //         label: "SMS is the fallback, and it is metered",

@@ -81,7 +81,7 @@ const FAQS = [
   {
     question: "Why is SMS priced separately?",
     answer:
-      "Push notifications reach a parent within seconds and cost nothing per message, so they are the primary channel. SMS exists so parents without a smartphone are still reached, and it carries a real per-message cost. Charging for it honestly is better than folding it into a flat fee and quietly rationing it.",
+      "Push notifications cost nothing per message, so they are the primary channel. SMS exists so parents without a smartphone are still reached, and it carries a real per-message cost. Charging for it honestly is better than folding it into a flat fee and quietly rationing it.",
   },
   {
     question: "How long is the commitment?",

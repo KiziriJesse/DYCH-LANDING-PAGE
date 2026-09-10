@@ -42,7 +42,7 @@ const FLOW = [
   },
   {
     title: "Alerts",
-    body: "A push notification reaches the parent in seconds, with SMS behind it.",
+    body: "A push notification reaches the parent on the school’s chosen delay, with SMS behind it.",
     Icon: DeviceMobileSpeaker,
   },
   {

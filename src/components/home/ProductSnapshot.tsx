@@ -30,7 +30,7 @@ const FEATURES = [
   },
   {
     title: "Real-Time Parent Alerts",
-    body: "A push notification within seconds of the scan, carrying the pupil’s photo so a parent can see it is their child. SMS follows as a fallback if the push goes unopened.",
+    body: "A push notification carrying the pupil’s photo, so a parent can see it is their child. The school sets how soon after the scan it goes; SMS follows where the push goes unopened.",
     href: "/product/schools#communication",
     Icon: PaperPlaneTilt,
     span: "md:col-span-5",

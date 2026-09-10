@@ -22,7 +22,7 @@ const STEPS = [
     detail: [
       {
         label: "What it needs",
-        body: "A camera covering the approach to each entry point, a reader at the threshold, and a local unit that performs matching on site. Mains power with battery backup at the gate.",
+        body: "A camera covering the approach to each entry point and a machine on site that does the matching, holds the records and runs the services the parent, teacher and gate apps talk to. Mains power with battery backup at the gate. No reader, no card and no tag: a pupil walks up as normal. Existing CCTV can often supply the picture, because the system reads an NVR or DVR over the network as well as cameras we fit.",
       },
       {
         label: "What happens",
@@ -42,7 +42,7 @@ const STEPS = [
     detail: [
       {
         label: "What it needs",
-        body: "Nothing beyond the gate hardware for arrival and departure. Schools that want a second checkpoint at a classroom door can add a reader there.",
+        body: "Nothing beyond the gate hardware for arrival and departure. Schools that want a second checkpoint at a classroom door add another camera position there; up to twenty run at once.",
       },
       {
         label: "What happens",
@@ -58,7 +58,7 @@ const STEPS = [
     id: "step-alerts",
     title: "Alerts",
     Icon: DeviceMobileSpeaker,
-    lead: "A parent hears within the minute, not at the end of the day. This is the part that changes what a school can promise a family.",
+    lead: "A parent hears the same morning, not at the end of the day. This is the part that changes what a school can promise a family.",
     detail: [
       {
         label: "What it needs",
@@ -66,7 +66,7 @@ const STEPS = [
       },
       {
         label: "What happens",
-        body: "Three messages: arrived, left, and expected but not arrived. The third is the one that matters, and it fires without anyone deciding to send it.",
+        body: "Three messages: arrived, left, and expected but not arrived. The third is the one that matters, and it fires without anyone deciding to send it. The gap between the scan and the message is a school setting - immediate up to five hours, ten minutes as shipped - and the absence sweep has its own time of day.",
       },
       {
         label: "What the parent sees",

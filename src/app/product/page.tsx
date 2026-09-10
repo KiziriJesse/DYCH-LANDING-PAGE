@@ -48,8 +48,8 @@ const SHARED = [
   },
   {
     Icon: DeviceMobileSpeaker,
-    title: "And somebody is told, in seconds",
-    body: "A push notification reaches whoever needs to know, carrying the photo so they can see the match was right. SMS follows as a metered fallback for anyone without the app.",
+    title: "And somebody is told, without anyone deciding to",
+    body: "A push notification reaches whoever needs to know, carrying the photo so they can see the match was right. How soon after the scan it goes is a setting the site controls. SMS follows as a metered fallback for anyone without the app.",
   },
 ];
 

@@ -69,9 +69,13 @@ const CAPABILITIES: CapabilityData[] = [
         label: "When a face is not recognised",
         body: "Nobody is turned away automatically. The screen flags it and a person on the gate checks, the way they always have.",
       },
+      {
+        label: "It can use the cameras you already have",
+        body: "As well as cameras we supply, the system reads an existing NVR or DVR over the network, discovers its channels and assigns them to slots, or takes a single RTSP stream directly. Up to twenty camera positions run at once. A school with CCTV already at the gate is not necessarily buying it twice.",
+      },
     ],
     media:
-      "the recognition view at the school gate, or the camera and reader hardware in place",
+      "the recognition view at the school gate, or the camera hardware in place above the entry point",
     mediaAspect: "aspect-[4/3]",
     renderMedia: () => <RecognitionFigure />,
     Icon: ScanSmiley,
@@ -107,13 +111,29 @@ const CAPABILITIES: CapabilityData[] = [
   {
     // STATUS: push arrival alerts and live chat are Week 2 and shipped.
     // Absence excuse and school announcements are Month 2.
+    //
+    // TIMING CORRECTED FROM THE ADMIN GUIDE. This said alerts arrive "within
+    // seconds". They do not, by default: System -> Parent portal
+    // notifications sets a delay of 0-300 minutes before the parent is
+    // messaged, and it ships at 10. A school that wants an immediate alert
+    // sets it to zero.
+    //
+    // ASK DYCH: the spec's SMS fallback fires "if a push has not been opened
+    // within ten minutes". If the push itself is also delayed ten minutes by
+    // default, those two compound to twenty. Whether the fallback clock
+    // starts at the scan or at the push is not stated in either document, so
+    // no combined timeline is claimed below.
     id: "communication",
     title: "Parents told while it still matters",
-    lead: "A push notification reaches the parent within seconds of the gate scan, and it carries the pupil’s photo so the parent can see at a glance that it is their child and not a mismatch. Push is the primary channel because it is immediate and costs nothing per message.",
+    lead: "A push notification carries the pupil’s photo, so a parent can see at a glance that it is their child and not a mismatch. Push is the primary channel because it costs nothing per message. When it goes out is the school’s decision, not ours: the delay between the gate scan and the message is a setting, anywhere from immediate to five hours, and it ships at ten minutes.",
     points: [
       {
+        label: "The delay is a dial, and you hold it",
+        body: "Ten minutes is the default, not a limit. A school that wants the alert to land before the pupil has reached the classroom sets it to zero; one that would rather absorb a pupil stepping back out to a waiting parent leaves it longer. The same screen sets the end-of-day sweep for pupils who never checked in, and can restrict it to weekdays.",
+      },
+      {
         label: "SMS is a fallback, and it is not free",
-        body: "If a push has not been opened within ten minutes, an SMS follows, so a parent without a smartphone is still reached. SMS carries a real per-message cost and is priced as an add-on rather than folded into every plan.",
+        body: "Where a push goes unopened an SMS follows, so a parent without a smartphone is still reached. SMS carries a real per-message cost and is priced as an add-on rather than folded into every plan.",
       },
       {
         label: "A conversation, not just alerts",
@@ -130,7 +150,11 @@ const CAPABILITIES: CapabilityData[] = [
     layout: "stage",
   },
   {
-    // STATUS: MOSTLY ROADMAP. Campus status, dorm check-in, missed check-in and
+    // STATUS: MOSTLY ROADMAP - but less than it was. The admin guide's gate
+    // colour code is explicit that red means "boarding student without a
+    // pass", so the pass check IS in the shipped gate flow rather than
+    // waiting on Month 4. What follows is still ahead of the build:
+    // Campus status, dorm check-in, missed check-in and
     // admin-created gate passes are Month 3. Digital exeat request, approval
     // and the automatic gate check are Month 4 on the Premium tier. Opening
     // and closing day tracking are Month 4-5. Visiting-day QR is Month 6+.

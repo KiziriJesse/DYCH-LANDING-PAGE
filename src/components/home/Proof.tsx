@@ -13,7 +13,7 @@ const POINTS = [
   {
     Icon: DeviceMobile,
     title: "On the phone parents already own",
-    body: "A push notification reaches a parent in seconds. Where there is no smartphone, the same alert falls back to SMS, so no family is left out.",
+    body: "A push notification reaches a parent on the school’s own timing. Where there is no smartphone, the same alert falls back to SMS, so no family is left out.",
   },
 ];
 
