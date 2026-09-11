@@ -1,0 +1,139 @@
+import type { Metadata } from "next";
+import {
+  EnvelopeSimple,
+  MapPin,
+  PhoneCall,
+  WhatsappLogo,
+} from "@phosphor-icons/react/dist/ssr";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Reveal } from "@/components/ui/Reveal";
+import { ContactForm } from "@/components/contact/ContactForm";
+import { Button } from "@/components/ui/Button";
+import { CONTACT } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Book a demo with DYCH Technologies, or reach the team in Kampala by phone, WhatsApp or email.",
+};
+
+const CHANNELS: {
+  Icon: typeof PhoneCall;
+  label: string;
+  lines: { text: string; href?: string; external?: boolean }[];
+}[] = [
+  {
+    Icon: PhoneCall,
+    label: "Call the team",
+    lines: CONTACT.phones.map((p) => ({ text: p.display, href: p.href })),
+  },
+  {
+    Icon: EnvelopeSimple,
+    label: "Email",
+    lines: [{ text: CONTACT.email.display, href: CONTACT.email.href, external: true }],
+  },
+  {
+    Icon: MapPin,
+    label: "Where we are",
+    lines: [{ text: CONTACT.location }],
+  },
+];
+
+export default function ContactPage() {
+  return (
+    <>
+      <PageHeader
+        title="Talk to the team in Kampala."
+        intro="Tell us the size of your roll and how attendance is taken today, and we will come back with what an installation would involve at your site. A site assessment costs nothing and ends with a written scope."
+      />
+
+      {/* No closing CTA band on this page: every other page's CTA points here,
+          so one more "Book a Demo" would loop the reader back to where they
+          already are. */}
+      <section className="bg-background px-4 pb-28 pt-16 sm:px-6 lg:px-10 lg:pb-40 lg:pt-20">
+        <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            {/* WhatsApp first and as real buttons: it is the channel that
+                actually reaches us fastest, and the form below cannot yet
+                deliver anything. */}
+            <Reveal>
+              <h2 className="text-xl tracking-[-0.02em] text-foreground">
+                Prefer WhatsApp?
+              </h2>
+              <p className="mt-3 max-w-[46ch] leading-relaxed text-muted">
+                It is the quickest way to reach us, and you will get a person rather
+                than a ticket number.
+              </p>
+              <ul className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {CONTACT.whatsapp.map((line) => (
+                  <li key={line.href}>
+                    {/* The glyph slot carries the WhatsApp mark instead of the
+                        default arrow: on a control whose whole purpose is one
+                        named channel, the channel is the more useful glyph. */}
+                    <Button href={line.href} size="lg" icon={WhatsappLogo}>
+                      <span className="nums">{line.display}</span>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+
+            <dl className="mt-12 divide-y divide-[var(--border)] border-t border-border">
+              {CHANNELS.map(({ Icon, label, lines }, i) => (
+                <Reveal key={label} delay={0.06 * i} className="flex gap-5 py-6">
+                  <dt className="sr-only">{label}</dt>
+                  <span
+                    aria-hidden
+                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  >
+                    <Icon size={22} weight="light" />
+                  </span>
+                  <dd>
+                    <p className="text-sm font-medium text-faint">{label}</p>
+                    {lines.map((line) =>
+                      line.href ? (
+                        <a
+                          key={line.text}
+                          href={line.href}
+                          {...(line.external
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                          className="nums mt-1 block text-[0.9375rem] text-foreground underline decoration-[var(--accent-line)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-accent-on-light"
+                        >
+                          {line.text}
+                        </a>
+                      ) : (
+                        <p key={line.text} className="mt-1 text-[0.9375rem] text-foreground">
+                          {line.text}
+                        </p>
+                      ),
+                    )}
+                  </dd>
+                </Reveal>
+              ))}
+            </dl>
+          </div>
+
+          {/* col-span-6 with a max-width, not col-span-7 at full bleed. The
+              card was wider and more heavily padded than the column beside
+              it, so it read as the page rather than as one of two ways to
+              get in touch. */}
+          <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-7">
+            <div className="max-w-[34rem] rounded-card border border-border bg-surface p-6 sm:p-7">
+              <h2 className="text-xl tracking-[-0.02em] text-foreground">
+                Or send us the details
+              </h2>
+              <p className="mt-3 max-w-[52ch] leading-relaxed text-muted">
+                The more you can tell us about the site, the more useful the first
+                conversation is.
+              </p>
+              <div className="mt-8">
+                <ContactForm />
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
+  );
+}

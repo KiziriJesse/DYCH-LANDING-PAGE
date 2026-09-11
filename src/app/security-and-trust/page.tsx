@@ -1,0 +1,288 @@
+import type { Metadata } from "next";
+import {
+  Export,
+  EyeSlash,
+  HandPalm,
+  PlugsConnected,
+  UserFocus,
+  Vault,
+} from "@phosphor-icons/react/dist/ssr";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { CtaBand } from "@/components/ui/CtaBand";
+import { Reveal } from "@/components/ui/Reveal";
+import { Commitment, type CommitmentData } from "@/components/trust/Commitment";
+
+export const metadata: Metadata = {
+  title: "Security & trust",
+  description:
+    "How DYCH Technologies captures, stores, isolates, exports and deletes school records and biometric data.",
+};
+
+/*  ============================================================
+    STOP. READ BEFORE THIS PAGE GOES LIVE.
+
+    Every statement below is a claim about how DYCH handles biometric data
+    belonging to children. None of it has been reviewed by a lawyer.
+
+    WHAT IS NOW DOCUMENT-BACKED, after reading the Admin Dashboard user guide:
+
+      - On-device matching. "All face data is matched and encrypted
+        on-device, no photos ever leave the school" is verbatim in the
+        case-study deck; the spec corroborates it, and the guide shows the
+        parent, teacher and gate services running on the school's own machine.
+      - Scoped accounts. The guide opens by stating that what an admin can see
+        depends on their role, and that anything outside it is hidden or
+        refused. Roles are created and edited by the school.
+      - Enrolment and access are logged. There is an audit trail of security
+        events with its own filter and a CSV export.
+      - Export without asking us. Attendance, entry logs, report cards and a
+        full database-and-images backup all export from the dashboard.
+      - Sessions end. Idle timeout is configurable and an eight-hour maximum
+        session applies regardless.
+      - Parents see nothing until approved - see the "Consent and control"
+        section, which now says so.
+
+    STILL NOT BACKED, and still positioning: deletion on request and written
+    confirmation of what was destroyed; the promise that support access is
+    requested and recorded; the claim that one school's records are never
+    combined into a wider index. The guide is a manual for one school's
+    installation, so it neither confirms nor denies what happens between
+    schools or at our end. Engineering must confirm those three.
+
+    Before launch, each point needs to be either confirmed by engineering,
+    corrected, or removed. Deliberately absent, because inventing them would
+    be worse than leaving them out:
+      - named certifications (ISO 27001, SOC 2 and the like)
+      - specific encryption algorithms or key lengths
+      - retention periods in days or years
+      - any claim of compliance with the Uganda Data Protection and Privacy
+        Act, or with GDPR
+    ============================================================ */
+const COMMITMENTS: CommitmentData[] = [
+  {
+    id: "biometric-data",
+    title: "Matched on your hardware. No photos leave the school.",
+    lead: "This is the commitment the rest of the page rests on, and it is the one DYCH states plainly in its own materials: all face data is matched and encrypted on-device, and no photos ever leave the school. Recognition happens on a unit on your site, not on a server somewhere else, so there is no upload of children’s faces to anywhere.",
+    points: [
+      {
+        label: "Enrolment does not keep a photograph",
+        body: "It produces a mathematical template used for matching, and the template is what the system holds. It exists to recognise a pupil at an entry point and to mark a register, and it is not put to any other purpose.",
+      },
+      {
+        label: "What is actually held",
+        body: "A matching template derived from the face, the pupil record the school already keeps, and the entry and exit events that matching produces. Face images are stored in a folder the school chooses on its own machine.",
+      },
+      {
+        label: "What it is never used for",
+        body: "It is not sold, not shared with advertisers, and not used to build or improve anything for another customer.",
+      },
+      {
+        label: "Why this also makes the gate more reliable",
+        body: "Because matching does not depend on a round trip to a distant server, the gate keeps reading through an internet outage. The privacy decision and the reliability behaviour are the same decision.",
+      },
+    ],
+    Icon: UserFocus,
+  },
+  {
+    id: "consent",
+    title: "Consent and control",
+    lead: "Enrolment is arranged between the school and the guardian, not between DYCH and the family. A school should hold recorded consent for every pupil before a template is created, and should be able to act on a withdrawal the same day it arrives.",
+    points: [
+      {
+        label: "Consent comes first",
+        body: "A pupil is enrolled after the school records the guardian’s agreement, not before it.",
+      },
+      {
+        label: "Withdrawing it costs the pupil nothing",
+        body: "The school deletes the template from the console, and attendance for that pupil continues by card or by the class teacher. No child is shut out of school for being withdrawn from recognition.",
+      },
+      {
+        label: "Who can enrol",
+        body: "Named staff accounts only, and every enrolment is written to a log the school can read. That log is filterable and exports to a spreadsheet, so it is evidence rather than a screen someone has to sit and watch.",
+      },
+      {
+        label: "A parent account sees nothing until you say so",
+        body: "Parents register themselves, and then wait. Until an administrator approves the account it can sign in and see no pupil data at all - not their own child's. Approval is a deliberate act by a named member of staff, not something that happens because a form was filled in correctly.",
+      },
+      {
+        label: "Sessions do not stay open forever",
+        body: "An idle dashboard signs itself out on a timeout the school sets, and no session survives past eight hours whatever that timeout says. Opening the account and permissions screen asks for the password again even mid-session.",
+      },
+    ],
+    Icon: HandPalm,
+  },
+  {
+    /*  This section exists because the guide documents a feature that is a
+        genuine privacy question and that no other DYCH document mentions:
+        Gate -> Policy -> Visitor Auto-Registration. When it is on, a face the
+        system does not recognise, that stays in view long enough, is saved as
+        a placeholder identity so it is recognised next time.
+
+        That is enrolment of somebody who never consented to anything, so it
+        is described here plainly rather than left for a school to discover in
+        a settings screen. Everything below is stated in the guide: it is
+        opt-in, it does not mark attendance, it does not notify parents, the
+        sighting threshold and retention period are set by the school, and a
+        banner stays on screen the whole time it is enabled.  */
+    id: "unknown-faces",
+    title: "Faces the system does not know",
+    lead: "A recognition system has to do something when it sees somebody it has never seen. Ours can be told to remember them, and that setting is off unless a school turns it on deliberately.",
+    points: [
+      {
+        label: "What the setting actually does",
+        body: "With visitor auto-registration on, a face that is unrecognised and stays in view long enough is saved as a numbered placeholder, so the same person is recognised as the same person on a return visit. No name is attached. A member of staff can give it one later, or leave it.",
+      },
+      {
+        label: "What it deliberately does not do",
+        body: "It does not mark attendance for that person, and it does not notify any parent. It is a record that somebody came back, not an accusation and not a register entry.",
+      },
+      {
+        label: "The school sets the thresholds, and cannot forget it is on",
+        body: "How similar a return sighting must be, how long a face must be in view before it is kept, and how many days it is kept for are all yours to set. While the feature is enabled a warning banner stays visible on every gate screen, which is deliberate: a setting this consequential should not be quietly on.",
+      },
+      {
+        label: "Our recommendation",
+        body: "Leave it off unless there is a specific reason. A school that wants to know about repeat unknown visitors at the gate has a real use for it; a school that just wants attendance does not, and should not be holding face records for people who are not part of the school.",
+      },
+    ],
+    Icon: EyeSlash,
+  },
+  {
+    id: "isolation",
+    title: "Isolation between schools",
+    lead: "One school’s records are not visible to another. A deployment is scoped to the school that owns it, and there is no shared roll across customers that anyone could query.",
+    points: [
+      {
+        label: "No pooled register",
+        body: "Templates and pupil records belong to one school. They are not combined into a wider index.",
+      },
+      {
+        label: "Accounts are scoped",
+        body: "A staff account reaches its own school and nothing beyond it.",
+      },
+      {
+        label: "Support access is visible",
+        body: "Where our staff need access to diagnose a fault, it is requested from the school and recorded, rather than standing open.",
+      },
+    ],
+    Icon: Vault,
+  },
+  {
+    id: "export-and-deletion",
+    title: "Export and deletion",
+    lead: "The records are the school’s, not ours. A school can take them out in a form it can actually use, and can require that our copies be destroyed.",
+    points: [
+      {
+        label: "Taking the records out",
+        body: "Attendance, entry logs and gate records export in a readable format, without a request to us and without a charge.",
+      },
+      {
+        label: "Ending a contract",
+        body: "On request we delete the school’s data and confirm in writing what was removed and when.",
+      },
+      {
+        label: "A single pupil leaving",
+        body: "A leaver’s template can be destroyed while the attendance record the school is required to keep stays intact.",
+      },
+    ],
+    Icon: Export,
+  },
+  {
+    id: "resilience",
+    title: "Uptime and offline resilience",
+    lead: "A system that stops when the connection does is worse than paper, because staff stop trusting it. The gate keeps reading and the register keeps writing through an outage.",
+    points: [
+      {
+        label: "Local first",
+        body: "Entry events are written on site as they happen, not queued in the hope of a connection.",
+      },
+      {
+        label: "Catching up",
+        body: "When connectivity returns, records synchronise on their own. Nobody re-keys a morning.",
+      },
+      {
+        label: "Power",
+        body: "Battery backup at the entry point, so a cut does not leave a gate that cannot tell anyone who came through it.",
+      },
+    ],
+    Icon: PlugsConnected,
+  },
+];
+
+// TODO: confirm DYCH is willing to answer all five of these before publishing.
+// The section only works if the answers exist.
+const QUESTIONS = [
+  "Where is the matching performed, and what happens to recognition when our connection is down?",
+  "What exactly is stored for each pupil, and can you show us one record end to end?",
+  "How do we withdraw a pupil from recognition, and what does that pupil’s day look like afterwards?",
+  "If we leave, what do we get back, in what format, and how do you prove your copies are gone?",
+  "Who at your company can see our data, under what circumstances, and where is that recorded?",
+  "Does the system ever record a face belonging to someone who is not enrolled, and if so, who switched that on and when does it expire?",
+];
+
+export default function SecurityAndTrustPage() {
+  return (
+    <>
+      {/* Deliberately still written for the school case. Children's biometric
+          data is the harder version of this problem, and a business reader
+          who is satisfied by the answers here will be satisfied by them for
+          staff. The intro says that rather than pretending the page is
+          audience-neutral when its examples plainly are not. */}
+      <PageHeader
+        title="Children’s biometric data, handled carefully."
+        intro="Recognition means holding data about people, and about children in particular, so how it is captured, stored, kept apart from other customers, exported and destroyed matters more than any feature on this site. The short version: matching happens on your own hardware, and no photos leave your site. This page is written for schools because that is the strictest case; every commitment on it applies to staff and visitor data at a business too."
+      />
+
+      <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">
+        <div className="mx-auto max-w-[1240px]">
+          {COMMITMENTS.map((item) => (
+            <Commitment key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* Questions rather than claims: a different kind of block from the
+          commitments above, and it invites scrutiny instead of asserting. */}
+      <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
+        <div className="mx-auto max-w-[1240px]">
+          <Reveal>
+            <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+              Questions worth putting to us, and to anyone else.
+            </h2>
+            <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+              If a supplier cannot answer these plainly, that is worth knowing before
+              a single camera goes up. Ask us at a site assessment and hold us to the
+              answers.
+            </p>
+          </Reveal>
+
+          <ol className="mt-12 border-t border-border">
+            {QUESTIONS.map((question, i) => (
+              <Reveal
+                as="li"
+                key={question}
+                delay={0.05 * i}
+                className="flex gap-6 border-b border-border py-6"
+              >
+                <span
+                  aria-hidden
+                  className="nums mt-0.5 shrink-0 text-sm font-semibold text-accent-on-light"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="max-w-[68ch] text-lg leading-relaxed text-foreground">
+                  {question}
+                </p>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <CtaBand
+        title="Bring your data protection questions to the site assessment."
+        body="We would rather answer them in front of your board than after an installation. A site assessment costs nothing and ends with a written scope."
+      />
+    </>
+  );
+}

@@ -1,0 +1,409 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+/**
+ * DetectionFigure - live nodal biometric wireframe.
+ *
+ * Ported from the prototype on `main`. A dense facial-landmark mesh rendered
+ * to canvas: nodes drift on their own, react to the pointer, and snap into a
+ * lock state on a self-running cycle, with a scan-line sweep. Fully static
+ * under
+ * prefers-reduced-motion.
+ *
+ * Geometry is hand-placed facial topology (cranium, jaw, brows, orbits, nasal
+ * ridge, philtrum, lips, cheekbones), not random points, so the mesh reads as
+ * a face. All of that is unchanged from the original.
+ *
+ * The stroke colour was originally hardcoded as `rgba(0, 113, 227, ...)` in
+ * four places. It is a single module default plus an optional `stroke` prop,
+ * which is now mostly redundant - there is one ground on the site - but is
+ * kept so a caller can tune the mesh against an unusually deep wash.
+ */
+
+type P = [number, number];
+
+/** --accent, #8369D3. Line art, so 3:1 is the bar; it clears that on every
+    paper tone (3.94-4.70:1). */
+const DEFAULT_STROKE: [number, number, number] = [131, 105, 211];
+
+/* The self-running scan cycle, in seconds. Idle drift, then a sweep down the
+   mesh, a short lock, and a release back to idle. */
+const CYCLE = 9;
+const SCAN_START = 4.6;
+const SCAN_END = 6.8;
+const HOLD_END = 7.6;
+
+const W = 360;
+const H = 470;
+
+const OUTLINE: P[] = [
+  [180, 18], [222, 26], [258, 44], [288, 72], [308, 110], [320, 155],
+  [324, 200], [321, 246], [313, 288], [300, 326], [281, 360], [256, 391],
+  [226, 416], [204, 434], [180, 442], [156, 434], [134, 416], [104, 391],
+  [79, 360], [60, 326], [47, 288], [39, 246], [36, 200], [40, 155],
+  [52, 110], [72, 72], [102, 44], [138, 26],
+];
+
+const BROW_L: P[] = [[70, 170], [96, 152], [124, 146], [152, 154]];
+const BROW_R: P[] = [[208, 154], [236, 146], [264, 152], [290, 170]];
+
+const EYE_L: P[] = [[84, 197], [106, 181], [131, 179], [151, 193], [130, 206], [105, 205]];
+const EYE_R: P[] = [[209, 193], [229, 179], [254, 181], [276, 197], [255, 205], [230, 206]];
+const IRIS: P[] = [[118, 193], [242, 193]];
+
+const NOSE: P[] = [
+  [180, 188], [180, 216], [180, 244], [180, 266],
+  [158, 258], [202, 258],
+  [151, 287], [165, 297], [180, 301], [195, 297], [209, 287],
+];
+
+const LIP_TOP: P[] = [[138, 341], [158, 329], [172, 336], [180, 331], [188, 336], [202, 329], [222, 341]];
+const LIP_BOT: P[] = [[208, 357], [190, 366], [180, 368], [170, 366], [152, 357]];
+
+const STRUCTURE: P[] = [
+  [180, 78], [120, 90], [240, 90], [150, 118], [210, 118], [180, 122],
+  [88, 128], [272, 128], [58, 190], [302, 190],
+  [78, 240], [120, 250], [240, 250], [282, 240],
+  [94, 292], [140, 300], [220, 300], [266, 292],
+  [108, 342], [252, 342], [126, 300], [234, 300],
+  [138, 392], [222, 392], [180, 398], [180, 420],
+  [104, 220], [256, 220], [180, 160],
+  [148, 56], [212, 56], [92, 104], [268, 104], [180, 46],
+];
+
+const NODES: P[] = [
+  ...OUTLINE, ...BROW_L, ...BROW_R, ...EYE_L, ...EYE_R, ...IRIS,
+  ...NOSE, ...LIP_TOP, ...LIP_BOT, ...STRUCTURE,
+];
+
+/** Explicit feature chains, so eyes/lips/brows always read as contours. */
+function chain(start: number, len: number, closed = false): [number, number][] {
+  const e: [number, number][] = [];
+  for (let i = 0; i < len - 1; i++) e.push([start + i, start + i + 1]);
+  if (closed) e.push([start + len - 1, start]);
+  return e;
+}
+
+const iOutline = 0;
+const iBrowL = iOutline + OUTLINE.length;
+const iBrowR = iBrowL + BROW_L.length;
+const iEyeL = iBrowR + BROW_R.length;
+const iEyeR = iEyeL + EYE_L.length;
+const iIris = iEyeR + EYE_R.length;
+const iNose = iIris + IRIS.length;
+const iLipT = iNose + NOSE.length;
+const iLipB = iLipT + LIP_TOP.length;
+
+const FEATURE_EDGES: [number, number][] = [
+  ...chain(iOutline, OUTLINE.length, true),
+  ...chain(iBrowL, BROW_L.length),
+  ...chain(iBrowR, BROW_R.length),
+  ...chain(iEyeL, EYE_L.length, true),
+  ...chain(iEyeR, EYE_R.length, true),
+  ...chain(iNose, 4),
+  ...chain(iLipT, LIP_TOP.length),
+  ...chain(iLipB, LIP_BOT.length),
+  [iLipT, iLipB + LIP_BOT.length - 1],
+  [iLipT + LIP_TOP.length - 1, iLipB],
+];
+
+/** Proximity mesh - this is what gives the figure its triangulated web. */
+function buildEdges(): [number, number][] {
+  const set = new Set<string>();
+  const out: [number, number][] = [];
+  const add = (a: number, b: number) => {
+    const k = a < b ? `${a}:${b}` : `${b}:${a}`;
+    if (!set.has(k)) {
+      set.add(k);
+      out.push([a, b]);
+    }
+  };
+  FEATURE_EDGES.forEach(([a, b]) => add(a, b));
+  for (let i = 0; i < NODES.length; i++) {
+    for (let j = i + 1; j < NODES.length; j++) {
+      const dx = NODES[i][0] - NODES[j][0];
+      const dy = NODES[i][1] - NODES[j][1];
+      if (Math.hypot(dx, dy) < 46) add(i, j);
+    }
+  }
+  return out;
+}
+
+const EDGES = buildEdges();
+
+export function DetectionFigure({
+  className = "",
+  stroke = DEFAULT_STROKE,
+}: {
+  className?: string;
+  /** RGB triple for the mesh. Tune per background; see the note above. */
+  stroke?: [number, number, number];
+}) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  // A stable primitive, so passing a fresh array literal each render does not
+  // tear down and rebuild the animation.
+  const rgb = stroke.join(", ");
+
+  useEffect(() => {
+    const cv = ref.current;
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!ctx) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const state = NODES.map(([x, y], i) => ({
+      hx: x, hy: y, x, y, vx: 0, vy: 0,
+      phase: (i * 2.399) % (Math.PI * 2),
+      amp: 0.5 + ((i * 7) % 10) / 10,
+    }));
+
+    let pointer = { x: -999, y: -999, inside: false };
+    let press = 0;      // eased 0..1, driven by the pointer
+    let pressing = false;
+    let raf = 0;
+    let t = 0;
+    // Real seconds, so the auto-cycle keeps the same tempo regardless of
+    // frame rate. `t` is a frame counter and is left alone for the drift.
+    let cycle = 0;
+    let last = performance.now();
+
+    const scale = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const r = cv.getBoundingClientRect();
+      cv.width = Math.round(r.width * dpr);
+      cv.height = Math.round(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { w: r.width, h: r.height };
+    };
+    let box = scale();
+    const onResize = () => { box = scale(); };
+    window.addEventListener("resize", onResize);
+
+    const toLocal = (e: PointerEvent) => {
+      const r = cv.getBoundingClientRect();
+      const s = Math.min(r.width / W, r.height / H);
+      const ox = (r.width - W * s) / 2;
+      const oy = (r.height - H * s) / 2;
+      return { x: (e.clientX - r.left - ox) / s, y: (e.clientY - r.top - oy) / s };
+    };
+
+    const onMove = (e: PointerEvent) => {
+      const p = toLocal(e);
+      pointer = { ...p, inside: true };
+    };
+    const onLeave = () => { pointer.inside = false; pressing = false; };
+    const onDown = (e: PointerEvent) => {
+      pressing = true;
+      const p = toLocal(e);
+      pointer = { ...p, inside: true };
+    };
+    const onUp = () => { pressing = false; };
+
+    cv.addEventListener("pointermove", onMove);
+    cv.addEventListener("pointerleave", onLeave);
+    cv.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp);
+
+    const draw = () => {
+      const { w, h } = box;
+      const s = Math.min(w / W, h / H);
+      const ox = (w - W * s) / 2;
+      const oy = (h - H * s) / 2;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(ox, oy);
+      ctx.scale(s, s);
+
+      /*  The silhouette, behind everything.
+
+          Without it the mesh is a node network floating in white space; with
+          it the same mesh reads as mapped onto a face, which is what the
+          product actually does.
+
+          It is drawn from OUTLINE - the hand-placed cranium-and-jaw contour
+          the mesh is already built on - smoothed through midpoints, and
+          filled with a vertical duotone of the stroke colour at 4-13%. So it
+          is an illustration by construction: there is no photograph here, and
+          there could not be. That is deliberate on two counts. No licensed
+          portrait exists for this, and putting a real, identifiable person
+          behind a facial-recognition company's own marketing would imply that
+          specific individual is the one under surveillance - which is a bad
+          look however the photo was obtained.
+
+          Drawn from the HOME coordinates rather than the drifting ones, so
+          the face holds still while the mesh breathes over it. */
+      const face = new Path2D();
+      face.moveTo(
+        (OUTLINE[0][0] + OUTLINE[OUTLINE.length - 1][0]) / 2,
+        (OUTLINE[0][1] + OUTLINE[OUTLINE.length - 1][1]) / 2,
+      );
+      for (let i = 0; i < OUTLINE.length; i++) {
+        const cur = OUTLINE[i];
+        const next = OUTLINE[(i + 1) % OUTLINE.length];
+        face.quadraticCurveTo(
+          cur[0],
+          cur[1],
+          (cur[0] + next[0]) / 2,
+          (cur[1] + next[1]) / 2,
+        );
+      }
+      face.closePath();
+
+      const fill = ctx.createLinearGradient(0, 0, 0, H);
+      fill.addColorStop(0, `rgba(${rgb}, 0.13)`);
+      fill.addColorStop(0.55, `rgba(${rgb}, 0.08)`);
+      fill.addColorStop(1, `rgba(${rgb}, 0.035)`);
+      ctx.fillStyle = fill;
+      ctx.fill(face);
+
+      const now = performance.now();
+      // Clamped so a backgrounded tab does not jump the cycle on return.
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      t += 0.0125;
+      press += ((pressing ? 1 : 0) - press) * 0.14;
+
+      // The figure runs its own scan on a loop, so it is alive on load with no
+      // input: it drifts, sweeps a scan line down the mesh, holds a brief lock,
+      // then releases. Under reduced motion the cycle does not advance at all,
+      // which leaves the whole figure static rather than merely slower.
+      if (!reduced) cycle = (cycle + dt) % CYCLE;
+      let autoLock = 0;
+      let scanY = -1;
+      if (!reduced && cycle >= SCAN_START) {
+        if (cycle < SCAN_END) {
+          const p = (cycle - SCAN_START) / (SCAN_END - SCAN_START);
+          scanY = 18 + p * (H - 36);
+          autoLock = Math.min(1, p * 2.2);
+        } else if (cycle < HOLD_END) {
+          autoLock = 1;
+        } else {
+          autoLock = 1 - (cycle - HOLD_END) / (CYCLE - HOLD_END);
+        }
+      }
+
+      // Pointer press and the auto-cycle drive the same visual state, so
+      // hovering and pressing still layer on top of the loop rather than
+      // replacing it.
+      const lock = Math.max(press, autoLock);
+      const reach = 74 + lock * 46;
+
+      for (const n of state) {
+        // idle drift
+        const dx0 = reduced ? 0 : Math.cos(t + n.phase) * 0.5 * n.amp;
+        const dy0 = reduced ? 0 : Math.sin(t * 0.85 + n.phase) * 0.5 * n.amp;
+        let tx = n.hx + dx0;
+        let ty = n.hy + dy0;
+
+        if (pointer.inside && !reduced) {
+          const dx = n.hx - pointer.x;
+          const dy = n.hy - pointer.y;
+          const d = Math.hypot(dx, dy);
+          if (d < reach && d > 0.001) {
+            const f = (1 - d / reach) ** 2;
+            // hover pushes the mesh outward; pressing pulls it into a lock
+            const dir = lock > 0.5 ? -1 : 1;
+            const mag = f * (9 + lock * 11) * dir;
+            tx += (dx / d) * mag;
+            ty += (dy / d) * mag;
+          }
+        }
+
+        n.vx += (tx - n.x) * 0.14;
+        n.vy += (ty - n.y) * 0.14;
+        n.vx *= 0.76;
+        n.vy *= 0.76;
+        n.x += n.vx;
+        n.y += n.vy;
+      }
+
+      // edges
+      for (const [a, b] of EDGES) {
+        const A = state[a];
+        const B = state[b];
+        let alpha = 0.5 + lock * 0.28;
+        let width = 0.9 + lock * 0.5;
+        if (pointer.inside && !reduced) {
+          const mx = (A.x + B.x) / 2;
+          const my = (A.y + B.y) / 2;
+          const d = Math.hypot(mx - pointer.x, my - pointer.y);
+          if (d < reach) {
+            const f = 1 - d / reach;
+            alpha = Math.min(1, alpha + f * (0.45 + lock * 0.3));
+            width = width + f * (0.8 + lock * 0.9);
+          }
+        }
+        ctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.stroke();
+      }
+
+      // nodes
+      for (let i = 0; i < state.length; i++) {
+        const n = state[i];
+        let r = 1.9 + lock * 0.5;
+        let alpha = 1;
+        if (pointer.inside && !reduced) {
+          const d = Math.hypot(n.x - pointer.x, n.y - pointer.y);
+          if (d < reach) {
+            const f = 1 - d / reach;
+            r = r + f * (1.9 + lock * 2.2);
+            alpha = 1;
+          }
+        }
+        const isIris = i >= iIris && i < iIris + IRIS.length;
+        ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, isIris ? r + 1.6 : r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // The scan sweep, driven by the cycle rather than by a press.
+      if (scanY >= 0) {
+        const y = scanY;
+        ctx.strokeStyle = `rgba(${rgb}, 0.75)`;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(6, y);
+        ctx.lineTo(W - 6, y);
+        ctx.stroke();
+      }
+
+      // The bounding box and corner ticks that the original drew around the
+      // mesh are deliberately gone. They were decoration here, and the same
+      // grammar already carries real meaning on /product, where a box marks an
+      // actual tracked face. Repeating it around a decorative mesh diluted it.
+
+      ctx.restore();
+      raf = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("pointerup", onUp);
+      cv.removeEventListener("pointermove", onMove);
+      cv.removeEventListener("pointerleave", onLeave);
+      cv.removeEventListener("pointerdown", onDown);
+    };
+  }, [rgb]);
+
+  return (
+    <canvas
+      ref={ref}
+      className={className + " touch-none"}
+      style={{ aspectRatio: `${W} / ${H}` }}
+      role="img"
+      aria-label="An illustrated facial-landmark wireframe over a generic face silhouette, scanning on a loop and responding to pointer movement"
+    />
+  );
+}

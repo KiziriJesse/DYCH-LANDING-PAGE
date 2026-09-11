@@ -1,54 +1,169 @@
-/* BAND 8 — DARK, 0.79vh. */
+import Image from "next/image";
+import Link from "next/link";
+import {
+  EnvelopeSimple,
+  MapPin,
+  PhoneCall,
+  WhatsappLogo,
+} from "@phosphor-icons/react/dist/ssr";
+import { BRAND, CONTACT, SITEMAP } from "@/lib/site";
 
-const COLS = [
-  {
-    label: "10 — Products",
-    links: [
-      { href: "/#recognition", text: "Facial Recognition" },
-      { href: "/#vision-one", text: "Vision One" },
-    ],
-  },
-  {
-    label: "20 — Company",
-    links: [
-      { href: "/about", text: "About" },
-      { href: "/#contact", text: "Contact" },
-      { href: "/sign-in", text: "Sign in" },
-    ],
-  },
-];
+const ICON = { size: 18, weight: "light" } as const;
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--ink)] px-[var(--shell)] pb-12 pt-24 text-[var(--paper)]">
-      <div className="grid gap-16 md:grid-cols-12">
-        <p className="font-[family-name:var(--font-display)] text-2xl font-light tracking-tight md:col-span-4">
-          dych
-        </p>
+    <footer className="border-t border-border bg-surface-sunk px-4 pb-10 pt-20 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-[1240px]">
+        {/* Three columns, not a four-column link farm. */}
+        <div className="grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <Link href="/" aria-label="DYCH Technologies, home" className="inline-block">
+              <Image
+                src="/logo/dych-lockup.png"
+                alt="DYCH Technologies"
+                width={640}
+                height={591}
+                className="h-auto w-[7.25rem]"
+              />
+            </Link>
+            <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
+              {BRAND.blurb}
+            </p>
+            {/* text-muted, not text-faint. Under the old dark palette --faint
+                measured 4.17:1 here and missed AA; both tokens have been
+                re-measured against the paper family since, but the more
+                readable one is still the right call for a footer. */}
+            <p className="mt-5 flex items-center gap-2 text-sm text-muted">
+              <MapPin {...ICON} aria-hidden />
+              {CONTACT.location}
+            </p>
+          </div>
 
-        {COLS.map((c) => (
-          <nav key={c.label} className="md:col-span-3" aria-label={c.label}>
-            <p className="eyebrow text-[var(--paper)]/40">{c.label}</p>
-            <ul className="mt-6 space-y-1">
-              {c.links.map((l) => (
-                <li key={l.text}>
-                  <a
-                    href={l.href}
-                    className="flex h-11 items-center text-[var(--paper)]/80 transition-colors hover:text-[var(--accent-on-dark)] md:h-8"
+          <nav aria-labelledby="footer-sitemap" className="md:col-span-3">
+            <h2
+              id="footer-sitemap"
+              className="text-sm font-medium tracking-[0.1em] text-foreground"
+            >
+              Site
+            </h2>
+            <ul className="mt-5 flex flex-col gap-3">
+              {SITEMAP.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
                   >
-                    {l.text}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
-        ))}
-      </div>
 
-      <div className="mt-24 flex flex-col gap-4 border-t border-[var(--paper)]/12 pt-8 text-sm text-[var(--paper)]/40 sm:flex-row sm:justify-between">
-        <p>© {new Date().getFullYear()} Dych Technologies</p>
-        {/* [PLACEHOLDER] legal links — no policies exist yet */}
-        <p>Privacy Policy · Terms of Use</p>
+          <div className="md:col-span-4">
+            <h2 className="text-sm font-medium tracking-[0.1em] text-foreground">
+              Talk to us
+            </h2>
+
+            <ul className="mt-5 flex flex-col gap-4">
+              {CONTACT.whatsapp.map((line) => (
+                <li key={line.href}>
+                  <a
+                    href={line.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`WhatsApp ${line.display}`}
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <WhatsappLogo {...ICON} />
+                    </span>
+                    <span className="nums">
+                      {line.display}
+                    </span>
+                  </a>
+                </li>
+              ))}
+
+              {CONTACT.phones.map((line) => (
+                <li key={line.href}>
+                  <a
+                    href={line.href}
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <PhoneCall {...ICON} />
+                    </span>
+                    <span className="nums">{line.display}</span>
+                  </a>
+                </li>
+              ))}
+
+              <li>
+                <a
+                  href={CONTACT.email.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                  >
+                    <EnvelopeSimple {...ICON} />
+                  </span>
+                  {CONTACT.email.display}
+                </a>
+              </li>
+
+              {/* LinkedIn — restore when CONTACT.linkedin.href is a real URL.
+              <li>
+                {CONTACT.linkedin.href === "#" ? (
+                  <span className="inline-flex items-center gap-3 text-[0.9375rem] text-faint">
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-faint"
+                    >
+                      <LinkedinLogo {...ICON} />
+                    </span>
+                    LinkedIn &mdash; link to follow
+                  </span>
+                ) : (
+                  <a
+                    href={CONTACT.linkedin.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <LinkedinLogo {...ICON} />
+                    </span>
+                    {CONTACT.linkedin.display}
+                  </a>
+                )}
+              </li>
+              */}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-14 border-t border-border pt-6 text-sm text-muted">
+          <p>
+            <span className="nums">{new Date().getFullYear()}</span> {BRAND.name}. All
+            rights reserved.
+          </p>
+          {/* TODO: add Privacy and Terms links here once those routes exist.
+              Omitted rather than linked to a 404. */}
+        </div>
       </div>
     </footer>
   );

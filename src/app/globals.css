@@ -1,104 +1,380 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Dych Technologies — design tokens
-   Palette colour-picked from screencapture-augen-pro-*.png (PIL).
-   Accent tints computed for WCAG AA per CLAUDEwebdesign copy.md §4.
-   Button tokens per button.md.
+   DYCH Technologies - design tokens
+
+   TWO HUES. ONE SCOPE. NO DARK THEME.
+
+   This replaces the previous two-scope system (dark :root + .theme-light
+   override + .theme-dark islands) and the four semantic feature accents
+   (security=cyan, attendance=blue, communication=emerald, operations=amber).
+   None of that survives. There is now a near-white paper family and a single
+   purple accent family, and nothing else - including the icon wells, which
+   all take the same purple at different weights instead of a hue per feature.
+
+   That trade is deliberate. The old system colour-coded the seven
+   capabilities, which was genuinely useful for scanning; cohesion won. If a
+   capability ever needs to be told apart at a glance again, do it with
+   position, icon or label - not by reintroducing a second hue.
+
+   ON PURPLE. The governing design standard bans purple as a primary brand
+   colour and calls it the single biggest tell of a generated site. It carries
+   its own exception: a brief that explicitly asks for one wins. DYCH's logo is
+   a real, designed purple mark supplied by the client, so the exception
+   applies, and the answer to "does it still look designed rather than
+   defaulted" is the split below - the accent is separated by role and every
+   pairing is measured, not assumed. Every other ban in that document still
+   holds in full.
+
+   CONTRAST. Measured, not estimated. Ratios are against the ground named.
+   The worst ground for dark ink is --wash, so that is the column that decides
+   whether a value ships.
+
+   Radius scale (locked):  card | pill (interactive) | input
+   Z-index scale (locked): raise 10 | float 30 | menu 40 | nav 50 | skip 70
    ============================================================ */
 
 :root {
-  /* Neutrals — measured shares: 34.8% / 21.8% / 9.5% / 8.6% / 5.1% */
-  --ink:            #0f1012;  /* primary near-black            */
-  --ink-raised:     #161719;  /* elevated dark surface         */
-  --paper:          #f2f2f4;  /* off-white ground              */
-  --paper-alt:      #efefef;  /* secondary light ground        */
-  --paper-pure:     #fefefe;  /* pure white                    */
+  color-scheme: light;
 
-  /* Accent — one hue (210.1°), split by role for contrast compliance */
-  --accent:         #0071e3;  /* borders, icon rings, large display type */
-  --accent-on-light:#006ad6;  /* body-size text on light grounds  4.53:1+ */
-  --accent-on-dark: #2d87e2;  /* body-size text on dark grounds   4.85:1+ */
-  --accent-inverse: #fefefe;  /* text/border on the blue band     4.66:1  */
+  /* ---- Paper family. Three tones, warm-shifted toward the brand hue so the
+     page never reads as neutral grey stock. ---- */
+  --paper: #f5f3fc; /* page ground — ~4% more brand hue than #faf9fd */
+  --paper-alt: #eeebfa; /* section-alternation band */
+  --wash: #e9e2fb; /* the deepest tone: gradient stops, hover fills */
 
-  /* Buttons — measured from the reference at 1920px */
-  --btn-h:          2.25rem;  /* 36px  */
-  --btn-h-touch:    2.75rem;  /* 44px — mobile + minimum hit area */
-  --btn-gap:        0.25rem;  /* 4px   */
-  --btn-icon:       2.0625rem;/* 33px  */
-  --btn-icon-gap:   2.125rem; /* 34px  */
+  /* Role aliases. Components across the site already read bg-background,
+     bg-surface and friends, so the roles are mapped onto the palette above
+     rather than rewritten at every call site. --surface is pure white on
+     purpose: cards need to lift off --paper, and white is the only tone
+     lighter than it. */
+  --background: var(--paper);
+  --surface: #ffffff;
+  --surface-raised: var(--paper-alt);
+  --surface-sunk: var(--wash);
 
-  /* Vertical rhythm — band heights measured from the reference */
-  --band-sm:        clamp(28rem, 60vh, 40rem);
-  --band-md:        clamp(40rem, 82vh, 56rem);
-  --band-lg:        clamp(48rem, 100vh, 72rem);
+  /* ---- Ink. Near-black tinted toward the brand hue, not neutral grey. ---- */
+  --ink: #181521;
+  --foreground: var(--ink); /* 17.15 paper · 15.98 alt · 15.05 wash */
+  --muted: #5b5470; /*  6.80 paper ·  6.33 alt ·  5.97 wash */
+  --faint: #6b6480; /*  5.33 paper ·  4.97 alt ·  4.68 wash */
 
-  --shell:          clamp(1.5rem, 5vw, 7.5rem); /* page gutter */
+  /* ---- Structure ---- */
+  --border: rgba(24, 21, 33, 0.1);
+  --border-strong: rgba(24, 21, 33, 0.2);
+
+  /* ---- Accent, split by role.
+
+     --accent is the border, icon-stroke and large-display value. It measures
+     3.94-4.70:1 across the paper tones, which clears the 3:1 that non-text
+     and large text need on every one of them, and it is 4.70:1 under a white
+     label, so the same token covers the outline state and the hover-fill
+     state of a button with no second value.
+
+     It is 4.49:1 on --paper, a hair under the 4.5 body threshold, which is
+     exactly why it is not used for body-size text. That is what
+     --accent-on-light is for: 6.04-7.22:1, comfortable everywhere. Same hue
+     family, lower lightness - the page still reads as one purple. ---- */
+  --accent: #8369d3;
+  --accent-on-light: #6846b9;
+  --accent-ink: #ffffff; /* label on a filled --accent - 4.70:1 */
+  --accent-inverse: #ffffff; /* border + label on the solid accent band */
+  --accent-soft: rgba(131, 105, 211, 0.1);
+  --accent-line: rgba(131, 105, 211, 0.32);
+
+  /* Shadows are tinted to the ink hue, never neutral black, and the lift used
+     on an interactive card is tinted further toward the accent. A rainbow of
+     soft shadows on every card is banned; these two are the whole set. */
+  --shade: 0 24px 60px -28px rgba(24, 21, 33, 0.18);
+  --shade-lift: 0 32px 80px -30px rgba(24, 21, 33, 0.26);
+  --shade-accent: 0 18px 44px -20px rgba(104, 70, 185, 0.28);
+
+  /* ---- Interactive element metrics, from the button spec ---- */
+  --btn-h: 2.25rem; /* 36px desktop */
+  --btn-h-lg: 2.75rem; /* 44px below 768px, and the lg size */
+  --btn-h-sm: 1.75rem;
+  --btn-icon: 2.0625rem; /* the 33px glyph circle */
+  --btn-border: 1px;
+
+  /* 16px, the top of the 12-16px band the craft floor holds cards to. It was
+     20px, which is the radius that starts reading as a pill on a large
+     surface. Pills stay for small controls only. */
+  --radius-card: 1rem;
+  --radius-input: 0.625rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The closing band: a solid plate of the deeper accent with white on it at
+   7.22:1. This is still the same purple family, not a third hue, and it is
+   the one place a large area of saturated colour is allowed.
+
+   --surface and --accent are re-pointed locally so a button placed inside
+   resolves to the inverse treatment through its normal tokens, with no
+   special casing in the component. */
+@layer base {
+  .band-accent {
+    --surface: #ffffff;
+    --accent: var(--accent-inverse);
+    --accent-on-light: var(--accent-inverse);
+    --accent-ink: #6846b9;
+    --border: rgba(255, 255, 255, 0.28);
+    --border-strong: rgba(255, 255, 255, 0.44);
+    background-color: #6846b9;
+    color: #ffffff;
+  }
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-ink-raised: var(--ink-raised);
   --color-paper: var(--paper);
   --color-paper-alt: var(--paper-alt);
-  --color-paper-pure: var(--paper-pure);
+  --color-wash: var(--wash);
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunk: var(--surface-sunk);
+
+  --color-ink: var(--ink);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
   --color-accent: var(--accent);
   --color-accent-on-light: var(--accent-on-light);
-  --color-accent-on-dark: var(--accent-on-dark);
+  --color-accent-ink: var(--accent-ink);
   --color-accent-inverse: var(--accent-inverse);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
 
-  --font-display: var(--font-space-grotesk);
-  --font-sans: var(--font-plex);
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: var(--radius-card);
+  --radius-input: var(--radius-input);
 }
 
-/* Type scale — explicit sizes, weights, leading, tracking (§3) */
 @layer base {
-  html { -webkit-text-size-adjust: 100%; }
-
-  body {
-    background: var(--paper-pure);
-    color: var(--ink);
-    font-family: var(--font-sans), system-ui, sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;          /* §3: generous body leading 1.5–1.7 */
-    -webkit-font-smoothing: antialiased;
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
-  h1, h2, h3 {
-    font-family: var(--font-display), system-ui, sans-serif;
-    font-weight: 300;          /* reference runs light at display sizes */
-    line-height: 1.02;         /* §3: tighter leading on headlines     */
+  body {
+    font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* Display face at a light weight with tight leading and tracking. Sizes
+     stay on the components, which set their own clamp() values. Small
+     headings (roughly 20px and under) opt back up to 500 locally, where 300
+     loses its hierarchy. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 300;
+    line-height: 1.05;
     letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
-  h1 { font-size: clamp(2.75rem, 7.5vw, 7rem); }
-  h2 { font-size: clamp(2rem, 4.6vw, 4rem); }
-  h3 { font-size: clamp(1.25rem, 1.9vw, 1.75rem); letter-spacing: -0.02em; }
-
-  /* Eyebrow / index label — the reference's 01 / 02 / 03 device */
-  .eyebrow {
-    font-family: var(--font-sans), system-ui, sans-serif;
-    font-size: 0.6875rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1.3;
+  p {
+    text-wrap: pretty;
   }
 
+  /* Anchor targets clear the fixed navbar. */
+  section[id],
+  main[id] {
+    scroll-margin-top: 8rem;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Outline follows each element's own radius. Never set border-radius here,
+     or focusing a pill button squares it off. */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
-    border-radius: 2px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+  }
+
+  /* No 300ms double-tap zoom delay, and a tap highlight chosen on purpose
+     rather than the browser's default blue-grey block. */
+  a,
+  button,
+  label,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(131, 105, 211, 0.2);
   }
 }
 
-/* §6 / §8 — motion is opt-out by default */
+@layer utilities {
+  .z-raise {
+    z-index: 10;
+  }
+  /* Floating page-level affordances, currently the WhatsApp widget. Below the
+     menu overlay on purpose: opening the mobile menu should cover the bubble,
+     not have it float on top of the navigation. */
+  .z-float {
+    z-index: 30;
+  }
+  .z-menu {
+    z-index: 40;
+  }
+  /* Above the menu overlay: the hamburger morphs into the close control,
+     so it has to stay reachable while the menu is open. */
+  .z-nav {
+    z-index: 50;
+  }
+
+  /* Tabular figures for any number a reader may compare. */
+  .nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    letter-spacing: 0.01em;
+  }
+
+  /* Full-bleed fixed layers clear notches and rounded display corners. */
+  .safe-x {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  /* The soft lavender field behind the hero. A gradient of --wash into
+     --paper rather than a flat block, which is what gives it the
+     photographic falloff the brief asked for. Two offset radials, so the
+     light has a direction instead of sitting dead centre. */
+  .wash-field {
+    background-image:
+      radial-gradient(
+        62rem 42rem at 78% 8%,
+        color-mix(in srgb, var(--wash) 92%, transparent) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        48rem 36rem at 12% 62%,
+        color-mix(in srgb, var(--wash) 58%, transparent) 0%,
+        transparent 58%
+      );
+  }
+
+  /*  The ambient drift.
+
+      The field above is painted on a child layer that very slowly slides and
+      breathes, rather than on the section itself. 34 seconds a cycle, a few
+      percent of travel and 4% of scale: at any given second nothing is
+      visibly moving, but the light is never in quite the same place twice.
+      This is meant to be felt, not watched.
+
+      Transform only - no background-position, no filter - so it stays on the
+      compositor and costs nothing per frame. `will-change` is deliberately
+      absent: a permanently promoted full-bleed layer is worse than the
+      occasional repaint this avoids. */
+  .wash-drift {
+    animation: wash-drift 34s ease-in-out infinite alternate;
+  }
+
+  @keyframes wash-drift {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+    }
+    to {
+      transform: translate3d(1.5%, 1.5%, 0) scale(1.08);
+    }
+  }
+
+  .skip-link {
+    position: fixed;
+    z-index: 70;
+    left: 1rem;
+    top: -6rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    background-color: var(--accent-on-light);
+    color: var(--accent-ink);
+    font-weight: 600;
+    transition: top 220ms var(--ease-out-expo);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+/* Reduced motion: loops, parallax and transitions collapse to static. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The scroll-in reveals, forced to their finished state.
+
+     The rules above only flatten CSS animation and transition. They do
+     nothing about framer-motion, which writes opacity and transform as
+     inline styles on the node. Those beat any normal rule, survive a
+     re-render, and are already in the prerendered HTML before a line of JS
+     has run - so without this, a reader with reduced motion loads a page
+     whose content is invisible until the viewport observer fires. See the
+     note in Reveal.tsx. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* The ambient field keeps its light and loses its motion. Left to the
+     blanket rule above it would snap to the end of its keyframe and sit
+     there offset; this returns it to rest. */
+  .wash-drift {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Same problem, same fix, for the hero's drifting fragments and its
+     word-by-word headline resolve. */
+  .drift,
+  .resolve-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+}
+
+/* Transparency-sensitive users get solid surfaces instead of glass. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: var(--surface) !important;
   }
 }

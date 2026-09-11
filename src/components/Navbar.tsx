@@ -1,298 +1,417 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from "framer-motion";
+import { CaretDown } from "@phosphor-icons/react";
+import { NAV_LINKS, CONTACT, PRODUCT_VERTICALS } from "@/lib/site";
+import { Button } from "@/components/ui/Button";
 
-/* Primary navigation.
-   Structure mirrors the supplied reference (two dropdowns, an active pill,
-   an outlined Sign in) rendered in the Dych system: #0071e3 accent,
-   ghost/outline per button.md, 1px borders instead of drop shadows (§1).
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
 
-   Opens on hover (pointer) AND on click/tap (touch); closes on Escape,
-   outside click, or selecting an item. Mobile uses a tap accordion. */
-
-type Item = { href: string; text: string };
-type Entry = { label: string; href?: string; items?: Item[] };
-
-const NAV: Entry[] = [
-  {
-    label: "Products",
-    items: [
-      { href: "/#recognition", text: "Facial Recognition" },
-      { href: "/#vision-one", text: "Vision One" },
-    ],
-  },
-  {
-    label: "Vision One",
-    // Six user-supplied component names — real content, not invented.
-    items: [
-      { href: "/#vision-one", text: "Admin dashboard" },
-      { href: "/#vision-one", text: "Parent Portal" },
-      { href: "/#vision-one", text: "Guard app" },
-      { href: "/#vision-one", text: "Camera management" },
-      { href: "/#vision-one", text: "Live display" },
-      { href: "/#vision-one", text: "Report card automation" },
-    ],
-  },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/#contact" },
-];
+/**
+ * The Product panel: the software name, then the two verticals under it.
+ *
+ * ONE PANEL, NOT A NESTED FLYOUT. The hierarchy asked for is Product > Smart
+ * Vision > Schools / Business, but building that as a sub-flyout of a
+ * sub-flyout is a known bad pattern - it is fiddly on desktop hover, where
+ * the pointer has to cross two panels without falling out of either, and on
+ * a touch device it is worse still, because a third level has no hover to
+ * open it and needs a tap target that then fights the tap that navigates.
+ *
+ * So the hierarchy is visual rather than structural: "Smart Vision" is a
+ * plain heading at the top of one panel, and the two verticals are the only
+ * clickable items in it. Reads the same, behaves like a single menu.
+ *
+ * The seven capability anchors that used to live here are gone. They pointed
+ * into a single /product page that has since become three, and a menu of
+ * seven anchors was already the longest thing in the nav.
+ */
+const PRODUCT_MENU = {
+  /* Not a link. The software name labels the group; the verticals are the
+     destinations. */
+  heading: "Smart Vision",
+  blurb: "Facial-recognition access, attendance and alerts.",
+  items: PRODUCT_VERTICALS,
+};
 
 export function Navbar() {
-  const [open, setOpen] = useState<string | null>(null);
-  const [mobile, setMobile] = useState(false);
-  const [acc, setAcc] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const bar = useRef<HTMLElement>(null);
-  /* True while the open menu was opened by hover rather than a deliberate
-     click. Without this, hovering opens the menu and the click that follows
-     immediately toggles it shut — so clicking a trigger appears to do
-     nothing. A click on a hover-opened menu pins it open instead. */
-  const viaHover = useRef(false);
+  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [lifted, setLifted] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
+  const { scrollY } = useScroll();
+  const reduce = useReducedMotion();
+  const productRef = useRef<HTMLLIElement>(null);
+  const lastY = useRef(0);
 
-  const hoverOpen = (label: string) => {
-    viaHover.current = true;
-    setOpen(label);
-  };
-  const hoverClose = () => {
-    if (viaHover.current) {
-      viaHover.current = false;
-      setOpen(null);
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setLifted(y > 24);
+
+    const prev = lastY.current;
+    lastY.current = y;
+
+    if (open || menuOpen || y < 32) {
+      setHidden(false);
+      return;
     }
-  };
-  const clickToggle = (label: string) => {
-    // Read state through the updater, never from this render's closure:
-    // mouseenter and click can land in the same tick, so `open` here would
-    // still be null and the click would close what hover just opened.
-    const hovered = viaHover.current;
-    viaHover.current = false;
-    setOpen((prev) => {
-      if (prev === label && hovered) return label; // pin a hover-opened menu
-      return prev === label ? null : label;
-    });
-  };
 
+    if (y > prev + 6) setHidden(true);
+    else if (y < prev - 6) setHidden(false);
+  });
+
+  // Menu links close the overlay on click. This effect only subscribes to
+  // external events: Escape, and back/forward navigation that no click of
+  // ours produced.
   useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        viaHover.current = false;
-        setOpen(null);
-        setMobile(false);
-      }
+      if (e.key === "Escape") setOpen(false);
     };
-    const onDown = (e: MouseEvent) => {
-      if (bar.current && !bar.current.contains(e.target as Node)) {
-        viaHover.current = false;
-        setOpen(null);
-      }
-    };
-    const onScroll = () => setScrolled(window.scrollY > 8);
-
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onDown);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    const onPop = () => setOpen(false);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("popstate", onPop);
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onDown);
-      window.removeEventListener("scroll", onScroll);
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("popstate", onPop);
     };
-  }, []);
+  }, [open]);
 
-  const edge = scrolled || open ? "border-b border-[var(--ink)]/10" : "";
+  // The Product disclosure closes on Escape and on a pointer down elsewhere.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!productRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onDown);
+    };
+  }, [menuOpen]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const productActive = isActive("/product");
 
   return (
-    <header
-      ref={bar}
-      className={"sticky top-0 z-50 bg-[var(--paper-pure)] " + edge}
-    >
-      <nav
-        aria-label="Primary"
-        className="flex items-center justify-between px-[var(--shell)] py-4"
+    <>
+      <motion.header
+        className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex items-center justify-between gap-4 px-4 pt-4 sm:px-6 sm:pt-5 lg:px-10"
+        initial={false}
+        animate={{ y: hidden ? "-130%" : 0 }}
+        transition={reduce ? { duration: 0 } : { duration: 0.45, ease: EASE_GLIDE }}
       >
         <Link
-          href="/#top"
-          className="font-[family-name:var(--font-display)] text-lg font-light tracking-tight text-[var(--ink)]"
+          href="/"
+          className={
+            "glass pointer-events-auto ml-4 flex size-[3.75rem] shrink-0 items-center justify-center rounded-full border p-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:ml-6 sm:size-[4.25rem] sm:p-2 lg:ml-8 " +
+            (lifted
+              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
+              : "border-transparent bg-white/70")
+          }
+          aria-label="DYCH Technologies, home"
         >
-          dych
+          <Image
+            src="/logo/dych-lockup.png"
+            alt="DYCH Technologies"
+            width={640}
+            height={591}
+            priority
+            className="h-full w-full object-contain"
+          />
         </Link>
 
-        {/* ---------------- desktop ---------------- */}
-        <ul className="hidden items-center gap-1 md:flex">
-          {NAV.map((e) =>
-            e.items ? (
-              <li
-                key={e.label}
-                className="relative"
-                onMouseEnter={() => hoverOpen(e.label)}
-                onMouseLeave={hoverClose}
-              >
-                <button
-                  type="button"
-                  aria-expanded={open === e.label}
-                  aria-haspopup="true"
-                  onClick={() => clickToggle(e.label)}
-                  className={
-                    "flex h-11 items-center gap-1.5 rounded-md px-3 text-sm transition-colors " +
-                    (open === e.label
-                      ? "bg-[var(--accent)]/10 text-[var(--accent-on-light)]"
-                      : "text-[var(--ink)]/75 hover:text-[var(--accent-on-light)]")
-                  }
-                >
-                  {e.label}
-                  <Chevron flipped={open === e.label} />
-                </button>
-
-                {open === e.label ? (
-                  <div className="absolute left-0 top-full min-w-[16rem] border border-[var(--ink)]/12 bg-[var(--paper-pure)] py-2">
-                    <ul>
-                      {e.items.map((it) => (
-                        <li key={it.text}>
-                          <a
-                            href={it.href}
-                            onClick={() => {
-                              viaHover.current = false;
-                              setOpen(null);
-                            }}
-                            className="flex h-11 items-center px-5 text-sm text-[var(--ink)]/80 transition-colors hover:bg-[var(--accent)]/8 hover:text-[var(--accent-on-light)]"
-                          >
-                            {it.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </li>
-            ) : (
-              <li key={e.label}>
-                <a
-                  href={e.href}
-                  className="flex h-11 items-center rounded-md px-3 text-sm text-[var(--ink)]/75 transition-colors hover:text-[var(--accent-on-light)]"
-                >
-                  {e.label}
-                </a>
-              </li>
-            )
-          )}
-
-          <li className="ml-3">
-            <a
-              href="/sign-in"
-              className="flex h-9 items-center rounded-full border border-[var(--accent)] px-4 text-sm text-[var(--accent-on-light)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--paper-pure)]"
+        <motion.nav
+          aria-label="Primary"
+          initial={reduce ? false : { y: -28, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+          className={
+            "glass pointer-events-auto flex h-12 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-14 lg:gap-1 lg:pl-2 lg:pr-2 " +
+            (lifted
+              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
+              : "border-transparent bg-white/70")
+          }
+        >
+          <ul className="hidden items-center gap-0.5 lg:flex">
+            {/* Product is a disclosure rather than a link: it reveals the
+                software name and the two verticals under it. */}
+            <li
+              ref={productRef}
+              className="relative"
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") setMenuOpen(true);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") setMenuOpen(false);
+              }}
             >
-              Sign in
-            </a>
-          </li>
-        </ul>
+              <button
+                type="button"
+                aria-expanded={menuOpen}
+                aria-controls="product-menu"
+                // The trigger stands in for the Product route now that it is a
+                // disclosure rather than a link, so it still has to carry the
+                // current-page signal. Without this, /product is the one route
+                // with no announced nav state.
+                aria-current={productActive ? "page" : undefined}
+                onClick={() => setMenuOpen((v) => !v)}
+                className={
+                  "relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-300 xl:px-3 " +
+                  (productActive ? "text-foreground" : "text-muted hover:text-foreground")
+                }
+              >
+                Product
+                <motion.span
+                  aria-hidden
+                  animate={{ rotate: menuOpen ? 180 : 0 }}
+                  transition={reduce ? { duration: 0 } : { duration: 0.3, ease: EASE_GLIDE }}
+                  className="flex"
+                >
+                  <CaretDown size={12} weight="bold" />
+                </motion.span>
+                {productActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    aria-hidden
+                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-[var(--accent-line)]"
+                    transition={{ duration: 0.45, ease: EASE_GLIDE }}
+                  />
+                )}
+              </button>
 
-        {/* ---------------- mobile trigger ---------------- */}
-        <button
-          type="button"
-          aria-expanded={mobile}
-          aria-controls="mobile-nav"
-          onClick={() => setMobile((v) => !v)}
-          className="relative flex size-11 items-center justify-center md:hidden"
-        >
-          <span className="sr-only">{mobile ? "Close menu" : "Open menu"}</span>
-          <span aria-hidden="true" className="flex flex-col gap-[5px]">
-            <span
-              className={
-                "block h-px w-6 bg-[var(--ink)] transition-transform duration-200 " +
-                (mobile ? "translate-y-[6px] rotate-45" : "")
-              }
-            />
-            <span
-              className={
-                "block h-px w-6 bg-[var(--ink)] transition-opacity duration-200 " +
-                (mobile ? "opacity-0" : "")
-              }
-            />
-            <span
-              className={
-                "block h-px w-6 bg-[var(--ink)] transition-transform duration-200 " +
-                (mobile ? "-translate-y-[6px] -rotate-45" : "")
-              }
-            />
-          </span>
-        </button>
-      </nav>
+              <AnimatePresence>
+                {menuOpen && (
+                  <motion.div
+                    id="product-menu"
+                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: EASE_GLIDE }}
+                    // pt-3 rather than mt-3: the pointer must not cross a gap
+                    // between the trigger and the panel.
+                    className="absolute left-0 top-full pt-3"
+                  >
+                    <div className="min-w-[17.5rem] rounded-[1rem] bg-surface p-2 shadow-[var(--shade-lift)]">
+                      {/* The software name, as a label rather than a third
+                          level of menu. Not focusable, not clickable. */}
+                      <p
+                        id="product-menu-heading"
+                        className="px-3.5 pb-2 pt-2.5 text-sm font-semibold tracking-[-0.01em] text-foreground"
+                      >
+                        {PRODUCT_MENU.heading}
+                        <span className="mt-0.5 block text-[0.8125rem] font-normal leading-snug text-muted">
+                          {PRODUCT_MENU.blurb}
+                        </span>
+                      </p>
+                      <ul
+                        aria-labelledby="product-menu-heading"
+                        className="mt-1 border-t border-border pt-1"
+                      >
+                        {PRODUCT_MENU.items.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              aria-current={
+                                pathname === item.href ? "page" : undefined
+                              }
+                              onClick={() => setMenuOpen(false)}
+                              className="block rounded-[0.75rem] px-3.5 py-2.5 transition-colors duration-200 hover:bg-wash"
+                            >
+                              <span className="block text-sm font-medium text-foreground">
+                                {item.label}
+                              </span>
+                              <span className="mt-0.5 block text-[0.8125rem] leading-snug text-muted">
+                                {item.note}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
 
-      {/* ---------------- mobile drawer ---------------- */}
-      {mobile ? (
-        <div
-          id="mobile-nav"
-          className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-[var(--ink)]/10 px-[var(--shell)] pb-10 md:hidden"
-        >
-          <ul className="divide-y divide-[var(--ink)]/10">
-            {NAV.map((e) =>
-              e.items ? (
-                <li key={e.label}>
-                  <button
-                    type="button"
-                    aria-expanded={acc === e.label}
-                    onClick={() => setAcc((v) => (v === e.label ? null : e.label))}
-                    className="flex h-14 w-full items-center justify-between text-left text-base text-[var(--ink)]"
+            {NAV_LINKS.filter((l) => l.href !== "/product").map((link) => {
+              const active = isActive(link.href);
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    className={
+                      "relative block whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-300 xl:px-3 " +
+                      (active ? "text-foreground" : "text-muted hover:text-foreground")
+                    }
                   >
-                    {e.label}
-                    <Chevron flipped={acc === e.label} />
-                  </button>
-                  {acc === e.label ? (
-                    <ul className="pb-3 pl-4">
-                      {e.items.map((it) => (
-                        <li key={it.text}>
-                          <a
-                            href={it.href}
-                            onClick={() => {
-                              setMobile(false);
-                              setAcc(null);
-                            }}
-                            className="flex h-12 items-center text-sm text-[var(--ink)]/70"
-                          >
-                            {it.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
+                    {link.label}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-active"
+                        aria-hidden
+                        className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-[var(--accent-line)]"
+                        transition={{ duration: 0.45, ease: EASE_GLIDE }}
+                      />
+                    )}
+                  </Link>
                 </li>
-              ) : (
-                <li key={e.label}>
-                  <a
-                    href={e.href}
-                    onClick={() => setMobile(false)}
-                    className="flex h-14 items-center text-base text-[var(--ink)]"
-                  >
-                    {e.label}
-                  </a>
-                </li>
-              )
-            )}
+              );
+            })}
           </ul>
 
-          <a
-            href="/sign-in"
-            onClick={() => setMobile(false)}
-            className="mt-6 flex h-11 w-full items-center justify-center rounded-full border border-[var(--accent)] text-sm text-[var(--accent-on-light)]"
-          >
-            Sign in
-          </a>
-        </div>
-      ) : null}
-    </header>
-  );
-}
+          <div className="hidden lg:block">
+            <Button href="/contact" size="sm">Book a Demo</Button>
+          </div>
 
-function Chevron({ flipped }: { flipped: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 10 6"
-      aria-hidden="true"
-      className={
-        "size-2.5 transition-transform duration-200 " + (flipped ? "rotate-180" : "")
-      }
-    >
-      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.3" />
-    </svg>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface/60 transition-transform duration-300 active:scale-[0.94] lg:hidden"
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            {/* Two bars that rotate and translate into an X, rather than
+                swapping one icon for another. Both bars sit at top-0 and move
+                on `y`, so this animates transform only and never layout. */}
+            <span aria-hidden className="relative block h-3 w-5">
+              <motion.span
+                className="absolute left-0 top-0 block h-[1.5px] w-5 rounded-full bg-foreground"
+                animate={open ? { y: 6, rotate: 45 } : { y: 0, rotate: 0 }}
+                transition={{ duration: 0.4, ease: EASE_GLIDE }}
+              />
+              <motion.span
+                className="absolute left-0 top-0 block h-[1.5px] w-5 rounded-full bg-foreground"
+                animate={open ? { y: 6, rotate: -45 } : { y: 12, rotate: 0 }}
+                transition={{ duration: 0.4, ease: EASE_GLIDE }}
+              />
+            </span>
+          </button>
+        </motion.nav>
+      </motion.header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            key="menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE_GLIDE }}
+            // Light, to match the now-light nav trigger floating above it.
+            className="glass fixed inset-0 z-menu overflow-y-auto overscroll-contain bg-background/95 backdrop-blur-2xl lg:hidden"
+          >
+            <nav
+              aria-label="Mobile"
+              className="safe-x flex min-h-[100dvh] flex-col justify-between px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-28"
+            >
+              <ul className="flex flex-col">
+                {NAV_LINKS.map((link, i) => (
+                  <li key={link.href} className="overflow-hidden border-b border-border">
+                    <motion.div
+                      initial={reduce ? false : { y: "100%", opacity: 0 }}
+                      animate={{ y: "0%", opacity: 1 }}
+                      transition={{
+                        duration: 0.6,
+                        delay: reduce ? 0 : 0.06 + i * 0.05,
+                        ease: EASE_OUT_EXPO,
+                      }}
+                    >
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        aria-current={pathname === link.href ? "page" : undefined}
+                        className={
+                          "block py-4 text-2xl font-semibold tracking-tight transition-colors duration-300 " +
+                          (isActive(link.href) ? "text-accent-on-light" : "text-foreground")
+                        }
+                      >
+                        {link.label}
+                      </Link>
+
+                      {/* The two verticals, indented under Product rather than
+                          behind a second tap. A nested flyout on touch is the
+                          pattern this menu exists to avoid; on mobile there is
+                          room to simply show both. */}
+                      {link.href === "/product" && (
+                        <ul className="-mt-1 flex flex-col pb-4 pl-5">
+                          {PRODUCT_VERTICALS.map((v) => (
+                            <li key={v.href}>
+                              <Link
+                                href={v.href}
+                                onClick={() => setOpen(false)}
+                                aria-current={
+                                  pathname === v.href ? "page" : undefined
+                                }
+                                className={
+                                  "block border-l border-border py-2.5 pl-5 text-lg font-medium transition-colors duration-300 " +
+                                  (pathname === v.href
+                                    ? "text-accent-on-light"
+                                    : "text-muted hover:text-foreground")
+                                }
+                              >
+                                {v.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </motion.div>
+                  </li>
+                ))}
+              </ul>
+
+              <motion.div
+                initial={reduce ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: reduce ? 0 : 0.42,
+                  ease: EASE_OUT_EXPO,
+                }}
+                className="flex flex-col gap-5"
+              >
+                <Button
+                  href="/contact"
+                  size="lg"
+                  onClick={() => setOpen(false)}
+                  className="w-fit"
+                >
+                  Book a Demo
+                </Button>
+                <a
+                  href={CONTACT.phones[0].href}
+                  className="nums text-sm text-accent-on-light underline decoration-[var(--accent-line)] decoration-2 underline-offset-4"
+                >
+                  {CONTACT.phones[0].display}
+                </a>
+              </motion.div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
