@@ -20,7 +20,7 @@ const TEAM = [
     photo: "Grace Ddamulira, Founder and Managing Director",
     src: "/founder.png",
     mediaClassName:
-      "bg-gradient-to-b from-wash to-[color-mix(in_srgb,var(--wash)_40%,white)]",
+      "bg-gradient-to-b from-[color-mix(in_srgb,var(--accent)_42%,white)] to-[color-mix(in_srgb,var(--accent)_26%,white)]",
     imageClassName: "object-cover object-[38%_center]",
   },
   /* {
