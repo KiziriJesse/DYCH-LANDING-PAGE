@@ -22,6 +22,7 @@ export function PlaceholderMedia({
   src,
   aspect = "aspect-[4/3]",
   className = "",
+  imageClassName = "object-cover",
 }: {
   /** What should eventually go here. Written for whoever sources the asset,
       and used as the alt text once `src` is supplied. */
@@ -30,6 +31,8 @@ export function PlaceholderMedia({
   src?: string;
   aspect?: string;
   className?: string;
+  /** Extra classes on the image. Defaults to a cropped fill. */
+  imageClassName?: string;
 }) {
   if (src) {
     return (
@@ -41,7 +44,7 @@ export function PlaceholderMedia({
           alt={description}
           fill
           sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover"
+          className={imageClassName}
         />
       </div>
     );

@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { PaperPlaneTilt, Warning } from "@phosphor-icons/react";
+import { PaperPlaneTilt, Warning, CheckCircle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 
 type Field = "name" | "company" | "email" | "message";
@@ -58,18 +58,7 @@ function validate(values: Record<Field, string>): Errors {
 }
 
 /**
- * Validation, loading and error states are real. Delivery is not.
- *
- * There is no backend yet, so the submit handler logs the payload and then
- * tells the sender plainly that the form is not connected, pointing them at
- * the phone and WhatsApp links beside it. It deliberately does not show a
- * success state: claiming "message sent" when nothing was sent would be the
- * one genuinely harmful thing this component could do.
- *
- * TODO: wire real delivery. Either a route handler posting to a transactional
- * email provider (Resend, Postmark, SES) addressed to the team inbox, or the
- * WhatsApp Business API. When that lands, replace the notice below with a
- * success state and remove this comment.
+ * Posts to /api/contact, which delivers the enquiry to the DYCH inbox.
  */
 export function ContactForm() {
   const uid = useId();
@@ -81,9 +70,10 @@ export function ContactForm() {
     message: "",
   });
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "not-connected">(
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
   );
+  const [serverError, setServerError] = useState("");
 
   function update(field: Field, value: string) {
     setValues((v) => ({ ...v, [field]: value }));
@@ -100,23 +90,54 @@ export function ContactForm() {
       return;
     }
 
+    const honeypot = String(
+      new FormData(event.currentTarget).get("website") ?? "",
+    );
+
     setStatus("sending");
-    // Stands in for the network call, so the sending state is visible rather
-    // than flashing past on a local machine.
-    await new Promise((r) => setTimeout(r, 500));
+    setServerError("");
 
-    // TODO: replace with a real submission. Until then this is the only place
-    // the enquiry goes.
-    console.info("[contact] enquiry (not delivered, no backend wired)", {
-      ...values,
-      submittedAt: new Date().toISOString(),
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, website: honeypot }),
+      });
+      const result = (await response.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
 
-    setStatus("not-connected");
+      if (!response.ok || !result?.ok) {
+        setServerError(
+          result?.error ||
+            "The message could not be sent. Please email us directly or reach us on WhatsApp.",
+        );
+        setStatus("error");
+        return;
+      }
+
+      setValues({ name: "", company: "", email: "", message: "" });
+      setStatus("sent");
+    } catch {
+      setServerError(
+        "The message could not be sent. Please email us directly or reach us on WhatsApp.",
+      );
+      setStatus("error");
+    }
   }
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-6 sm:grid-cols-2">
+      <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
+        <label htmlFor={`${uid}-website`}>Website</label>
+        <input
+          id={`${uid}-website`}
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       {FIELDS.map((field) => {
         const inputId = `${uid}-${field.id}`;
         const error = errors[field.id];
@@ -211,19 +232,33 @@ export function ContactForm() {
         </span>
 
         <p aria-live="polite" className="sr-only">
-          {status === "sending" ? "Sending your message" : ""}
+          {status === "sending"
+            ? "Sending your message"
+            : status === "sent"
+              ? "Message sent"
+              : ""}
         </p>
 
-        {status === "not-connected" && (
+        {status === "sent" && (
+          <p
+            role="status"
+            className="mt-6 flex gap-2.5 rounded-input border border-accent-line bg-accent-soft px-5 py-4 leading-relaxed text-foreground"
+          >
+            <CheckCircle size={20} weight="fill" aria-hidden className="mt-0.5 shrink-0 text-accent-on-light" />
+            <span>
+              <strong className="font-semibold">Message sent.</strong> We will
+              come back from Kampala within one working day.
+            </span>
+          </p>
+        )}
+
+        {status === "error" && (
           <p
             role="alert"
             className="mt-6 rounded-input border border-accent-line bg-accent-soft px-5 py-4 leading-relaxed text-foreground"
           >
-            <strong className="font-semibold">
-              This form is not connected yet.
-            </strong>{" "}
-            Nothing was sent, so please reach us on WhatsApp or by phone using the
-            links beside this form. We answer from Kampala within one working day.
+            <strong className="font-semibold">The message did not go through.</strong>{" "}
+            {serverError}
           </p>
         )}
       </div>

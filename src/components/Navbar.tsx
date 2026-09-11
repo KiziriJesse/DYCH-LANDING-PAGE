@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
@@ -13,7 +14,6 @@ import {
 import { CaretDown } from "@phosphor-icons/react";
 import { NAV_LINKS, CONTACT, PRODUCT_VERTICALS } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
-import { Wordmark } from "@/components/ui/Wordmark";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
@@ -48,13 +48,27 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const reduce = useReducedMotion();
   const productRef = useRef<HTMLLIElement>(null);
+  const lastY = useRef(0);
 
-  // A discrete flip, not a per-frame value, so React state is safe here.
-  useMotionValueEvent(scrollY, "change", (y) => setLifted(y > 24));
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setLifted(y > 24);
+
+    const prev = lastY.current;
+    lastY.current = y;
+
+    if (open || menuOpen || y < 32) {
+      setHidden(false);
+      return;
+    }
+
+    if (y > prev + 6) setHidden(true);
+    else if (y < prev - 6) setHidden(false);
+  });
 
   // Menu links close the overlay on click. This effect only subscribes to
   // external events: Escape, and back/forward navigation that no click of
@@ -100,51 +114,44 @@ export function Navbar() {
 
   return (
     <>
-      {/* Floating island, weighted to the right rather than centred. There
-          is one scope on the site now, so the pill no longer carries a theme
-          class of its own; it is a translucent white plate over paper. */}
-      <header className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex justify-end px-4 pt-4 sm:pt-5">
+      <motion.header
+        className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex items-center justify-between gap-4 px-4 pt-4 sm:px-6 sm:pt-5 lg:px-10"
+        initial={false}
+        animate={{ y: hidden ? "-130%" : 0 }}
+        transition={reduce ? { duration: 0 } : { duration: 0.45, ease: EASE_GLIDE }}
+      >
+        <Link
+          href="/"
+          className={
+            "glass pointer-events-auto ml-4 flex size-[3.75rem] shrink-0 items-center justify-center rounded-full border p-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:ml-6 sm:size-[4.25rem] sm:p-2 lg:ml-8 " +
+            (lifted
+              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
+              : "border-transparent bg-white/70")
+          }
+          aria-label="DYCH Technologies, home"
+        >
+          <Image
+            src="/logo/dych-lockup.png"
+            alt="DYCH Technologies"
+            width={640}
+            height={591}
+            priority
+            className="h-full w-full object-contain"
+          />
+        </Link>
+
         <motion.nav
           aria-label="Primary"
           initial={reduce ? false : { y: -28, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
           className={
-            "glass pointer-events-auto flex h-[4.25rem] w-full max-w-[1240px] items-center justify-between gap-4 rounded-full border pl-5 pr-2 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] " +
+            "glass pointer-events-auto flex h-12 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-14 lg:gap-1 lg:pl-2 lg:pr-2 " +
             (lifted
               ? "border-transparent bg-white/90 shadow-[var(--shade)]"
               : "border-transparent bg-white/70")
           }
         >
-          <Link
-            href="/"
-            className="flex items-center rounded-full py-2 pr-2"
-            aria-label="DYCH Technologies, home"
-          >
-            {/* The words are always on now.
-
-                They used to come off between lg and xl. That was measured
-                honestly - with the trigger reading "Smart School Systems",
-                "Book a Demo" ran 64px past the pill at 1024px - but the
-                trigger has been "Product" for a while and the slack came
-                back. Keeping the breakpoint after that was a call for visual
-                calm, and it cost the company its name on every tablet and
-                phone, which is the worse trade: a bare mark reads as
-                unbranded, not as restraint.
-
-                Below lg the desktop links and the CTA are hidden anyway, so
-                the pill has room to spare. lg (1024) is the tight case and it
-                is measured at every breakpoint in the audit. The motto stays
-                off below sm, where it is the one line that has nowhere to
-                go. */}
-            <Wordmark
-              sublineClass="hidden sm:block"
-              textClass="text-[0.9375rem] lg:text-base xl:text-[1.0625rem]"
-              markHeight={32}
-              priority
-            />
-          </Link>
-
           <ul className="hidden items-center gap-0.5 lg:flex">
             {/* Product is a disclosure rather than a link: it reveals the
                 software name and the two verticals under it. */}
@@ -274,7 +281,7 @@ export function Navbar() {
           </ul>
 
           <div className="hidden lg:block">
-            <Button href="/contact">Book a Demo</Button>
+            <Button href="/contact" size="sm">Book a Demo</Button>
           </div>
 
           <button
@@ -282,7 +289,7 @@ export function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface/60 transition-transform duration-300 active:scale-[0.94] lg:hidden"
+            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface/60 transition-transform duration-300 active:scale-[0.94] lg:hidden"
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             {/* Two bars that rotate and translate into an X, rather than
@@ -302,7 +309,7 @@ export function Navbar() {
             </span>
           </button>
         </motion.nav>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {open && (

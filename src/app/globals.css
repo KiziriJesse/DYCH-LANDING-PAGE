@@ -39,9 +39,9 @@
 
   /* ---- Paper family. Three tones, warm-shifted toward the brand hue so the
      page never reads as neutral grey stock. ---- */
-  --paper: #faf9fd; /* page ground */
-  --paper-alt: #f3f0fb; /* section-alternation band */
-  --wash: #eee8fc; /* the deepest tone: gradient stops, hover fills */
+  --paper: #f5f3fc; /* page ground — ~4% more brand hue than #faf9fd */
+  --paper-alt: #eeebfa; /* section-alternation band */
+  --wash: #e9e2fb; /* the deepest tone: gradient stops, hover fills */
 
   /* Role aliases. Components across the site already read bg-background,
      bg-surface and friends, so the roles are mapped onto the palette above
@@ -75,19 +75,19 @@
      exactly why it is not used for body-size text. That is what
      --accent-on-light is for: 6.04-7.22:1, comfortable everywhere. Same hue
      family, lower lightness - the page still reads as one purple. ---- */
-  --accent: #7c5ce0;
-  --accent-on-light: #6238c7;
+  --accent: #8369d3;
+  --accent-on-light: #6846b9;
   --accent-ink: #ffffff; /* label on a filled --accent - 4.70:1 */
   --accent-inverse: #ffffff; /* border + label on the solid accent band */
-  --accent-soft: rgba(124, 92, 224, 0.1);
-  --accent-line: rgba(124, 92, 224, 0.32);
+  --accent-soft: rgba(131, 105, 211, 0.1);
+  --accent-line: rgba(131, 105, 211, 0.32);
 
   /* Shadows are tinted to the ink hue, never neutral black, and the lift used
      on an interactive card is tinted further toward the accent. A rainbow of
      soft shadows on every card is banned; these two are the whole set. */
   --shade: 0 24px 60px -28px rgba(24, 21, 33, 0.18);
   --shade-lift: 0 32px 80px -30px rgba(24, 21, 33, 0.26);
-  --shade-accent: 0 18px 44px -20px rgba(98, 56, 199, 0.28);
+  --shade-accent: 0 18px 44px -20px rgba(104, 70, 185, 0.28);
 
   /* ---- Interactive element metrics, from the button spec ---- */
   --btn-h: 2.25rem; /* 36px desktop */
@@ -118,10 +118,10 @@
     --surface: #ffffff;
     --accent: var(--accent-inverse);
     --accent-on-light: var(--accent-inverse);
-    --accent-ink: #6238c7;
+    --accent-ink: #6846b9;
     --border: rgba(255, 255, 255, 0.28);
     --border-strong: rgba(255, 255, 255, 0.44);
-    background-color: #6238c7;
+    background-color: #6846b9;
     color: #ffffff;
   }
 }
@@ -195,7 +195,7 @@
   /* Anchor targets clear the fixed navbar. */
   section[id],
   main[id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 8rem;
   }
 
   ::selection {
@@ -225,7 +225,7 @@
   summary,
   [role="button"] {
     touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(124, 92, 224, 0.2);
+    -webkit-tap-highlight-color: rgba(131, 105, 211, 0.2);
   }
 }
 

@@ -17,7 +17,7 @@ const FEATURES = [
     body: "A face matched against your own enrolled people as they walk in, so you know who is on the premises and who is not, without anyone walking a clipboard to the perimeter.",
     href: "/product/schools#security",
     Icon: ScanSmiley,
-    span: "md:col-span-7 lg:row-span-2",
+    span: "md:col-span-4",
     shape: "lead" as const,
   },
   {
@@ -25,7 +25,7 @@ const FEATURES = [
     body: "Arrival and departure recorded as they happen, against your own hours and late rules. No manual register, so no transcription errors to chase at the end of the month.",
     href: "/product/schools#attendance",
     Icon: ListChecks,
-    span: "md:col-span-5",
+    span: "md:col-span-4",
     shape: "standard" as const,
   },
   {
@@ -33,7 +33,7 @@ const FEATURES = [
     body: "A notification carrying the photo, so whoever gets it can see the match was right. You set how soon after the scan it goes; SMS and WhatsApp follow where it goes unopened.",
     href: "/product/schools#communication",
     Icon: PaperPlaneTilt,
-    span: "md:col-span-5",
+    span: "md:col-span-4",
     shape: "standard" as const,
   },
   {
@@ -78,13 +78,9 @@ function IconWell({ Icon }: { Icon: (typeof FEATURES)[number]["Icon"] }) {
 }
 
 /**
- * Asymmetric bento rather than a 2x2 of identical tiles: one tall lead cell,
- * two stacked companions and a wide closer. Four items, exactly four cells.
- *
- * Each shape uses its width and height deliberately. The lead cell anchors its
- * text to the bottom so its extra height reads as composition rather than as a
- * gap, and the wide cell splits into two columns so its text does not hug the
- * left edge of a 1240px card.
+ * Three equal cards, then a wide closer. The lead cell used to span two
+ * rows for a photo that is not in yet; without that image it shares a
+ * height with the two beside it.
  *
  * Accent discipline (build plan 0.4a): at rest every card is neutral and its
  * accent appears only on the icon glyph. The accent-tinted spotlight is what
@@ -142,25 +138,7 @@ export function ProductSnapshot() {
                   <>
                     <IconWell Icon={feature.Icon} />
 
-                    {/* The lead cell is two rows tall, so it gets the homepage's
-                        image slot rather than an empty stretch of surface.
-                        TODO: replace with a real photo or screen-recording still. */}
-                    {feature.shape === "lead" && (
-                      <div
-                        role="img"
-                        aria-label="Placeholder for a photograph of facial recognition at a school entry point"
-                        className="mt-7 flex flex-1 items-center justify-center rounded-[calc(var(--radius-card)-0.75rem)] border border-dashed border-border-strong bg-surface-raised/40 p-6 text-center"
-                      >
-                        <span className="max-w-[32ch] text-[0.8125rem] leading-relaxed text-muted">
-                          [Placeholder image: recognition view at the school gate,
-                          camera hardware or the entry dashboard]
-                        </span>
-                      </div>
-                    )}
-
-                    {/* mt-auto anchors the text to the bottom, which only has an
-                        effect on the tall lead cell. */}
-                    <div className="mt-auto pt-7">
+                    <div className="pt-7">
                       <h3
                         className={
                           "leading-tight tracking-[-0.02em] text-foreground " +

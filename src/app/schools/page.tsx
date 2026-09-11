@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
-import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
@@ -100,12 +99,14 @@ export default function SchoolsPage() {
               </p>
             </Reveal>
 
+            {/*
             <Reveal delay={0.08} className="lg:col-span-6">
               <PlaceholderMedia
                 description="a photograph taken at the school during installation, showing the camera at the entry point"
                 aspect="aspect-[4/3]"
               />
             </Reveal>
+            */}
           </div>
 
           {/* Empty by design. The blanks are the honest answer, and labelling

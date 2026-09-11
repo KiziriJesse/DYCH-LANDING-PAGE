@@ -23,9 +23,9 @@ import { useEffect, useRef } from "react";
 
 type P = [number, number];
 
-/** --accent, #7C5CE0. Line art, so 3:1 is the bar; it clears that on every
+/** --accent, #8369D3. Line art, so 3:1 is the bar; it clears that on every
     paper tone (3.94-4.70:1). */
-const DEFAULT_STROKE: [number, number, number] = [124, 92, 224];
+const DEFAULT_STROKE: [number, number, number] = [131, 105, 211];
 
 /* The self-running scan cycle, in seconds. Idle drift, then a sweep down the
    mesh, a short lock, and a release back to idle. */

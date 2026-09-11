@@ -7,18 +7,15 @@ import { DetectionFigure } from "@/components/ui/DetectionFigure";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
-/** --accent, #7C5CE0. The mesh is line art, so 3:1 is the bar and it clears
+/** --accent, #8369D3. The mesh is line art, so 3:1 is the bar and it clears
     it on every paper tone (3.94-4.70:1). */
-const MESH: [number, number, number] = [124, 92, 224];
+const MESH: [number, number, number] = [131, 105, 211];
 
 /*  DYCH's own approved hero line, used as written. The previous headline -
     "The face at the door is the safest record you'll ever keep" - was a
     better sentence but it sold a record. This sells knowing, which is what
     the buyer is actually short of. */
-/* Non-breaking space before the dash: the headline is split on spaces
-   for the word-by-word reveal, so a bare "—" becomes its own token and can
-   start a line on its own, which looks like a mistake. */
-const HEADLINE = "Know who is on your premises — in real time.";
+const HEADLINE = "Know who is on your premises in real time.";
 
 /*  The three drifting fragments.
 
@@ -36,7 +33,7 @@ const FRAGMENTS = [
     label: "Match confirmed",
     note: "at the entry point",
     // Positioned around the figure column, never over the headline.
-    place: "left-[-2.5rem] top-[14%]",
+    place: "left-0 top-[10%] md:left-[-2.5rem] md:top-[14%]",
     drift: { y: [0, -12, 0], x: [0, 4, 0] },
     period: 7.5,
   },
@@ -44,7 +41,7 @@ const FRAGMENTS = [
     Icon: DeviceMobileSpeaker,
     label: "Alert sent",
     note: "push, then SMS",
-    place: "right-[-1.5rem] top-[44%]",
+    place: "right-0 top-[40%] md:right-[-1.5rem] md:top-[44%]",
     drift: { y: [0, 10, 0], x: [0, -5, 0] },
     period: 9.1,
   },
@@ -52,7 +49,7 @@ const FRAGMENTS = [
     Icon: CloudSlash,
     label: "Works offline",
     note: "matching runs on site",
-    place: "bottom-[8%] left-[-1rem]",
+    place: "bottom-[6%] left-0 md:bottom-[8%] md:left-[-1rem]",
     drift: { y: [0, -8, 0], x: [0, -3, 0] },
     period: 8.3,
   },
@@ -166,9 +163,9 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* The mesh, beside the copy at every width. The fragments that
-            drift around it stay off below md: they carry two lines of text
-            each and would be wider than the mesh they annotate on a phone. */}
+        {/* The mesh, beside the copy at every width. On a phone the
+            fragments sit on the figure rather than hanging off it, so they
+            stay inside the column. From md up they keep the original offsets. */}
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -181,7 +178,7 @@ export function Hero() {
             <motion.div
               key={f.label}
               aria-hidden
-              className={`drift absolute ${f.place} pointer-events-none hidden items-center gap-2.5 rounded-full border border-border-strong bg-surface py-2 pl-2 pr-4 md:flex`}
+              className={`drift absolute ${f.place} pointer-events-none flex max-w-[min(100%,11.5rem)] items-center gap-1.5 rounded-full border border-border-strong bg-surface py-1 pl-1 pr-2 md:max-w-none md:gap-2.5 md:py-2 md:pl-2 md:pr-4`}
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={
                 reduce
@@ -209,14 +206,17 @@ export function Hero() {
                     }
               }
             >
-              <span className="grid size-8 shrink-0 place-items-center rounded-full border border-accent-line bg-wash text-accent-on-light">
-                <f.Icon size={16} weight="light" />
+              <span className="grid size-6 shrink-0 place-items-center rounded-full border border-accent-line bg-wash text-accent-on-light md:size-8">
+                <f.Icon size={14} weight="light" className="md:hidden" />
+                <f.Icon size={16} weight="light" className="hidden md:block" />
               </span>
-              <span className="leading-tight">
-                <span className="block text-[0.8125rem] font-semibold text-foreground">
+              <span className="min-w-0 leading-tight">
+                <span className="block text-[0.625rem] font-semibold text-foreground md:text-[0.8125rem]">
                   {f.label}
                 </span>
-                <span className="block text-[0.6875rem] text-muted">{f.note}</span>
+                <span className="block text-[0.5625rem] text-muted md:text-[0.6875rem]">
+                  {f.note}
+                </span>
               </span>
             </motion.div>
           ))}

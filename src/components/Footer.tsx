@@ -1,13 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   EnvelopeSimple,
-  LinkedinLogo,
   MapPin,
   PhoneCall,
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr";
 import { BRAND, CONTACT, SITEMAP } from "@/lib/site";
-import { Wordmark } from "@/components/ui/Wordmark";
 
 const ICON = { size: 18, weight: "light" } as const;
 
@@ -19,7 +18,13 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <Link href="/" aria-label="DYCH Technologies, home" className="inline-block">
-              <Wordmark markHeight={38} />
+              <Image
+                src="/logo/dych-lockup.png"
+                alt="DYCH Technologies"
+                width={640}
+                height={591}
+                className="h-auto w-[7.25rem]"
+              />
             </Link>
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
               {BRAND.blurb}
@@ -67,6 +72,7 @@ export function Footer() {
                     href={line.href}
                     target="_blank"
                     rel="noreferrer"
+                    aria-label={`WhatsApp ${line.display}`}
                     className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
                   >
                     <span
@@ -76,7 +82,7 @@ export function Footer() {
                       <WhatsappLogo {...ICON} />
                     </span>
                     <span className="nums">
-                      WhatsApp {line.display}
+                      {line.display}
                     </span>
                   </a>
                 </li>
@@ -102,6 +108,8 @@ export function Footer() {
               <li>
                 <a
                   href={CONTACT.email.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
                 >
                   <span
@@ -114,14 +122,7 @@ export function Footer() {
                 </a>
               </li>
 
-              {/* LinkedIn is the only social platform confirmed, so it is the
-                  only one here. Facebook, Instagram and YouTube are not
-                  added on spec; when one is confirmed it extends this same
-                  pattern.
-
-                  Until the real URL lands (CONTACT.linkedin.href is "#") this
-                  renders as plain text rather than a link, so the footer
-                  never ships an anchor that goes nowhere. */}
+              {/* LinkedIn — restore when CONTACT.linkedin.href is a real URL.
               <li>
                 {CONTACT.linkedin.href === "#" ? (
                   <span className="inline-flex items-center gap-3 text-[0.9375rem] text-faint">
@@ -150,6 +151,7 @@ export function Footer() {
                   </a>
                 )}
               </li>
+              */}
             </ul>
           </div>
         </div>

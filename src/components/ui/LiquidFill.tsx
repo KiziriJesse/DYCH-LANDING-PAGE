@@ -63,8 +63,8 @@ export const LIQUID_COLORS: Colors = {
   color6: "#B4A8E7", // was #B2B8E7
   color7: "#3A1EA8", // was #0E2DCB
   color8: "#4A2AB8", // was #0017E9
-  color9: "#6238C7", // was #4743EF  (--accent-on-light)
-  color10: "#7C5CE0", // was #7D7BF4  (--accent)
+  color9: "#6846B9", // was #4743EF  (--accent-on-light)
+  color10: "#8369D3", // was #7D7BF4  (--accent)
   color11: "#2E1478", // was #0B06FC
   color12: "#CFC6EA", // was #C5C1EA
   color13: "#33179B", // was #1403DE

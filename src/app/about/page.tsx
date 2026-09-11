@@ -13,30 +13,32 @@ export const metadata: Metadata = {
     "Who DYCH Technologies is, why the company exists, and where it operates from in Kampala, Uganda.",
 };
 
-// TODO: names, roles and photographs are all placeholders. Replace every one
-// before launch. Invented people on an About page are worse than an empty
-// section, so delete any card that has no real person behind it rather than
-// leaving a bracketed name in production.
 const TEAM = [
   {
-    name: "[Full name]",
+    name: "Grace Ddamulira",
     role: "Founder and Managing Director",
-    photo: "a portrait of the founder",
+    photo: "Grace Ddamulira, Founder and Managing Director",
+    src: "/founder.png",
+    mediaClassName:
+      "bg-gradient-to-b from-wash to-[color-mix(in_srgb,var(--wash)_40%,white)]",
+    imageClassName: "object-cover object-[38%_center]",
   },
-  {
+  /* {
     name: "[Full name]",
     role: "Engineering lead",
     photo: "a portrait of the engineering lead",
+  }, */
+  {
+    name: "Saida Salim",
+    role: "Sales Manager",
+    photo: "Saida Salim, Sales Manager",
+    src: "/sales.jpeg",
   },
   {
-    name: "[Full name]",
+    name: "John Jesse Kiziri",
     role: "Deployment and support",
-    photo: "a portrait of the deployment lead",
-  },
-  {
-    name: "[Full name]",
-    role: "Partnerships",
-    photo: "a portrait of the partnerships lead",
+    photo: "John Jesse Kiziri, Deployment and support",
+    src: "/deployment.JPG",
   },
 ];
 
@@ -88,21 +90,21 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
-              The people who install it and answer the phone.
+              Meet Our Team.
             </h2>
-            <p className="mt-5 max-w-[58ch] text-lg leading-relaxed text-muted">
-              A deployment is a small team walking your site, not a support ticket
-              queue in another time zone.
-            </p>
           </Reveal>
 
-          {/* Four cards rather than three, and no hover spotlight: these are not
-              links, so they should not suggest they can be clicked. */}
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mx-auto mt-14 grid max-w-[64rem] gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {TEAM.map((person, i) => (
               <Reveal as="li" key={person.role} delay={0.05 * i}>
                 <div className="flex h-full flex-col">
-                  <PlaceholderMedia description={person.photo} aspect="aspect-[4/5]" />
+                  <PlaceholderMedia
+                    description={person.photo}
+                    src={person.src}
+                    aspect="aspect-[5/6]"
+                    className={person.mediaClassName}
+                    imageClassName={person.imageClassName}
+                  />
                   <h3 className="mt-5 font-medium tracking-[-0.015em] text-foreground">
                     {person.name}
                   </h3>
@@ -153,12 +155,14 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
+          {/*
           <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
             <PlaceholderMedia
               description="a photograph of the team on site at a school gate during an installation"
               aspect="aspect-[4/3]"
             />
           </Reveal>
+          */}
         </div>
       </section>
 

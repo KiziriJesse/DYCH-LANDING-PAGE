@@ -63,14 +63,17 @@ export const SITEMAP = [
 
 export const CONTACT = {
   phones: [
-    { display: "+256 767 870 035", href: "tel:+256767870035" },
+    { display: "+256 708 180 987", href: "tel:+256708180987" },
     { display: "+256 788 195 067", href: "tel:+256788195067" },
   ],
   whatsapp: [
     { display: "+256 767 870 035", href: "https://wa.me/256767870035" },
-    { display: "+256 788 195 067", href: "https://wa.me/256788195067" },
+    // { display: "+256 788 195 067", href: "https://wa.me/256788195067" },
   ],
-  email: { display: "dychtech256@gmail.com", href: "mailto:dychtech256@gmail.com" },
+  email: {
+    display: "dychtech256@gmail.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=dychtech256@gmail.com",
+  },
   /*  TODO: DYCH to supply the real LinkedIn company page URL.
 
       The href is "#" on purpose. Guessing a slug from the company name is

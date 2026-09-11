@@ -72,7 +72,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   // --paper. Was the old dark substrate, which tinted the mobile browser
   // chrome near-black above a white page.
-  themeColor: "#faf9fd",
+  themeColor: "#f5f3fc",
 };
 
 export default function RootLayout({

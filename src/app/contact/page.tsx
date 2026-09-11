@@ -30,7 +30,7 @@ const CHANNELS: {
   {
     Icon: EnvelopeSimple,
     label: "Email",
-    lines: [{ text: CONTACT.email.display, href: CONTACT.email.href }],
+    lines: [{ text: CONTACT.email.display, href: CONTACT.email.href, external: true }],
   },
   {
     Icon: MapPin,
@@ -95,6 +95,9 @@ export default function ContactPage() {
                         <a
                           key={line.text}
                           href={line.href}
+                          {...(line.external
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
                           className="nums mt-1 block text-[0.9375rem] text-foreground underline decoration-[var(--accent-line)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-accent-on-light"
                         >
                           {line.text}
