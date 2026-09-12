@@ -11,7 +11,7 @@ import {
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Capability, type CapabilityData } from "@/components/product/Capability";
-import { RecognitionFigure } from "@/components/product/RecognitionFigure";
+import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 
 export const metadata: Metadata = {
   title: "Smart Vision for Schools",
@@ -75,9 +75,16 @@ const CAPABILITIES: CapabilityData[] = [
       },
     ],
     media:
-      "the recognition view at the school gate, or the camera hardware in place above the entry point",
+      "Students arriving at a school gate as the system identifies each person",
     mediaAspect: "aspect-[4/3]",
-    renderMedia: () => <RecognitionFigure />,
+    renderMedia: () => (
+      <PlaceholderMedia
+        description="Students arriving at a school gate as the system identifies each person"
+        src="/school-arrival.png"
+        aspect="aspect-[4/3]"
+        imageClassName="object-cover object-[center_72%]"
+      />
+    ),
     Icon: ScanSmiley,
     layout: "split-right",
   },

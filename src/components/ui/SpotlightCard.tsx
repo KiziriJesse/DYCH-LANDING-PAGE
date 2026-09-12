@@ -28,10 +28,14 @@ export function SpotlightCard({
   children,
   href,
   className = "",
+  media,
 }: {
   children: ReactNode;
   href?: string;
   className?: string;
+  /** Optional full-bleed plate at the top of the well. Clipped to the same
+      inner radius as the card, so corners sit flush with no leftover ears. */
+  media?: ReactNode;
 }) {
   const reduce = useReducedMotion();
 
@@ -76,8 +80,11 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0"
         style={{ background: spotlight }}
       />
-      <div className="relative flex h-full flex-col rounded-[calc(var(--radius-card)-0.375rem)] p-6 sm:p-7">
-        {children}
+      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[calc(var(--radius-card)-0.375rem)]">
+        {media ? <div className="relative shrink-0 overflow-hidden">{media}</div> : null}
+        <div className="relative flex h-full flex-1 flex-col p-6 sm:p-7">
+          {children}
+        </div>
       </div>
     </motion.div>
   );

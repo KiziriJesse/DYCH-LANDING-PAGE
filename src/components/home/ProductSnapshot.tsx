@@ -5,20 +5,38 @@ import {
   Devices,
   ScanSmiley,
 } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
+import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 const ICON = { size: 26, weight: "light" } as const;
 
-const FEATURES = [
+type Feature = {
+  title: string;
+  body: string;
+  href: string;
+  Icon: PhosphorIcon;
+  span: string;
+  shape: "lead" | "standard" | "wide";
+  image?: string;
+  imageAlt?: string;
+  imageClassName?: string;
+};
+
+const FEATURES: Feature[] = [
   {
     title: "Recognition at the entrance",
     body: "A face matched against your own enrolled people as they walk in, so you know who is on the premises and who is not, without anyone walking a clipboard to the perimeter.",
     href: "/product/schools#security",
     Icon: ScanSmiley,
-    span: "md:col-span-4",
+    span: "md:col-span-8 md:row-span-2",
     shape: "lead" as const,
+    image: "/school-gate.png",
+    imageAlt:
+      "Students walking through a school gate as a camera on the post identifies them",
+    imageClassName: "object-cover object-[42%_center]",
   },
   {
     title: "Attendance and timekeeping",
@@ -66,7 +84,7 @@ function ReadMore() {
 /*  One well treatment for every feature, everywhere on the site. The four
     per-feature hues this used to carry are gone; what distinguishes a card
     now is its glyph and its position, not its colour. */
-function IconWell({ Icon }: { Icon: (typeof FEATURES)[number]["Icon"] }) {
+function IconWell({ Icon }: { Icon: PhosphorIcon }) {
   return (
     <span
       aria-hidden
@@ -78,9 +96,8 @@ function IconWell({ Icon }: { Icon: (typeof FEATURES)[number]["Icon"] }) {
 }
 
 /**
- * Three equal cards, then a wide closer. The lead cell used to span two
- * rows for a photo that is not in yet; without that image it shares a
- * height with the two beside it.
+ * Lead cell spans two rows for the gate photograph, with attendance and
+ * alerts stacked beside it, then a wide closer.
  *
  * Accent discipline (build plan 0.4a): at rest every card is neutral and its
  * accent appears only on the icon glyph. The accent-tinted spotlight is what
@@ -116,6 +133,19 @@ export function ProductSnapshot() {
               <SpotlightCard
                 href={feature.href}
                 className="h-full"
+                media={
+                  feature.image ? (
+                    <div className="relative aspect-[4/3] w-full">
+                      <Image
+                        src={feature.image}
+                        alt={feature.imageAlt ?? feature.title}
+                        fill
+                        sizes="(min-width: 768px) 60vw, 100vw"
+                        className={feature.imageClassName}
+                      />
+                    </div>
+                  ) : undefined
+                }
               >
                 {feature.shape === "wide" ? (
                   <div className="grid h-full gap-6 md:grid-cols-12 md:items-center">
