@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
+import { ShapeField } from "@/components/ui/ShapeField";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -13,7 +14,8 @@ import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  // 700 is for the Face Scan hero headline only; the comp sets it bold.
+  weight: ["300", "400", "500", "700"],
   display: "swap",
 });
 
@@ -72,7 +74,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   // --paper. Was the old dark substrate, which tinted the mobile browser
   // chrome near-black above a white page.
-  themeColor: "#f5f3fc",
+  themeColor: "#f4f0ff",
 };
 
 export default function RootLayout({
@@ -83,11 +85,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${plexSans.variable} bg-background text-foreground antialiased`}
+        className={`${spaceGrotesk.variable} ${plexSans.variable} bg-transparent text-foreground antialiased`}
       >
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        {/* Site-wide drifting shapes. Here rather than per page for the same
+            reason as the widget below: one field that survives navigation. */}
+        <ShapeField />
         <Navbar />
         <main id="main">{children}</main>
         <Footer />

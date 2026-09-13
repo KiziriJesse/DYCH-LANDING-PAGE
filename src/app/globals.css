@@ -37,27 +37,32 @@
 :root {
   color-scheme: light;
 
-  /* ---- Paper family. Three tones, warm-shifted toward the brand hue so the
-     page never reads as neutral grey stock. ---- */
-  --paper: #f5f3fc; /* page ground — ~4% more brand hue than #faf9fd */
-  --paper-alt: #eeebfa; /* section-alternation band */
-  --wash: #e9e2fb; /* the deepest tone: gradient stops, hover fills */
+  /* ---- Pastel-violet mesh. Four named stops, then the paper roles
+     mapped onto them so existing bg-background / bg-surface call sites
+     pick up the new ground without a rewrite. --background is transparent
+     on purpose: the mesh is painted on html, and section wrappers that
+     used to stamp a solid plate now let it show through. Cards still
+     lift in white. ---- */
+  --frost: #f4f0ff; /* primary light base */
+  --lavender: #dcd0ff; /* mid-tone */
+  --lilac: #c3b1e1; /* secondary */
+  --iris: #8a73b9; /* accent / depth shadow */
 
-  /* Role aliases. Components across the site already read bg-background,
-     bg-surface and friends, so the roles are mapped onto the palette above
-     rather than rewritten at every call site. --surface is pure white on
-     purpose: cards need to lift off --paper, and white is the only tone
-     lighter than it. */
-  --background: var(--paper);
+  --paper: var(--frost);
+  --paper-alt: var(--lavender);
+  --wash: var(--lilac);
+
+  --background: transparent;
   --surface: #ffffff;
   --surface-raised: var(--paper-alt);
   --surface-sunk: var(--wash);
 
-  /* ---- Ink. Near-black tinted toward the brand hue, not neutral grey. ---- */
-  --ink: #181521;
-  --foreground: var(--ink); /* 17.15 paper · 15.98 alt · 15.05 wash */
-  --muted: #5b5470; /*  6.80 paper ·  6.33 alt ·  5.97 wash */
-  --faint: #6b6480; /*  5.33 paper ·  4.97 alt ·  4.68 wash */
+  /* ---- Ink. Charcoal on the pale mesh for contrast. Secondary copy
+     stays in the same charcoal family, just a step lighter. ---- */
+  --ink: #111112;
+  --foreground: var(--ink);
+  --muted: #3a3a3c;
+  --faint: #5c5c60;
 
   /* ---- Structure ---- */
   --border: rgba(24, 21, 33, 0.1);
@@ -124,12 +129,119 @@
     background-color: #6846b9;
     color: #ffffff;
   }
+
+  /* Hero is a cinematic HUD plate: midnight indigo into royal indigo.
+     Tokens flip locally so the headline, muted copy and inverted CTA
+     keep contrast on the dark field without leaking into the paper
+     sections below. */
+  .hero-field {
+    isolation: isolate;
+    color: var(--foreground);
+
+    /* ---- Cyber-violet HUD palette. Named here and nowhere else: these five
+       values exist only inside the hero, so the paper sections below keep the
+       two-hue system intact and nothing leaks out of this scope. ---- */
+    --hud-base: #120529; /* deep midnight indigo */
+    --hud-mid: #2b125c; /* royal indigo-violet */
+    --hud-beam: #5a20b8; /* vibrant electric violet */
+    --hud-light: #8a52e0; /* luminous soft lavender */
+    --hud-cyan: #00d2ff; /* electric cyan */
+    --hud-white: #ffffff;
+
+    /* The same five as bare channels. Gradient stops need these rather than
+       the hex values: color-mix() has no alpha-preserving fallback, and
+       Lightning CSS compiles one that drops the alpha outright - which paints
+       the beam and the anchor glow as solid slabs on any engine without
+       color-mix. rgb(... / a) has no such gap. */
+    --hud-base-rgb: 18 5 41;
+    --hud-mid-rgb: 43 18 92;
+    --hud-beam-rgb: 90 32 184;
+    --hud-light-rgb: 138 82 224;
+    --hud-cyan-rgb: 0 210 255;
+
+    /* Site tokens re-pointed for the dark field, so Button, TextLink and the
+       type scale resolve to their inverse treatment with no special casing -
+       the same trick .band-accent uses. */
+    --foreground: var(--hud-white);
+    --muted: #cdbdf2;
+    --faint: #a892d4;
+    --accent: #c4b0ff;
+    --accent-on-light: #e4d9ff;
+    --accent-ink: var(--hud-base);
+    --accent-inverse: var(--hud-white);
+    --accent-line: rgb(var(--hud-cyan-rgb) / 0.42);
+    --border: rgba(255, 255, 255, 0.15);
+    --border-strong: rgba(255, 255, 255, 0.28);
+
+    background-color: var(--hud-base);
+
+    /* Four layers, painted front to back:
+       1. the luminous lavender anchor along the bottom edge,
+       2. the diagonal violet beam running top-left to bottom-right,
+       3. a low cyan rim on the copy side, which is what keeps the accent
+          hue present in the field rather than only on the HUD marks,
+       4. the vertical base gradient the whole plate sits on. */
+    background-image:
+      radial-gradient(
+        124% 48% at 50% 105%,
+        rgb(var(--hud-light-rgb) / 0.58) 0%,
+        rgb(var(--hud-light-rgb) / 0.24) 32%,
+        transparent 72%
+      ),
+      /* 45deg, not 135. The gradient axis is perpendicular to the band it
+         paints: a 135deg axis runs the bright stripe bottom-left to
+         top-right, which is the mirror of what this wants. 45deg puts the
+         beam itself on the top-left to bottom-right diagonal. */
+      linear-gradient(
+        45deg,
+        transparent 8%,
+        rgb(var(--hud-beam-rgb) / 0.2) 24%,
+        rgb(var(--hud-beam-rgb) / 0.58) 42%,
+        rgb(var(--hud-beam-rgb) / 0.34) 58%,
+        transparent 82%
+      ),
+      radial-gradient(
+        40rem 28rem at 6% 44%,
+        rgb(var(--hud-cyan-rgb) / 0.13) 0%,
+        transparent 62%
+      ),
+      linear-gradient(
+        180deg,
+        var(--hud-base) 0%,
+        #1a083f 48%,
+        var(--hud-mid) 100%
+      );
+  }
+
+  /* Face Scan hero ground, from the Claude Design comp: royal blue lit from
+     just right of centre, where the face sits, falling to deep indigo at the
+     edges. Replaces only the ground - the token re-points on .hero-field
+     still apply, so Button and TextLink keep their inverse treatment.
+     Declared after .hero-field so it wins at equal specificity. */
+  .scan-field {
+    /* Above the site-wide .shape-field (z-index 1). Under multiply its purple
+       shapes turn to dark smudges on this ground, and the hero already runs
+       its own white field. Still well under the nav (50). */
+    z-index: 2;
+    background-color: #0a0533;
+    background-image: radial-gradient(
+      120% 100% at 68% 46%,
+      #3826ab 0%,
+      #2a1a93 35%,
+      #201479 62%,
+      #170e5c 100%
+    );
+  }
 }
 
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-alt: var(--paper-alt);
   --color-wash: var(--wash);
+  --color-frost: var(--frost);
+  --color-lavender: var(--lavender);
+  --color-lilac: var(--lilac);
+  --color-iris: var(--iris);
 
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -162,16 +274,70 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    background-color: var(--frost);
+    /* Frost + lavender hold ~70% as overlapping clouds. Lilac is a
+       wide, soft bloom in the upper-right only; iris is a faint
+       depth spot inside that bloom, not a third field. */
+    background-image:
+      radial-gradient(
+        78rem 56rem at 94% 0%,
+        color-mix(in srgb, var(--lilac) 82%, transparent) 0%,
+        color-mix(in srgb, var(--lilac) 36%, transparent) 42%,
+        transparent 72%
+      ),
+      radial-gradient(
+        40rem 30rem at 88% 6%,
+        color-mix(in srgb, var(--iris) 20%, transparent) 0%,
+        transparent 58%
+      ),
+      radial-gradient(
+        68rem 52rem at 16% 18%,
+        color-mix(in srgb, var(--lavender) 92%, transparent) 0%,
+        transparent 64%
+      ),
+      radial-gradient(
+        62rem 48rem at 38% 72%,
+        color-mix(in srgb, var(--lavender) 78%, transparent) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        72rem 54rem at 32% 44%,
+        var(--frost) 0%,
+        color-mix(in srgb, var(--frost) 70%, transparent) 48%,
+        transparent 70%
+      ),
+      linear-gradient(
+        148deg,
+        var(--frost) 0%,
+        var(--frost) 22%,
+        var(--lavender) 48%,
+        var(--lavender) 70%,
+        color-mix(in srgb, var(--frost) 55%, var(--lavender) 45%) 100%
+      );
+    background-attachment: fixed;
   }
 
   body {
     font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
     line-height: 1.6;
-    background-color: var(--background);
+    background-color: transparent;
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+  }
+
+  /* High-frequency grain at 3% — a matte tooth, not a visible tile. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 96px 96px;
   }
 
   /* Display face at a light weight with tight leading and tracking. Sizes
@@ -261,6 +427,335 @@
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 
+  /* Sparse HUD grid. Large cells, not a dense engineering overlay. */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(0, 210, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 210, 255, 0.055) 1px, transparent 1px);
+    background-size: 18vw 22vh;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 40%, transparent 82%);
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 96px 96px;
+  }
+
+  /* Frosted plate behind the wireframe. Web glass approximation. */
+  .hero-glass {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02)),
+      rgba(18, 5, 41, 0.22);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 0 48px rgba(0, 210, 255, 0.08);
+  }
+
+  .hero-glass--main {
+    top: 8%;
+    right: -5%;
+    width: min(54vw, 42rem);
+    height: 82%;
+    border-radius: 2.5rem;
+  }
+
+  .hero-glass--cut {
+    right: -2%;
+    bottom: 7%;
+    width: min(30vw, 22rem);
+    height: 40%;
+    border-radius: 2rem;
+  }
+
+  /* ---- HUD instrumentation ----
+
+     Crosshairs, alignment rules and coordinate markers. All of it is frame
+     furniture: the readouts name positions on this layout (axis, sector,
+     grid step), never invented product numbers. The standard's ban on
+     meaningless stat pills is about fabricated metrics, and this stays on
+     the safe side of it by only ever describing itself. */
+  .hud-tag {
+    font-family: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+    font-size: 0.5625rem;
+    line-height: 1;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+    white-space: nowrap;
+  }
+
+  .hud-tag--cyan {
+    color: rgb(var(--hud-cyan-rgb) / 0.72);
+  }
+
+  /* Rules fade at both ends, so they read as alignment guides rather than
+     as borders that stop dead. */
+  .hud-rule-h {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--hud-cyan-rgb) / 0.26) 18%,
+      rgb(var(--hud-cyan-rgb) / 0.26) 82%,
+      transparent
+    );
+  }
+
+  .hud-rule-v {
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgb(var(--hud-cyan-rgb) / 0.22) 20%,
+      rgb(var(--hud-cyan-rgb) / 0.22) 80%,
+      transparent
+    );
+  }
+
+  /* A crosshair is two bars through a common centre; the box is the
+     registration square that sits around it. */
+  .hud-cross {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hud-cross::before,
+  .hud-cross::after {
+    content: "";
+    position: absolute;
+    background: rgb(var(--hud-cyan-rgb) / 0.58);
+  }
+
+  .hud-cross::before {
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+
+  .hud-cross::after {
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    transform: translateX(-50%);
+  }
+
+  .hud-box {
+    width: 7px;
+    height: 7px;
+    border: 1px solid rgb(var(--hud-cyan-rgb) / 0.42);
+  }
+
+  /* Corner brackets. One element, two visible edges, rotated per corner. */
+  .hud-bracket {
+    width: 18px;
+    height: 18px;
+    border-left: 1px solid rgba(255, 255, 255, 0.22);
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  /* Tick strip along an alignment rule. */
+  .hud-ticks {
+    height: 6px;
+    background-image: linear-gradient(
+      90deg,
+      rgb(var(--hud-cyan-rgb) / 0.34) 1px,
+      transparent 1px
+    );
+    background-size: 12px 100%;
+    mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  }
+
+  /* The frosted panel the hero copy sits on. Same glass recipe as the
+     decorative plates - blur 16, 1px border at 15% white - but this one
+     carries content, so it takes real padding and its own radius. */
+  .hero-panel {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1.5rem;
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.09),
+        rgba(255, 255, 255, 0.015)
+      ),
+      rgba(18, 5, 41, 0.28);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 24px 64px -32px rgba(0, 0, 0, 0.7);
+  }
+
+  .hero-fade {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 6;
+    height: 7rem;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--frost));
+  }
+
+  /* ---- Face Scan hero rig ----
+     The comp's face column is 1130x1080 on a 1920 stage, flush right. The
+     rig reproduces that box at the same share of the width; everything
+     inside is placed in percentages of it, and sizes that must track its
+     width use cqw, which is why it is an inline-size container. */
+  .scan-rig {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 58.85%; /* 1130 / 1920 */
+    aspect-ratio: 1130 / 1080;
+    translate: 0 -50%;
+    container-type: inline-size;
+    pointer-events: none;
+  }
+
+  .scan-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    transform-origin: 45% 50%;
+    /* The comp fades the column in over its first 430px of 1130. */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+  }
+
+  .scan-face-inner {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    /* 120px in from top and bottom of 1080. */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 11.1%,
+      #000 88.9%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 11.1%,
+      #000 88.9%,
+      transparent 100%
+    );
+  }
+
+  /* The comp's copy-side scrim, so white type holds over the lit ground. */
+  .scan-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      rgb(13 8 58 / 0.72) 0%,
+      rgb(13 8 58 / 0.45) 34%,
+      transparent 62%
+    );
+  }
+
+  .scan-stage {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Below lg there is no room beside the copy, and laying the face behind it
+     put the tracking brackets through the body text and the CTA. The stage
+     drops into flow under the copy instead.
+
+     The rig is widened to 130% and pulled 20% left so the bracket box
+     (23-82% of the column) lands roughly centred; the stage's aspect ratio
+     is the column's 1130x1080 at that 1.3x. The negative top margin tucks
+     the column's faded top edge under the CTA row, and the bottom margin
+     keeps the readout clear of .hero-fade. No scrim: nothing sits on top.
+
+     face.png carries its own blue ground. On desktop the column is flush
+     right and the field's bright spot sits behind it, so the two match. Here
+     the column floats mid-page, so its right edge gets the same fade as its
+     left, and the field's light moves down behind the stacked face. */
+  @media (max-width: 1023px) {
+    .scan-field {
+      background-image: radial-gradient(
+        140% 70% at 50% 72%,
+        #3826ab 0%,
+        #2a1a93 35%,
+        #201479 62%,
+        #170e5c 100%
+      );
+    }
+
+    .scan-face {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        #000 38%,
+        #000 76%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        #000 38%,
+        #000 76%,
+        transparent 100%
+      );
+    }
+
+    .scan-stage {
+      position: relative;
+      inset: auto;
+      width: min(100%, 34rem);
+      aspect-ratio: 1130 / 1404;
+      margin: -2rem auto 5rem;
+    }
+
+    .scan-rig {
+      top: 0;
+      left: -20%;
+      right: auto;
+      width: 130%;
+      translate: none;
+    }
+
+    .scan-scrim {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-glass--main {
+      top: 46%;
+      right: -20%;
+      width: 82vw;
+      height: 50%;
+    }
+
+    .hero-glass--cut {
+      display: none;
+    }
+  }
+
   /* The soft lavender field behind the hero. A gradient of --wash into
      --paper rather than a flat block, which is what gives it the
      photographic falloff the brief asked for. Two offset radials, so the
@@ -276,6 +771,59 @@
         48rem 36rem at 12% 62%,
         color-mix(in srgb, var(--wash) 58%, transparent) 0%,
         transparent 58%
+      );
+  }
+
+  /* Hero wash follows the same map: lavender clouds over the copy,
+     a wider lilac bloom in the upper-right. */
+  /* Diffuse iris orbs. #8A73B9, heavy backdrop blur, always behind
+     type and the figure. Isolation on .hero-field keeps z-index: -1
+     inside the section. */
+  .glow-orb {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 48%,
+      #8a73b9 0%,
+      color-mix(in srgb, #8a73b9 42%, transparent) 42%,
+      transparent 72%
+    );
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(100px);
+  }
+
+  .glow-orb--copy {
+    left: -6%;
+    top: 4%;
+    width: min(44rem, 108%);
+    height: min(30rem, 78%);
+  }
+
+  .glow-orb--mid {
+    left: 38%;
+    top: 22%;
+    width: min(52rem, 68vw);
+    height: min(40rem, 52vw);
+  }
+
+  .hero-glow {
+    background-image:
+      radial-gradient(
+        56rem 42rem at 96% -4%,
+        color-mix(in srgb, var(--lilac) 62%, transparent) 0%,
+        transparent 68%
+      ),
+      radial-gradient(
+        32rem 24rem at 88% 4%,
+        color-mix(in srgb, var(--iris) 18%, transparent) 0%,
+        transparent 54%
+      ),
+      radial-gradient(
+        52rem 38rem at 18% 36%,
+        color-mix(in srgb, var(--lavender) 55%, transparent) 0%,
+        transparent 62%
       );
   }
 
@@ -319,6 +867,51 @@
 
   .skip-link:focus {
     top: 1rem;
+  }
+
+  /* ---- Site-wide shape field (ShapeField.tsx) ----
+
+     A fixed overlay rather than a backdrop, because half the sections paint
+     an opaque ground that would hide a backdrop. z-index 1 keeps it under
+     every named layer in the locked scale - raised content, the widget, the
+     menu and the nav all sit above it - and multiply means a shape can only
+     darken what it crosses, so body text never loses contrast to it. */
+  .shape-field {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .shape-field__item {
+    position: absolute;
+    opacity: 0;
+    background: var(--iris);
+    animation: shape-rise var(--shape-dur) ease-in-out var(--shape-delay) infinite;
+  }
+
+  .shape-field__item--tri {
+    background: var(--accent);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+
+  /* Opacity peaks mid-rise and returns to zero, so a shape is never visible
+     at the moment it jumps back to its start. Transform and opacity only. */
+  @keyframes shape-rise {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(var(--shape-rot));
+    }
+    50% {
+      opacity: var(--shape-alpha);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(0, calc(var(--shape-rise) * -1), 0)
+        rotate(calc(var(--shape-rot) + 40deg));
+    }
   }
 }
 
@@ -368,6 +961,15 @@
     filter: none !important;
     animation: none !important;
   }
+
+  /* The shape field holds still. The blanket rule would end each shape on its
+     last keyframe - opacity 0 - and the field would vanish; instead every
+     shape rests at its start, a little under its peak alpha. */
+  .shape-field__item {
+    animation: none !important;
+    opacity: calc(var(--shape-alpha) * 0.7) !important;
+    transform: rotate(var(--shape-rot)) !important;
+  }
 }
 
 /* Transparency-sensitive users get solid surfaces instead of glass. */
@@ -376,5 +978,22 @@
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background-color: var(--surface) !important;
+  }
+
+  .hero-glass,
+  .hero-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(18, 5, 41, 0.86) !important;
+  }
+
+  body::after,
+  .hero-noise {
+    display: none;
+  }
+
+  .glow-orb {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }

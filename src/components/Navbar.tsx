@@ -321,7 +321,7 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE_GLIDE }}
             // Light, to match the now-light nav trigger floating above it.
-            className="glass fixed inset-0 z-menu overflow-y-auto overscroll-contain bg-background/95 backdrop-blur-2xl lg:hidden"
+            className="glass fixed inset-0 z-menu overflow-y-auto overscroll-contain bg-paper/95 backdrop-blur-2xl lg:hidden"
           >
             <nav
               aria-label="Mobile"

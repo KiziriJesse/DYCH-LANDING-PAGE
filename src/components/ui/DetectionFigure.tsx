@@ -8,12 +8,13 @@ import { useEffect, useRef } from "react";
  * Ported from the prototype on `main`. A dense facial-landmark mesh rendered
  * to canvas: nodes drift on their own, react to the pointer, and snap into a
  * lock state on a self-running cycle, with a scan-line sweep. Fully static
- * under
- * prefers-reduced-motion.
+ * under prefers-reduced-motion.
  *
- * Geometry is hand-placed facial topology (cranium, jaw, brows, orbits, nasal
- * ridge, philtrum, lips, cheekbones), not random points, so the mesh reads as
- * a face. All of that is unchanged from the original.
+ * Geometry is hand-placed facial topology (cranium, jaw, ears, brows, orbits,
+ * iris rings, nasal ridge, alae, nostrils, philtrum, lips), not random
+ * points, so the mesh reads as a face. Interior edges come from a Delaunay
+ * triangulation of those landmarks, which is what gives the figure its
+ * polygonal web.
  *
  * The stroke colour was originally hardcoded as `rgba(0, 113, 227, ...)` in
  * four places. It is a single module default plus an optional `stroke` prop,
@@ -21,7 +22,9 @@ import { useEffect, useRef } from "react";
  * kept so a caller can tune the mesh against an unusually deep wash.
  */
 
-type P = [number, number];
+export type P = [number, number];
+type Edge = [number, number];
+type Tri = [number, number, number];
 
 /** --accent, #8369D3. Line art, so 3:1 is the bar; it clears that on every
     paper tone (3.94-4.70:1). */
@@ -34,103 +37,312 @@ const SCAN_START = 4.6;
 const SCAN_END = 6.8;
 const HOLD_END = 7.6;
 
-const W = 360;
-const H = 470;
+export const W = 360;
+export const H = 470;
 
-const OUTLINE: P[] = [
-  [180, 18], [222, 26], [258, 44], [288, 72], [308, 110], [320, 155],
-  [324, 200], [321, 246], [313, 288], [300, 326], [281, 360], [256, 391],
-  [226, 416], [204, 434], [180, 442], [156, 434], [134, 416], [104, 391],
-  [79, 360], [60, 326], [47, 288], [39, 246], [36, 200], [40, 155],
-  [52, 110], [72, 72], [102, 44], [138, 26],
-];
+const mirror = (pts: P[]): P[] => pts.map(([x, y]) => [W - x, y]);
 
-const BROW_L: P[] = [[70, 170], [96, 152], [124, 146], [152, 154]];
-const BROW_R: P[] = [[208, 154], [236, 146], [264, 152], [290, 170]];
-
-const EYE_L: P[] = [[84, 197], [106, 181], [131, 179], [151, 193], [130, 206], [105, 205]];
-const EYE_R: P[] = [[209, 193], [229, 179], [254, 181], [276, 197], [255, 205], [230, 206]];
-const IRIS: P[] = [[118, 193], [242, 193]];
-
-const NOSE: P[] = [
-  [180, 188], [180, 216], [180, 244], [180, 266],
-  [158, 258], [202, 258],
-  [151, 287], [165, 297], [180, 301], [195, 297], [209, 287],
-];
-
-const LIP_TOP: P[] = [[138, 341], [158, 329], [172, 336], [180, 331], [188, 336], [202, 329], [222, 341]];
-const LIP_BOT: P[] = [[208, 357], [190, 366], [180, 368], [170, 366], [152, 357]];
-
-const STRUCTURE: P[] = [
-  [180, 78], [120, 90], [240, 90], [150, 118], [210, 118], [180, 122],
-  [88, 128], [272, 128], [58, 190], [302, 190],
-  [78, 240], [120, 250], [240, 250], [282, 240],
-  [94, 292], [140, 300], [220, 300], [266, 292],
-  [108, 342], [252, 342], [126, 300], [234, 300],
-  [138, 392], [222, 392], [180, 398], [180, 420],
-  [104, 220], [256, 220], [180, 160],
-  [148, 56], [212, 56], [92, 104], [268, 104], [180, 46],
-];
-
-const NODES: P[] = [
-  ...OUTLINE, ...BROW_L, ...BROW_R, ...EYE_L, ...EYE_R, ...IRIS,
-  ...NOSE, ...LIP_TOP, ...LIP_BOT, ...STRUCTURE,
-];
-
-/** Explicit feature chains, so eyes/lips/brows always read as contours. */
-function chain(start: number, len: number, closed = false): [number, number][] {
-  const e: [number, number][] = [];
-  for (let i = 0; i < len - 1; i++) e.push([start + i, start + i + 1]);
-  if (closed) e.push([start + len - 1, start]);
-  return e;
+function densify(pts: P[], closed: boolean, maxDist: number): P[] {
+  const src = closed ? [...pts, pts[0]] : pts;
+  const out: P[] = [];
+  for (let i = 0; i < src.length - 1; i++) {
+    const a = src[i];
+    const b = src[i + 1];
+    out.push(a);
+    const d = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const steps = Math.max(0, Math.floor(d / maxDist));
+    for (let k = 1; k <= steps; k++) {
+      const t = k / (steps + 1);
+      out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+    }
+  }
+  if (!closed) out.push(src[src.length - 1]);
+  return out;
 }
 
-const iOutline = 0;
-const iBrowL = iOutline + OUTLINE.length;
-const iBrowR = iBrowL + BROW_L.length;
-const iEyeL = iBrowR + BROW_R.length;
-const iEyeR = iEyeL + EYE_L.length;
-const iIris = iEyeR + EYE_R.length;
-const iNose = iIris + IRIS.length;
-const iLipT = iNose + NOSE.length;
-const iLipB = iLipT + LIP_TOP.length;
-
-const FEATURE_EDGES: [number, number][] = [
-  ...chain(iOutline, OUTLINE.length, true),
-  ...chain(iBrowL, BROW_L.length),
-  ...chain(iBrowR, BROW_R.length),
-  ...chain(iEyeL, EYE_L.length, true),
-  ...chain(iEyeR, EYE_R.length, true),
-  ...chain(iNose, 4),
-  ...chain(iLipT, LIP_TOP.length),
-  ...chain(iLipB, LIP_BOT.length),
-  [iLipT, iLipB + LIP_BOT.length - 1],
-  [iLipT + LIP_TOP.length - 1, iLipB],
-];
-
-/** Proximity mesh - this is what gives the figure its triangulated web. */
-function buildEdges(): [number, number][] {
-  const set = new Set<string>();
-  const out: [number, number][] = [];
-  const add = (a: number, b: number) => {
-    const k = a < b ? `${a}:${b}` : `${b}:${a}`;
-    if (!set.has(k)) {
-      set.add(k);
-      out.push([a, b]);
-    }
-  };
-  FEATURE_EDGES.forEach(([a, b]) => add(a, b));
-  for (let i = 0; i < NODES.length; i++) {
-    for (let j = i + 1; j < NODES.length; j++) {
-      const dx = NODES[i][0] - NODES[j][0];
-      const dy = NODES[i][1] - NODES[j][1];
-      if (Math.hypot(dx, dy) < 46) add(i, j);
-    }
+function ring(cx: number, cy: number, rx: number, ry: number, n: number, rot = -Math.PI / 2): P[] {
+  const out: P[] = [];
+  for (let i = 0; i < n; i++) {
+    const a = rot + (i / n) * Math.PI * 2;
+    out.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]);
   }
   return out;
 }
 
-const EDGES = buildEdges();
+function chain(start: number, len: number, closed = false): Edge[] {
+  const e: Edge[] = [];
+  for (let i = 0; i < len - 1; i++) e.push([start + i, start + i + 1]);
+  if (closed && len > 2) e.push([start + len - 1, start]);
+  return e;
+}
+
+function keyOf(a: number, b: number) {
+  return a < b ? `${a}:${b}` : `${b}:${a}`;
+}
+
+function pip(x: number, y: number, poly: P[]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0];
+    const yi = poly[i][1];
+    const xj = poly[j][0];
+    const yj = poly[j][1];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.00001) + xi) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+function circumcircle(a: P, b: P, c: P) {
+  const d = 2 * (a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]));
+  if (Math.abs(d) < 1e-6) return null;
+  const a2 = a[0] * a[0] + a[1] * a[1];
+  const b2 = b[0] * b[0] + b[1] * b[1];
+  const c2 = c[0] * c[0] + c[1] * c[1];
+  const ux = (a2 * (b[1] - c[1]) + b2 * (c[1] - a[1]) + c2 * (a[1] - b[1])) / d;
+  const uy = (a2 * (c[0] - b[0]) + b2 * (a[0] - c[0]) + c2 * (b[0] - a[0])) / d;
+  const r2 = (a[0] - ux) ** 2 + (a[1] - uy) ** 2;
+  return { ux, uy, r2 };
+}
+
+function delaunay(pts: P[], hull: P[]): Edge[] {
+  const n = pts.length;
+  const minX = 0;
+  const minY = 0;
+  const maxX = W;
+  const maxY = H;
+  const dx = maxX - minX;
+  const dy = maxY - minY;
+  const dmax = Math.max(dx, dy) * 4;
+  const midX = (minX + maxX) / 2;
+  const midY = (minY + maxY) / 2;
+  const all: P[] = pts.concat([
+    [midX - 2 * dmax, midY - dmax],
+    [midX, midY + 2 * dmax],
+    [midX + 2 * dmax, midY - dmax],
+  ]);
+  let tris: Tri[] = [[n, n + 1, n + 2]];
+
+  for (let i = 0; i < n; i++) {
+    const bad: Edge[] = [];
+    const keep: Tri[] = [];
+    const p = pts[i];
+    for (const t of tris) {
+      const cc = circumcircle(all[t[0]], all[t[1]], all[t[2]]);
+      if (!cc) continue;
+      if ((p[0] - cc.ux) ** 2 + (p[1] - cc.uy) ** 2 <= cc.r2 + 0.4) {
+        bad.push([t[0], t[1]], [t[1], t[2]], [t[2], t[0]]);
+      } else {
+        keep.push(t);
+      }
+    }
+    const counts = new Map<string, { e: Edge; n: number }>();
+    for (const e of bad) {
+      const k = keyOf(e[0], e[1]);
+      const prev = counts.get(k);
+      if (prev) prev.n += 1;
+      else counts.set(k, { e, n: 1 });
+    }
+    tris = keep;
+    for (const { e, n: c } of counts.values()) {
+      if (c === 1) tris.push([e[0], e[1], i]);
+    }
+  }
+
+  const edges: Edge[] = [];
+  const seen = new Set<string>();
+  const add = (a: number, b: number) => {
+    if (a >= n || b >= n) return;
+    const k = keyOf(a, b);
+    if (seen.has(k)) return;
+    seen.add(k);
+    edges.push([a, b]);
+  };
+
+  for (const [a, b, c] of tris) {
+    if (a >= n || b >= n || c >= n) continue;
+    const pa = pts[a];
+    const pb = pts[b];
+    const pc = pts[c];
+    const lab = Math.hypot(pa[0] - pb[0], pa[1] - pb[1]);
+    const lbc = Math.hypot(pb[0] - pc[0], pb[1] - pc[1]);
+    const lca = Math.hypot(pc[0] - pa[0], pc[1] - pa[1]);
+    if (Math.max(lab, lbc, lca) > 78) continue;
+    const mx = (pa[0] + pb[0] + pc[0]) / 3;
+    const my = (pa[1] + pb[1] + pc[1]) / 3;
+    if (!pip(mx, my, hull)) continue;
+    add(a, b);
+    add(b, c);
+    add(c, a);
+  }
+  return edges;
+}
+
+/* Silhouette includes the ear helices so the fill and the hull both carry
+   the pinnae. Interior ear bowls sit as their own landmark chains. */
+export const SILHOUETTE: P[] = [
+  [180, 16], [208, 20], [236, 32], [260, 50], [282, 74], [300, 104], [312, 138],
+  [318, 160],
+  [332, 168], [348, 182], [356, 202], [356, 224], [348, 246], [334, 260], [320, 266],
+  [316, 292], [306, 328], [288, 362], [264, 392], [234, 418], [206, 436], [180, 444],
+  [154, 436], [126, 418], [96, 392], [72, 362], [54, 328], [44, 292],
+  [40, 266], [26, 260], [12, 246], [4, 224], [4, 202], [12, 182], [28, 168],
+  [42, 160], [48, 138], [60, 104], [78, 74], [100, 50], [124, 32], [152, 20],
+];
+
+const OUTLINE = densify(SILHOUETTE, true, 18);
+
+const BROW_L = densify([[70, 168], [92, 150], [116, 142], [138, 144], [156, 154]], false, 16);
+const BROW_R = mirror(BROW_L);
+
+/* Almond lids, upper crease, then an iris ring and pupil so the orbits read
+   as eyes rather than empty hexagons. */
+const EYE_L = densify(
+  [[80, 198], [96, 182], [116, 176], [136, 180], [152, 196], [140, 212], [118, 218], [96, 214]],
+  true,
+  12,
+);
+const EYE_R = mirror(EYE_L);
+const CREASE_L = densify([[84, 172], [108, 162], [132, 160], [152, 170]], false, 14);
+const CREASE_R = mirror(CREASE_L);
+/** Nodes per iris ring. Exported because IRIS_INDEX stores ring starts,
+    so a consumer needs the length to test membership. */
+export const IRIS_LEN = 10;
+const IRIS_L = ring(116, 196, 12.5, 11, IRIS_LEN);
+const IRIS_R = ring(W - 116, 196, 12.5, 11, IRIS_LEN);
+const PUPIL: P[] = [[116, 196], [W - 116, 196]];
+
+const NOSE_RIDGE = densify(
+  [[180, 168], [180, 192], [180, 216], [180, 240], [180, 258], [180, 276]],
+  false,
+  14,
+);
+const NOSE_L_WALL = densify([[170, 198], [166, 224], [160, 250], [152, 268]], false, 16);
+const NOSE_R_WALL = mirror(NOSE_L_WALL);
+const ALA_L = densify([[152, 266], [142, 276], [146, 290], [158, 298]], false, 12);
+const ALA_R = mirror(ALA_L);
+const NOSTRIL_L = densify([[162, 282], [172, 276], [178, 286], [168, 294]], true, 10);
+const NOSTRIL_R = mirror(NOSTRIL_L);
+const NOSE_BASE = densify([[158, 300], [180, 308], [202, 300]], false, 12);
+
+const PHILTRUM: P[] = [[180, 318], [170, 328], [190, 328], [180, 332]];
+const LIP_TOP = densify(
+  [[132, 344], [150, 332], [164, 326], [172, 332], [180, 326], [188, 332], [196, 326], [210, 332], [228, 344]],
+  false,
+  12,
+);
+const LIP_TOP_IN = densify([[146, 350], [162, 346], [180, 348], [198, 346], [214, 350]], false, 12);
+const LIP_BOT_IN = densify([[214, 358], [198, 364], [180, 366], [162, 364], [146, 358]], false, 12);
+const LIP_BOT = densify(
+  [[228, 352], [214, 370], [198, 382], [180, 386], [162, 382], [146, 370], [132, 352]],
+  false,
+  12,
+);
+
+/* Inner bowl of each pinna - helix itself lives on SILHOUETTE. */
+const EAR_L = densify([[32, 186], [22, 200], [20, 218], [26, 238], [36, 250], [34, 216]], false, 12);
+const EAR_R = mirror(EAR_L);
+
+const STRUCTURE_SEED: P[] = [
+  [180, 46], [150, 42], [210, 42], [120, 58], [240, 58], [180, 78],
+  [140, 82], [220, 82], [100, 90], [260, 90], [160, 102], [200, 102],
+  [180, 118], [88, 118], [272, 118], [120, 132], [240, 132], [180, 144],
+  [64, 148], [296, 148], [164, 158], [196, 158], [180, 160],
+  [58, 190], [302, 190], [78, 218], [282, 218],
+  [100, 228], [260, 228], [128, 236], [232, 236],
+  [64, 248], [296, 248], [96, 268], [264, 268], [130, 272], [230, 272],
+  [70, 288], [290, 288], [108, 304], [252, 304], [140, 312], [220, 312],
+  [88, 332], [272, 332], [118, 348], [242, 348],
+  [100, 368], [260, 368], [140, 372], [220, 372],
+  [180, 400], [156, 396], [204, 396], [128, 408], [232, 408],
+  [180, 422], [160, 428], [200, 428],
+  [108, 220], [252, 220], [88, 200], [272, 200],
+  [148, 250], [212, 250], [180, 292],
+];
+
+export const NODES: P[] = [];
+const FEATURE_EDGES: Edge[] = [];
+const FEATURE_KEYS = new Set<string>();
+export const PUPIL_INDEX: number[] = [];
+export const IRIS_INDEX: number[] = [];
+
+function addGroup(pts: P[], links?: { closed?: boolean; feature?: boolean }) {
+  const start = NODES.length;
+  NODES.push(...pts);
+  if (links?.feature) {
+    for (const e of chain(start, pts.length, !!links.closed)) {
+      FEATURE_EDGES.push(e);
+      FEATURE_KEYS.add(keyOf(e[0], e[1]));
+    }
+  }
+  return start;
+}
+
+function addFeaturePair(a: number, b: number) {
+  FEATURE_EDGES.push([a, b]);
+  FEATURE_KEYS.add(keyOf(a, b));
+}
+
+addGroup(OUTLINE, { closed: true, feature: true });
+addGroup(BROW_L, { feature: true });
+addGroup(BROW_R, { feature: true });
+addGroup(EYE_L, { closed: true, feature: true });
+addGroup(EYE_R, { closed: true, feature: true });
+addGroup(CREASE_L, { feature: true });
+addGroup(CREASE_R, { feature: true });
+const iIrisL = addGroup(IRIS_L, { closed: true, feature: true });
+const iIrisR = addGroup(IRIS_R, { closed: true, feature: true });
+IRIS_INDEX.push(iIrisL, iIrisR);
+const iPupil = addGroup(PUPIL);
+PUPIL_INDEX.push(iPupil, iPupil + 1);
+addGroup(NOSE_RIDGE, { feature: true });
+addGroup(NOSE_L_WALL, { feature: true });
+addGroup(NOSE_R_WALL, { feature: true });
+addGroup(ALA_L, { feature: true });
+addGroup(ALA_R, { feature: true });
+addGroup(NOSTRIL_L, { closed: true, feature: true });
+addGroup(NOSTRIL_R, { closed: true, feature: true });
+addGroup(NOSE_BASE, { feature: true });
+const iPhil = addGroup(PHILTRUM);
+addFeaturePair(iPhil, iPhil + 1);
+addFeaturePair(iPhil, iPhil + 2);
+addFeaturePair(iPhil, iPhil + 3);
+const iLipT = addGroup(LIP_TOP, { feature: true });
+const iLipTI = addGroup(LIP_TOP_IN, { feature: true });
+const iLipBI = addGroup(LIP_BOT_IN, { feature: true });
+const iLipB = addGroup(LIP_BOT, { feature: true });
+addFeaturePair(iLipT, iLipB + LIP_BOT.length - 1);
+addFeaturePair(iLipT + LIP_TOP.length - 1, iLipB);
+addFeaturePair(iLipTI, iLipBI + LIP_BOT_IN.length - 1);
+addFeaturePair(iLipTI + LIP_TOP_IN.length - 1, iLipBI);
+addGroup(EAR_L, { feature: true });
+addGroup(EAR_R, { feature: true });
+
+{
+  const extra: P[] = [];
+  for (const p of STRUCTURE_SEED) {
+    const taken = NODES.concat(extra).some((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) < 12);
+    if (!taken && pip(p[0], p[1], SILHOUETTE)) extra.push(p);
+  }
+  addGroup(extra);
+}
+
+function buildEdges(): Edge[] {
+  const set = new Set<string>();
+  const out: Edge[] = [];
+  const add = (a: number, b: number) => {
+    const k = keyOf(a, b);
+    if (set.has(k)) return;
+    set.add(k);
+    out.push([a, b]);
+  };
+  FEATURE_EDGES.forEach(([a, b]) => add(a, b));
+  delaunay(NODES, SILHOUETTE).forEach(([a, b]) => add(a, b));
+  return out;
+}
+
+export const EDGES = buildEdges();
 
 export function DetectionFigure({
   className = "",
@@ -223,26 +435,16 @@ export function DetectionFigure({
           it the same mesh reads as mapped onto a face, which is what the
           product actually does.
 
-          It is drawn from OUTLINE - the hand-placed cranium-and-jaw contour
-          the mesh is already built on - smoothed through midpoints, and
-          filled with a vertical duotone of the stroke colour at 4-13%. So it
-          is an illustration by construction: there is no photograph here, and
-          there could not be. That is deliberate on two counts. No licensed
-          portrait exists for this, and putting a real, identifiable person
-          behind a facial-recognition company's own marketing would imply that
-          specific individual is the one under surveillance - which is a bad
-          look however the photo was obtained.
-
           Drawn from the HOME coordinates rather than the drifting ones, so
           the face holds still while the mesh breathes over it. */
       const face = new Path2D();
       face.moveTo(
-        (OUTLINE[0][0] + OUTLINE[OUTLINE.length - 1][0]) / 2,
-        (OUTLINE[0][1] + OUTLINE[OUTLINE.length - 1][1]) / 2,
+        (SILHOUETTE[0][0] + SILHOUETTE[SILHOUETTE.length - 1][0]) / 2,
+        (SILHOUETTE[0][1] + SILHOUETTE[SILHOUETTE.length - 1][1]) / 2,
       );
-      for (let i = 0; i < OUTLINE.length; i++) {
-        const cur = OUTLINE[i];
-        const next = OUTLINE[(i + 1) % OUTLINE.length];
+      for (let i = 0; i < SILHOUETTE.length; i++) {
+        const cur = SILHOUETTE[i];
+        const next = SILHOUETTE[(i + 1) % SILHOUETTE.length];
         face.quadraticCurveTo(
           cur[0],
           cur[1],
@@ -293,7 +495,6 @@ export function DetectionFigure({
       const reach = 74 + lock * 46;
 
       for (const n of state) {
-        // idle drift
         const dx0 = reduced ? 0 : Math.cos(t + n.phase) * 0.5 * n.amp;
         const dy0 = reduced ? 0 : Math.sin(t * 0.85 + n.phase) * 0.5 * n.amp;
         let tx = n.hx + dx0;
@@ -305,7 +506,6 @@ export function DetectionFigure({
           const d = Math.hypot(dx, dy);
           if (d < reach && d > 0.001) {
             const f = (1 - d / reach) ** 2;
-            // hover pushes the mesh outward; pressing pulls it into a lock
             const dir = lock > 0.5 ? -1 : 1;
             const mag = f * (9 + lock * 11) * dir;
             tx += (dx / d) * mag;
@@ -321,12 +521,12 @@ export function DetectionFigure({
         n.y += n.vy;
       }
 
-      // edges
       for (const [a, b] of EDGES) {
         const A = state[a];
         const B = state[b];
-        let alpha = 0.5 + lock * 0.28;
-        let width = 0.9 + lock * 0.5;
+        const feat = FEATURE_KEYS.has(keyOf(a, b));
+        let alpha = (feat ? 0.7 : 0.38) + lock * 0.28;
+        let width = (feat ? 1.15 : 0.7) + lock * 0.45;
         if (pointer.inside && !reduced) {
           const mx = (A.x + B.x) / 2;
           const my = (A.y + B.y) / 2;
@@ -345,27 +545,43 @@ export function DetectionFigure({
         ctx.stroke();
       }
 
-      // nodes
+      /* Iris discs sit under the nodes so the orbits have a pupil, matching
+         the landmark plate, without becoming a photograph. */
+      for (const i of PUPIL_INDEX) {
+        const n = state[i];
+        ctx.fillStyle = `rgba(${rgb}, ${0.16 + lock * 0.1})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 11.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = `rgba(${rgb}, ${0.34 + lock * 0.14})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       for (let i = 0; i < state.length; i++) {
         const n = state[i];
-        let r = 1.9 + lock * 0.5;
-        let alpha = 1;
+        let r = 1.55 + lock * 0.4;
+        let alpha = 0.92;
         if (pointer.inside && !reduced) {
           const d = Math.hypot(n.x - pointer.x, n.y - pointer.y);
           if (d < reach) {
             const f = 1 - d / reach;
-            r = r + f * (1.9 + lock * 2.2);
+            r = r + f * (1.7 + lock * 2);
             alpha = 1;
           }
         }
-        const isIris = i >= iIris && i < iIris + IRIS.length;
+        const isPupil = PUPIL_INDEX.includes(i);
+        const isIris = IRIS_INDEX.some((start, k) => {
+          const len = k === 0 ? IRIS_L.length : IRIS_R.length;
+          return i >= start && i < start + len;
+        });
         ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, isIris ? r + 1.6 : r, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, isPupil ? r + 1.8 : isIris ? r + 0.6 : r, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // The scan sweep, driven by the cycle rather than by a press.
       if (scanY >= 0) {
         const y = scanY;
         ctx.strokeStyle = `rgba(${rgb}, 0.75)`;
@@ -375,11 +591,6 @@ export function DetectionFigure({
         ctx.lineTo(W - 6, y);
         ctx.stroke();
       }
-
-      // The bounding box and corner ticks that the original drew around the
-      // mesh are deliberately gone. They were decoration here, and the same
-      // grammar already carries real meaning on /product, where a box marks an
-      // actual tracked face. Repeating it around a decorative mesh diluted it.
 
       ctx.restore();
       raf = requestAnimationFrame(draw);
@@ -407,3 +618,5 @@ export function DetectionFigure({
     />
   );
 }
+
+export default DetectionFigure;

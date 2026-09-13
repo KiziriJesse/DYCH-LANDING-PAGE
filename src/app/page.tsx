@@ -1,4 +1,4 @@
-import { Hero } from "@/components/home/Hero";
+import { FaceScanHero } from "@/components/home/FaceScanHero";
 import { Problem } from "@/components/home/Problem";
 import { ProductSnapshot } from "@/components/home/ProductSnapshot";
 import { HowItWorksTeaser } from "@/components/home/HowItWorksTeaser";
@@ -25,7 +25,7 @@ import { ClosingCta } from "@/components/home/ClosingCta";
 export default function Home() {
   return (
     <>
-      <Hero />
+      <FaceScanHero />
       <Problem />
       <ProductSnapshot />
       <Solutions />
