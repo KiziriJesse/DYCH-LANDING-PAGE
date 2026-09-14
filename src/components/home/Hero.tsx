@@ -26,7 +26,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="hero-field relative isolate min-h-[100dvh] overflow-hidden"
+      className="surface-recess relative isolate min-h-[100dvh] overflow-hidden"
     >
       <span aria-hidden className="hero-grid" />
       <HudOverlay />
@@ -51,7 +51,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: reduce ? 0 : 0.3, ease: EASE_OUT_EXPO }}
-            className="hud-tag hud-tag--cyan mb-5 flex items-center gap-3 sm:mb-6"
+            className="hud-tag hud-tag--glint mb-5 flex items-center gap-3 sm:mb-6"
           >
             <span className="hud-box shrink-0" />
             Facial recognition access control

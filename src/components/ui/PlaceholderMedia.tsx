@@ -37,7 +37,7 @@ export function PlaceholderMedia({
   if (src) {
     return (
       <div
-        className={`relative ${aspect} w-full overflow-hidden rounded-card border border-border ${className}`}
+        className={`relative z-raise ${aspect} w-full overflow-hidden rounded-card border border-border ${className}`}
       >
         <Image
           src={src}
@@ -54,9 +54,9 @@ export function PlaceholderMedia({
     <div
       role="img"
       aria-label={`Placeholder for ${description}`}
-      className={`flex ${aspect} w-full items-center justify-center rounded-card border border-dashed border-border-strong bg-surface-raised/40 p-8 text-center ${className}`}
+      className={`relative z-raise flex ${aspect} w-full items-center justify-center rounded-card border border-dashed border-border-strong bg-surface-raised/40 p-8 text-center ${className}`}
     >
-      <span className="max-w-[36ch] text-[0.8125rem] leading-relaxed text-muted">
+      <span className="max-w-[36ch] text-[0.8125rem] leading-relaxed text-faint">
         [Placeholder image: {description}]
       </span>
     </div>

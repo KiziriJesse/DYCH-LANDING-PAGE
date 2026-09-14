@@ -28,19 +28,15 @@
 export function RecognitionFigure() {
   return (
     <figure>
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-card border border-border bg-surface-sunk">
+      <div className="surface-recess relative aspect-[4/3] w-full overflow-hidden rounded-card">
         <svg
           viewBox="0 0 400 300"
           className="absolute inset-0 size-full"
           role="img"
           aria-label="Illustrative camera view with three tracked faces: two matched, shown with solid boxes, and one unmatched, shown with a dashed box and flagged for a person to check"
         >
-          {/* Frame scan lines. Restrained, not a decorative glow. */}
-          <g stroke="var(--foreground)" strokeWidth="0.3" opacity="0.07">
-            {Array.from({ length: 15 }, (_, i) => (
-              <line key={i} x1="0" y1={i * 20} x2="400" y2={i * 20} />
-            ))}
-          </g>
+          {/* No drawn scan lines: the recessed panel's stripes are the frame's
+              texture, and two textures on one camera view is one too many. */}
 
           <TrackedBox x={40} y={70} w={70} h={88} label="ID 4471" />
           <TrackedBox x={165} y={110} w={62} h={78} label="ID 2208" />
@@ -57,7 +53,7 @@ export function RecognitionFigure() {
             />
             Matched
           </dt>
-          <dd className="text-sm text-muted">Known, enrolled identity</dd>
+          <dd className="text-sm text-faint">Known, enrolled identity</dd>
         </div>
         <div className="flex items-baseline gap-2.5">
           <dt className="flex items-center gap-2 text-sm text-muted">
@@ -67,11 +63,11 @@ export function RecognitionFigure() {
             />
             Unmatched
           </dt>
-          <dd className="text-sm text-muted">Flagged for a person to check</dd>
+          <dd className="text-sm text-faint">Flagged for a person to check</dd>
         </div>
       </dl>
 
-      <figcaption className="mt-4 text-sm text-muted">
+      <figcaption className="mt-4 text-sm text-faint">
         Illustrative camera view, not a product screenshot.
       </figcaption>
     </figure>

@@ -112,7 +112,7 @@ export default function SchoolsPage() {
           {/* Empty by design. The blanks are the honest answer, and labelling
               them beats hiding the row until numbers arrive. */}
           <Reveal delay={0.12}>
-            <div className="mt-16 grid gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-3">
+            <div className="relative z-raise mt-16 grid gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-3">
               {PILOT_METRICS.map((metric) => (
                 <div key={metric.label} className="bg-surface px-7 py-9">
                   <p
@@ -150,7 +150,7 @@ export default function SchoolsPage() {
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               The kind of school this fits.
             </h2>
-            <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+            <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-faint">
               Not a list of names you would have to take on trust. What the system
               actually copes with, so you can tell in a minute whether it is worth an
               hour of your time.

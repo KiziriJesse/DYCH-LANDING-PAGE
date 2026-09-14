@@ -15,9 +15,9 @@ export type CommitmentData = {
  * Deliberately reads like a policy document rather than a marketing section:
  * this page's job is to look careful, so it carries no imagery and no card
  * elevation, and it repeats one structure instead of varying for interest.
- * That is also why it uses the brand accent only, never a feature hue.
+ * Its wells step through the brand gradient in section order.
  */
-export function Commitment({ item }: { item: CommitmentData }) {
+export function Commitment({ item, accent }: { item: CommitmentData; accent: string }) {
   return (
     <Reveal
       as="article"
@@ -26,7 +26,8 @@ export function Commitment({ item }: { item: CommitmentData }) {
       <div className="lg:col-span-4">
         <span
           aria-hidden
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+          className="flex h-12 w-12 items-center justify-center rounded-full text-accent-ink"
+          style={{ backgroundColor: accent }}
         >
           <item.Icon size={24} weight="light" />
         </span>

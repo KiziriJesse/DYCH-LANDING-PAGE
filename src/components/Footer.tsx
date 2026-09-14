@@ -7,8 +7,12 @@ import {
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr";
 import { BRAND, CONTACT, SITEMAP } from "@/lib/site";
+import { sequenceAccent } from "@/lib/palette";
 
 const ICON = { size: 18, weight: "light" } as const;
+
+// Every contact line is one step along the brand gradient, in list order.
+const CONTACT_COUNT = CONTACT.whatsapp.length + CONTACT.phones.length + 1;
 
 export function Footer() {
   return (
@@ -17,7 +21,7 @@ export function Footer() {
         {/* Three columns, not a four-column link farm. */}
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Link href="/" aria-label="DYCH Technologies, home" className="inline-block">
+            <Link href="/" aria-label="DYCH Technologies, home" className="relative z-raise inline-block">
               <Image
                 src="/logo/dych-lockup.png"
                 alt="DYCH Technologies"
@@ -66,7 +70,7 @@ export function Footer() {
             </h2>
 
             <ul className="mt-5 flex flex-col gap-4">
-              {CONTACT.whatsapp.map((line) => (
+              {CONTACT.whatsapp.map((line, i) => (
                 <li key={line.href}>
                   <a
                     href={line.href}
@@ -77,7 +81,8 @@ export function Footer() {
                   >
                     <span
                       aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent-ink transition-transform duration-300 group-hover:scale-105"
+                      style={{ backgroundColor: sequenceAccent(i, CONTACT_COUNT) }}
                     >
                       <WhatsappLogo {...ICON} />
                     </span>
@@ -88,7 +93,7 @@ export function Footer() {
                 </li>
               ))}
 
-              {CONTACT.phones.map((line) => (
+              {CONTACT.phones.map((line, i) => (
                 <li key={line.href}>
                   <a
                     href={line.href}
@@ -96,7 +101,8 @@ export function Footer() {
                   >
                     <span
                       aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent-ink transition-transform duration-300 group-hover:scale-105"
+                      style={{ backgroundColor: sequenceAccent(CONTACT.whatsapp.length + i, CONTACT_COUNT) }}
                     >
                       <PhoneCall {...ICON} />
                     </span>
@@ -114,7 +120,8 @@ export function Footer() {
                 >
                   <span
                     aria-hidden
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent-ink transition-transform duration-300 group-hover:scale-105"
+                    style={{ backgroundColor: sequenceAccent(CONTACT_COUNT - 1, CONTACT_COUNT) }}
                   >
                     <EnvelopeSimple {...ICON} />
                   </span>
@@ -156,7 +163,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-border pt-6 text-sm text-muted">
+        <div className="mt-14 border-t border-border pt-6 text-sm text-faint">
           <p>
             <span className="nums">{new Date().getFullYear()}</span> {BRAND.name}. All
             rights reserved.

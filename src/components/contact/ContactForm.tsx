@@ -171,7 +171,7 @@ export function ContactForm() {
               {field.label}
             </label>
             {field.helper && (
-              <p id={helperId} className="text-[0.8125rem] leading-relaxed text-muted">
+              <p id={helperId} className="text-[0.8125rem] leading-relaxed text-faint">
                 {field.helper}
               </p>
             )}

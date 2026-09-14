@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
+import { sequenceAccent } from "@/lib/palette";
 
 // TODO: add real durations to each stage once DYCH confirms typical lead times.
 // They are deliberately absent rather than invented, since a school will plan
@@ -35,7 +36,7 @@ export function DeploymentTimeline() {
           <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
             Deployment and support
           </h2>
-          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-faint">
             Four stages between the first conversation and the first automatic
             message home. A school stays on paper until the last one, so there is no
             week where neither system is trusted.
@@ -58,7 +59,8 @@ export function DeploymentTimeline() {
             >
               <span
                 aria-hidden
-                className="mt-1.5 block h-[15px] w-[15px] shrink-0 rounded-full border-2 border-accent bg-background md:mt-0"
+                className="mt-1.5 block h-[15px] w-[15px] shrink-0 rounded-full border-2 bg-background md:mt-0"
+                style={{ borderColor: sequenceAccent(i, STAGES.length) }}
               />
               <div className="md:mt-6">
                 <h3 className="font-medium tracking-[-0.015em] text-foreground">

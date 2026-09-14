@@ -36,10 +36,15 @@ const POINTS = [
  * Split composition: bare display type on one side, a quiet claim panel on the
  * other. Deliberately not another card grid, and the panel is styled
  * differently from the list so the two do not read as a matched pair.
+ *
+ * The homepage's violet section. The copy holds the left column, clear of the
+ * gradient's light corner, and the claim sits in a recessed panel of its own,
+ * so the one sentence DYCH stands behind reads as set into the brand rather
+ * than laid over it.
  */
 export function Proof() {
   return (
-    <section className="bg-surface px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
+    <section className="surface-violet px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
       <div className="mx-auto grid max-w-[1240px] gap-16 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-6">
           <Reveal>
@@ -61,9 +66,11 @@ export function Proof() {
                 delay={0.08 * (i + 1)}
                 className="flex gap-5 border-b border-border py-7"
               >
+                {/* On violet the wells do not step through the gradient - they
+                    would vanish into it. They take the outline instead. */}
                 <span
                   aria-hidden
-                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent-line text-accent"
                 >
                   <point.Icon {...ICON} />
                 </span>
@@ -81,12 +88,12 @@ export function Proof() {
         <Reveal delay={0.12} className="lg:col-span-5 lg:col-start-8 lg:self-center">
           {/* Was border-l-2 border-accent. A coloured left border above 1px on a
               callout is a craft-floor refusal, and it was also a second
-              elevation cue on a panel that already has a fill. The fill now
-              carries it alone. */}
-          <div className="rounded-card bg-surface-raised py-8 pl-8 pr-7">
+              elevation cue on a panel that already has a fill. The recessed
+              ground carries it alone. */}
+          <div className="surface-recess rounded-card py-8 pl-8 pr-7">
             <span
               aria-hidden
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line text-accent"
             >
               {/* HardDrives, not a padlock. The claim is that matching runs
                   on the school own machine; a padlock is the generic security
@@ -104,7 +111,7 @@ export function Proof() {
             </p>
             <Link
               href="/security-and-trust"
-              className="mt-7 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
+              className="mt-7 inline-block border-b border-link-rule pb-0.5 font-semibold text-link transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-link-hover hover:text-link-hover"
             >
               How we handle children&rsquo;s data
             </Link>

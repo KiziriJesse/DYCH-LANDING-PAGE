@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { Commitment, type CommitmentData } from "@/components/trust/Commitment";
+import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Security & trust",
@@ -235,8 +236,8 @@ export default function SecurityAndTrustPage() {
 
       <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">
         <div className="mx-auto max-w-[1240px]">
-          {COMMITMENTS.map((item) => (
-            <Commitment key={item.id} item={item} />
+          {COMMITMENTS.map((item, i) => (
+            <Commitment key={item.id} item={item} accent={sequenceAccent(i, COMMITMENTS.length)} />
           ))}
         </div>
       </section>
@@ -249,7 +250,7 @@ export default function SecurityAndTrustPage() {
             <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               Questions worth putting to us, and to anyone else.
             </h2>
-            <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+            <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-faint">
               If a supplier cannot answer these plainly, that is worth knowing before
               a single camera goes up. Ask us at a site assessment and hold us to the
               answers.
@@ -266,7 +267,8 @@ export default function SecurityAndTrustPage() {
               >
                 <span
                   aria-hidden
-                  className="nums mt-0.5 shrink-0 text-sm font-semibold text-accent-on-light"
+                  className="nums mt-0.5 shrink-0 text-sm font-semibold"
+                  style={{ color: sequenceAccent(i, QUESTIONS.length) }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>

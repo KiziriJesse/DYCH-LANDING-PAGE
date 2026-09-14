@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { sequenceAccent } from "@/lib/palette";
 
 const ICON = { size: 26, weight: "light" } as const;
 
@@ -81,14 +82,15 @@ function ReadMore() {
   );
 }
 
-/*  One well treatment for every feature, everywhere on the site. The four
-    per-feature hues this used to carry are gone; what distinguishes a card
-    now is its glyph and its position, not its colour. */
-function IconWell({ Icon }: { Icon: PhosphorIcon }) {
+/*  One well treatment for every feature. The per-feature hues this once
+    carried are long gone; the fill steps through the brand gradient in card
+    order instead, so the four read as one span of the brand. */
+function IconWell({ Icon, accent }: { Icon: PhosphorIcon; accent: string }) {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
+      style={{ backgroundColor: accent }}
     >
       <Icon {...ICON} />
     </span>
@@ -100,7 +102,7 @@ function IconWell({ Icon }: { Icon: PhosphorIcon }) {
  * alerts stacked beside it, then a wide closer.
  *
  * Accent discipline (build plan 0.4a): at rest every card is neutral and its
- * accent appears only on the icon glyph. The accent-tinted spotlight is what
+ * accent appears only in the icon well. The accent-tinted spotlight is what
  * activates, and only one card can be addressed at a time, so no more than one
  * accent is ever lit in the viewport.
  */
@@ -119,7 +121,7 @@ export function ProductSnapshot() {
               There is no fees ledger. The finance capability was removed from
               the product for want of any source document describing it, and
               this sentence was the last place the claim survived. */}
-          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
+          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-faint">
             One installation covers the entrance, the attendance record, the people
             who need telling, and the screen the officer on the door actually
             holds. Each part works on its own and gets sharper alongside the
@@ -152,7 +154,7 @@ export function ProductSnapshot() {
                     {/* Icon and title sit inline here so the two columns of the
                         wide cell balance instead of one hanging low. */}
                     <div className="flex items-center gap-4 md:col-span-6">
-                      <IconWell Icon={feature.Icon} />
+                      <IconWell Icon={feature.Icon} accent={sequenceAccent(i, FEATURES.length)} />
                       <h3 className="text-xl leading-tight tracking-[-0.02em] text-foreground sm:text-2xl">
                         {feature.title}
                       </h3>
@@ -166,7 +168,7 @@ export function ProductSnapshot() {
                   </div>
                 ) : (
                   <>
-                    <IconWell Icon={feature.Icon} />
+                    <IconWell Icon={feature.Icon} accent={sequenceAccent(i, FEATURES.length)} />
 
                     <div className="pt-7">
                       <h3
@@ -200,13 +202,13 @@ export function ProductSnapshot() {
             making claims nobody has confirmed. Restore the link here when the
             page comes back. */}
         <Reveal delay={0.28}>
-          <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
+          <p className="mt-12 max-w-[62ch] leading-relaxed text-faint">
             The same four run at a school gate, a factory turnstile, a clinic
             reception and an estate boom. What changes is the vocabulary, not the
             system.{" "}
             <Link
               href="/contact"
-              className="border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-150 hover:border-accent"
+              className="border-b border-link-rule pb-0.5 font-semibold text-link transition-colors duration-150 hover:border-link-hover hover:text-link-hover"
             >
               Tell us what your entrance looks like
             </Link>

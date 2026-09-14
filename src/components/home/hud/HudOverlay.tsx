@@ -62,7 +62,7 @@ export function HudOverlay() {
       <div className="hud-ticks absolute inset-x-0 top-[calc(50%+1px)] hidden md:block" />
 
       {/* Axis readouts sitting on the horizontal rule. */}
-      <span className="hud-tag hud-tag--cyan absolute left-5 top-[calc(50%-14px)] hidden md:block sm:left-8">
+      <span className="hud-tag hud-tag--glint absolute left-5 top-[calc(50%-14px)] hidden md:block sm:left-8">
         AXIS Y — 50.0
       </span>
       <span className="hud-tag absolute right-5 top-[calc(50%-14px)] hidden md:block sm:right-8">
@@ -93,7 +93,7 @@ export function HudOverlay() {
 
       {/* ---- baseline strip ---- */}
       <div className="absolute inset-x-5 bottom-5 hidden items-center justify-between sm:inset-x-8 sm:bottom-8 md:flex">
-        <span className="hud-tag hud-tag--cyan">FRAME 16:9 — FULL BLEED</span>
+        <span className="hud-tag hud-tag--glint">FRAME 16:9 — FULL BLEED</span>
         <span className="hud-tag">SCALE 1.00</span>
       </div>
     </div>

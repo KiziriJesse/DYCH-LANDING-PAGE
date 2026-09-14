@@ -101,7 +101,7 @@ export function WhatsAppWidget() {
                   <span className="block font-semibold leading-tight">
                     {BRAND.name}
                   </span>
-                  <span className="block text-[0.8125rem] leading-tight text-muted">
+                  <span className="block text-[0.8125rem] leading-tight text-faint">
                     Answered by a person, not a bot
                   </span>
                 </span>

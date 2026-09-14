@@ -8,6 +8,7 @@ import {
   ListChecks,
   ScanSmiley,
 } from "@phosphor-icons/react";
+import { sequenceAccent } from "@/lib/palette";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
@@ -132,11 +133,11 @@ export function StepSpine() {
       <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-12 lg:gap-16">
         <nav
           aria-label="Steps"
-          className="hidden lg:col-span-4 lg:block lg:self-start"
+          className="z-raise hidden lg:col-span-4 lg:block lg:self-start"
           style={{ position: "sticky", top: "8rem" }}
         >
           <ol className="flex flex-col gap-1">
-            {STEPS.map((step) => {
+            {STEPS.map((step, i) => {
               const isActive = active === step.id;
               return (
                 <li key={step.id}>
@@ -167,8 +168,11 @@ export function StepSpine() {
                       className={
                         "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 " +
                         (isActive
-                          ? "border border-accent-line bg-wash text-accent-on-light"
-                          : "border-border bg-surface-raised text-muted")
+                          ? "border-transparent text-accent-ink"
+                          : "border-border bg-surface-raised text-faint")
+                      }
+                      style={
+                        isActive ? { backgroundColor: sequenceAccent(i, STEPS.length) } : undefined
                       }
                     >
                       <step.Icon size={20} weight="light" />
@@ -196,7 +200,8 @@ export function StepSpine() {
             >
               <span
                 aria-hidden
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light lg:hidden"
+                className="flex h-12 w-12 items-center justify-center rounded-full text-accent-ink lg:hidden"
+                style={{ backgroundColor: sequenceAccent(i, STEPS.length) }}
               >
                 <step.Icon size={24} weight="light" />
               </span>

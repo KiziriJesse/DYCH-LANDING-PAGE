@@ -11,6 +11,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
+import { sequenceAccent } from "@/lib/palette";
 
 /*  Summarised from the Admin Dashboard user guide, which documents the desktop
     application screen by screen across twenty pages. Deliberately NOT
@@ -114,7 +115,7 @@ export function AdminDashboard() {
           <h2 className="max-w-[22ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
             What the operations console actually looks like.
           </h2>
-          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-faint">
             The entrance is the part everyone notices. The console is the part the
             office lives in: one desktop application covering cameras, people,
             attendance, the door, linked contacts and every message that goes out.
@@ -128,7 +129,8 @@ export function AdminDashboard() {
           <Reveal className="lg:col-span-6">
             <span
               aria-hidden
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+              className="flex h-12 w-12 items-center justify-center rounded-full text-accent-ink"
+              style={{ backgroundColor: sequenceAccent(0, 2) }}
             >
               <MonitorPlay size={26} weight="light" />
             </span>
@@ -160,7 +162,8 @@ export function AdminDashboard() {
           <Reveal className="lg:col-span-6 lg:col-start-7 lg:row-start-1">
             <span
               aria-hidden
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+              className="flex h-12 w-12 items-center justify-center rounded-full text-accent-ink"
+              style={{ backgroundColor: sequenceAccent(1, 2) }}
             >
               <Table size={26} weight="light" />
             </span>
@@ -216,7 +219,8 @@ export function AdminDashboard() {
               <dt className="flex items-center gap-4 lg:col-span-5">
                 <span
                   aria-hidden
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                  style={{ backgroundColor: sequenceAccent(i, AREAS.length) }}
                 >
                   <area.Icon size={20} weight="light" />
                 </span>
@@ -260,7 +264,7 @@ export function AdminDashboard() {
                   <span className="block font-medium text-foreground">
                     {shot.title}
                   </span>
-                  <span className="mt-1 block max-w-[46ch] text-[0.9375rem] leading-relaxed text-muted">
+                  <span className="mt-1 block max-w-[46ch] text-[0.9375rem] leading-relaxed text-faint">
                     {shot.body}
                   </span>
                 </figcaption>
@@ -273,7 +277,7 @@ export function AdminDashboard() {
           {/* text-muted, not text-faint. Under the old dark palette --faint
               measured 3.74:1 on --surface and missed AA at this size. The
               palette has changed since; the more readable token stays. */}
-          <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
+          <p className="mt-12 max-w-[62ch] leading-relaxed text-faint">
             Screenshots are from a working install with names, contact numbers
             and email addresses blurred out. A full administrator guide covers
             every screen and button in the dashboard; it is provided during

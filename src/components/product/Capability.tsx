@@ -27,12 +27,21 @@ function Media({ item }: { item: CapabilityData }) {
   return null;
 }
 
-function Head({ item, centered = false }: { item: CapabilityData; centered?: boolean }) {
+function Head({
+  item,
+  accent,
+  centered = false,
+}: {
+  item: CapabilityData;
+  accent: string;
+  centered?: boolean;
+}) {
   return (
     <div className={centered ? "flex flex-col items-center text-center" : ""}>
       <span
         aria-hidden
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+        className="flex h-12 w-12 items-center justify-center rounded-full text-accent-ink"
+        style={{ backgroundColor: accent }}
       >
         <item.Icon size={26} weight="light" />
       </span>
@@ -73,10 +82,13 @@ function Points({ item, className = "" }: { item: CapabilityData; className?: st
 export function Capability({
   item,
   tone,
+  accent,
 }: {
   item: CapabilityData;
   /** Alternating substrate, so the page has vertical rhythm. */
   tone: "base" | "raised";
+  /** This capability's step along the brand gradient (lib/palette). */
+  accent: string;
 }) {
   const background = tone === "base" ? "bg-background" : "bg-surface";
   const section = `${background} px-4 py-24 sm:px-6 lg:px-10 lg:py-32`;
@@ -88,7 +100,7 @@ export function Capability({
       <section id={item.id} className={section}>
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="mx-auto max-w-[54ch]">
-            <Head item={item} centered />
+            <Head item={item} accent={accent} centered />
           </Reveal>
 
           <div className="mt-14 grid items-center gap-12 lg:grid-cols-12">
@@ -112,7 +124,7 @@ export function Capability({
         <div className="mx-auto max-w-[1240px]">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-6">
-              <Head item={item} />
+              <Head item={item} accent={accent} />
             </Reveal>
             <Reveal delay={0.08} className="lg:col-span-5 lg:col-start-8 lg:self-end">
               <Points item={item} />
@@ -138,7 +150,7 @@ export function Capability({
             mediaFirst ? "lg:col-span-6 lg:col-start-7 lg:row-start-1" : "lg:col-span-6"
           }
         >
-          <Head item={item} />
+          <Head item={item} accent={accent} />
           <Points item={item} className="mt-9" />
         </Reveal>
 

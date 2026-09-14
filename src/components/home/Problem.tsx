@@ -43,7 +43,7 @@ export function Problem() {
           <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             Right now, access and attendance run on trust and paper.
           </h2>
-          <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-muted">
+          <p className="mt-6 max-w-[54ch] text-lg leading-relaxed text-faint">
             Six things most premises still do the hard way, and what each one
             becomes.
           </p>

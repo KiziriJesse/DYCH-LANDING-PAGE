@@ -7,6 +7,7 @@ import {
   ScanSmiley,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/ui/Reveal";
+import { sequenceAccent } from "@/lib/palette";
 
 const ICON = { size: 22, weight: "light" } as const;
 
@@ -54,7 +55,8 @@ const FLOW = [
 
 /**
  * A horizontal rail, so the section reads differently from the bento above it.
- * Single accent throughout: this is one flow, not four products.
+ * One flow, not four products: the wells step through the brand gradient in
+ * order, so the rail reads as one span of the brand.
  * No "Step 1 / Step 2" prefixes; position on the rail carries the order.
  */
 export function HowItWorksTeaser() {
@@ -65,7 +67,7 @@ export function HowItWorksTeaser() {
           <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             From the door to the office, in one line.
           </h2>
-          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
+          <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-faint">
             The four parts pass the same record along, so nothing is re-typed between
             the gate log and the report at the end of term.
           </p>
@@ -87,7 +89,8 @@ export function HowItWorksTeaser() {
               >
                 <span
                   aria-hidden
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                  style={{ backgroundColor: sequenceAccent(i, FLOW.length) }}
                 >
                   <step.Icon {...ICON} />
                 </span>
@@ -107,7 +110,7 @@ export function HowItWorksTeaser() {
         <Reveal delay={0.28}>
           <Link
             href="/how-it-works"
-            className="group mt-14 inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-accent-on-light underline decoration-[var(--accent-line)] decoration-2 underline-offset-[6px] transition-colors duration-300 hover:decoration-accent"
+            className="group mt-14 inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-link underline decoration-[var(--link-rule)] decoration-2 underline-offset-[6px] transition-colors duration-300 hover:text-link-hover hover:decoration-[var(--link-hover)]"
           >
             See How It Works
             <ArrowRight

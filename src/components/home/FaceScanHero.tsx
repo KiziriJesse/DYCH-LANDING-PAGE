@@ -30,7 +30,7 @@ const HEADLINE = "Know who is on your premises — in real time.";
 // The comp sets its headline as three hand-broken lines, not a reflow.
 const HEADLINE_LINES = ["Know who is on", "your premises —", "in real time."];
 
-const MATCH_DOT = "#7b5cff"; // the comp's violet accent option, closest to --accent
+const MATCH_DOT = "#b79bf2"; // the family's light violet, the link value on this ground
 
 /* ---- Easing, ported from animations-v3.jsx so timings match the comp ---- */
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -168,7 +168,7 @@ function Face({ clock }: { clock: MotionValue<number> }) {
         {/* The comp draws face.png at 1.85x, offset (-1054, -35) in the
             column. This asset is that image cropped to the face alone, so its
             box is the same placement shifted by the 560px crop. */}
-        <div className="absolute left-[-1.583%] top-[-3.241%] h-[106.39%] w-[109.21%]">
+        <div className="scan-face-grade absolute left-[-1.583%] top-[-3.241%] h-[106.39%] w-[109.21%]">
           {/* unoptimized: the source is only 621px tall and drawn at up to
               1.85x, so the optimizer's q=75 re-encode was the visible loss.
               The @2x file is a Lanczos upscale with a light unsharp mask,
@@ -257,7 +257,7 @@ function Particle({ p, clock }: { p: ParticleSpec; clock: MotionValue<number> })
         top: `${p.top}%`,
         width: p.size,
         height: p.size,
-        background: p.tri ? "rgba(255,255,255,0.85)" : "rgba(154,168,255,0.75)",
+        background: p.tri ? "rgb(244 240 255 / 0.85)" : "rgb(183 155 242 / 0.75)",
         clipPath: p.tri ? "polygon(50% 0, 100% 100%, 0 100%)" : undefined,
         opacity,
         y,
@@ -269,7 +269,7 @@ function Particle({ p, clock }: { p: ParticleSpec; clock: MotionValue<number> })
 
 function ParticleField({ clock }: { clock: MotionValue<number> }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden className="scan-particles pointer-events-none absolute inset-0 overflow-hidden">
       {PARTICLES.map((p, i) => (
         <Particle key={i} p={p} clock={clock} />
       ))}
@@ -302,8 +302,8 @@ function Sweep({
   return (
     <motion.div className="absolute inset-0" style={{ y, opacity }}>
       <div className="absolute left-[-7.96%] top-0 h-[2px] w-[107.96%]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(190,215,255,0.95)_30%,#fff_60%,rgba(255,255,255,0)_100%)] shadow-[0_0_24px_6px_rgba(140,180,255,0.55)]" />
-        <div className="absolute inset-x-0 bottom-0 h-[12.39cqw] bg-[linear-gradient(to_top,rgba(150,190,255,0.18),rgba(150,190,255,0))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(244_240_255/0)_0%,rgb(215_199_250/0.95)_30%,#f4f0ff_60%,rgb(244_240_255/0)_100%)] shadow-[0_0_24px_6px_rgb(126_59_232/0.55)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[12.39cqw] bg-[linear-gradient(to_top,rgb(183_155_242/0.18),rgb(183_155_242/0))]" />
       </div>
     </motion.div>
   );
@@ -353,8 +353,11 @@ function Brackets({ clock }: { clock: MotionValue<number> }) {
           </span>
         ))}
       </div>
+      {/* On a small recessed chip, so nothing that moves behind the readout -
+          a particle, a sweep's glow, the light corner of the gradient - can
+          take the label under 4.5:1. */}
       <motion.p
-        className="absolute left-[23.45%] top-[90.74%] flex items-center gap-[0.9cqw] font-mono text-[max(10px,1.77cqw)] uppercase leading-none tracking-[0.16em] text-white"
+        className="absolute left-[23.45%] top-[90.74%] -ml-[0.8cqw] flex items-center gap-[0.9cqw] bg-[var(--recess)] px-[0.8cqw] py-[0.6cqw] font-mono text-[max(10px,1.77cqw)] uppercase leading-none tracking-[0.16em] text-faint"
         style={{ opacity: readout }}
       >
         <span
@@ -378,19 +381,14 @@ export function FaceScanHero() {
     <section
       ref={sectionRef}
       aria-labelledby="hero-heading"
-      className="hero-field scan-field relative isolate min-h-[100dvh] overflow-hidden"
+      className="surface-violet scan-field relative isolate min-h-[100dvh] overflow-hidden"
     >
-      {/* First in source order, so it paints under the face, the scrim and
-          the copy. Section-wide at every width, including below lg where the
-          face stage drops into flow. */}
-      <ParticleField clock={clock} />
-
       {/* Left 150px of 1920 in the comp: 7.8vw on desktop. */}
       <div className="relative z-raise flex items-start px-5 pt-28 sm:px-8 lg:min-h-[100dvh] lg:items-center lg:px-[7.8vw] lg:py-24">
         <div className="w-full max-w-[56rem]">
           <h1
             id="hero-heading"
-            className="font-bold text-[clamp(2.125rem,3.65vw,4.375rem)] leading-[1.16] tracking-[-0.01em] text-white"
+            className="font-bold text-[clamp(2.125rem,3.65vw,4.375rem)] leading-[1.16] tracking-[-0.01em] text-foreground"
           >
             <span className="sr-only">{HEADLINE}</span>
             <span aria-hidden className="block">
@@ -416,7 +414,7 @@ export function FaceScanHero() {
             initial={reduce ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: reduce ? 0 : 1.1, ease: EASE_OUT_CUBIC }}
-            className="reveal mt-6 max-w-[44ch] text-[clamp(1rem,1.35vw,1.625rem)] leading-[1.55] text-white/90 lg:mt-8"
+            className="reveal mt-6 max-w-[44ch] text-[clamp(1rem,1.35vw,1.625rem)] leading-[1.55] text-muted lg:mt-8"
           >
             Cards, PINs and paper registers are easy to share, forget or fake.
             Our system uses the face as the credential: cameras recognise enrolled
@@ -448,11 +446,17 @@ export function FaceScanHero() {
           it. On desktop the stage is absolute and the copy's z-raise keeps
           it on top. */}
       <div aria-hidden className="scan-stage">
-        <div className="scan-rig">
+        {/* First in the stage, so it paints under the face and the scrim. It
+            lives here rather than on the section so that below lg it covers
+            only the stage under the copy; .scan-particles masks it out of the
+            copy column on desktop. Particles never pass behind type. There is
+            no copy-side scrim: the copy sits on the bare gradient, as every
+            dark section's copy does. */}
+        <ParticleField clock={clock} />
+
+        <div className="scan-rig scan-rig--face">
           <Face clock={clock} />
         </div>
-
-        <span className="scan-scrim" />
 
         <div className="scan-rig">
           <Sweep clock={clock} from={-0.2} to={2.0} />
@@ -460,8 +464,6 @@ export function FaceScanHero() {
           <Brackets clock={clock} />
         </div>
       </div>
-
-      <span aria-hidden className="hero-fade" />
     </section>
   );
 }

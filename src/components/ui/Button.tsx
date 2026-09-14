@@ -7,13 +7,13 @@ import type { ComponentType, ReactNode } from "react";
  * Spec: ghost at rest, fill only on hover. DYCH purple tokens instead of
  * main's reference blue (#0071e3 / #006ad6 / #2d87e2).
  *
- *   --accent           #8369D3   border and hover fill
- *   --accent-on-light  #6846B9   label on paper
- *   --accent-ink       #FFFFFF   label once the pill fills
+ *   --accent           #5416C4   border and hover fill
+ *   --accent-on-light  #5416C4   label on paper
+ *   --accent-ink       #F4F0FF   label once the pill fills
  *
  * Public API is unchanged: href, size, type, icon (Phosphor component),
- * variant, TextLink. .band-accent still remaps the tokens, so the closing
- * CTA inverts without a special case here.
+ * variant, TextLink. The violet and recessed surface scopes remap the tokens,
+ * so a button on a dark section inverts without a special case here.
  */
 
 type Variant = "outline" | "inverted";
@@ -63,7 +63,7 @@ export function Button({
 }) {
   const invert =
     variant === "inverted"
-      ? "[--accent:var(--accent-inverse)] [--accent-on-light:var(--accent-inverse)] [--accent-ink:#6846b9]"
+      ? "[--accent:var(--accent-inverse)] [--accent-on-light:var(--accent-inverse)] [--accent-ink:var(--brand-deep)]"
       : "";
 
   const classes = [
@@ -124,8 +124,9 @@ export function Button({
 Button.Icon = ButtonIcon;
 
 /**
- * The second tier, and the only other interactive treatment permitted.
- * Used for the secondary hero action and inline links that need an arrow.
+ * The link tier. Used for the secondary hero action and inline links that
+ * need an arrow. Colour is the scope's --link: #b79bf2 going white on dark
+ * grounds, the core violet going to the wordmark indigo on light.
  */
 export function TextLink({
   children,
@@ -142,7 +143,7 @@ export function TextLink({
 }) {
   const cls =
     "group relative inline-flex items-center gap-2.5 text-[0.9375rem] font-semibold " +
-    "text-accent-on-light transition-colors duration-150 ease-out hover:text-accent " +
+    "text-link transition-colors duration-150 ease-out hover:text-link-hover " +
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
     "after:absolute after:left-0 after:top-1/2 after:h-11 after:w-full " +
     "after:-translate-y-1/2 after:content-[''] " +
@@ -150,7 +151,7 @@ export function TextLink({
 
   const inner = (
     <>
-      <span className="border-b border-accent-line pb-0.5 transition-colors duration-150 group-hover:border-accent">
+      <span className="border-b border-link-rule pb-0.5 transition-colors duration-150 group-hover:border-link-hover">
         {children}
       </span>
       <Glyph size={15} weight="bold" aria-hidden />

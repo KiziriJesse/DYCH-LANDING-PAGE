@@ -125,8 +125,8 @@ export function Navbar() {
           className={
             "glass pointer-events-auto ml-4 flex size-[3.75rem] shrink-0 items-center justify-center rounded-full border p-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:ml-6 sm:size-[4.25rem] sm:p-2 lg:ml-8 " +
             (lifted
-              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
-              : "border-transparent bg-white/70")
+              ? "border-transparent bg-surface/90 shadow-[var(--shade)]"
+              : "border-transparent bg-surface/70")
           }
           aria-label="DYCH Technologies, home"
         >
@@ -148,8 +148,8 @@ export function Navbar() {
           className={
             "glass pointer-events-auto flex h-12 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-14 lg:gap-1 lg:pl-2 lg:pr-2 " +
             (lifted
-              ? "border-transparent bg-white/90 shadow-[var(--shade)]"
-              : "border-transparent bg-white/70")
+              ? "border-transparent bg-surface/90 shadow-[var(--shade)]"
+              : "border-transparent bg-surface/70")
           }
         >
           <ul className="hidden items-center gap-0.5 lg:flex">
@@ -219,7 +219,7 @@ export function Navbar() {
                         className="px-3.5 pb-2 pt-2.5 text-sm font-semibold tracking-[-0.01em] text-foreground"
                       >
                         {PRODUCT_MENU.heading}
-                        <span className="mt-0.5 block text-[0.8125rem] font-normal leading-snug text-muted">
+                        <span className="mt-0.5 block text-[0.8125rem] font-normal leading-snug text-faint">
                           {PRODUCT_MENU.blurb}
                         </span>
                       </p>
@@ -240,7 +240,7 @@ export function Navbar() {
                               <span className="block text-sm font-medium text-foreground">
                                 {item.label}
                               </span>
-                              <span className="mt-0.5 block text-[0.8125rem] leading-snug text-muted">
+                              <span className="mt-0.5 block text-[0.8125rem] leading-snug text-faint">
                                 {item.note}
                               </span>
                             </Link>
@@ -403,7 +403,7 @@ export function Navbar() {
                 </Button>
                 <a
                   href={CONTACT.phones[0].href}
-                  className="nums text-sm text-accent-on-light underline decoration-[var(--accent-line)] decoration-2 underline-offset-4"
+                  className="nums text-sm text-link underline decoration-[var(--link-rule)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-link-hover"
                 >
                   {CONTACT.phones[0].display}
                 </a>

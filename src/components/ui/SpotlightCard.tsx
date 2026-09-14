@@ -10,7 +10,7 @@ import { motion, useReducedMotion } from "framer-motion";
  * The move survives the two-colour system; only the colour maths changed. On
  * the old near-black substrate the card lightened toward its centre. On paper
  * there is nothing above white to lighten into, so it now goes the other way:
- * the flat white card takes on a soft radial of --wash, deepest at the top
+ * the pale card takes on a soft radial of --rule, deepest at the top
  * centre and fading back to white at the edges, and lifts on an accent-tinted
  * shadow rather than a neutral grey one.
  *
@@ -39,11 +39,11 @@ export function SpotlightCard({
 }) {
   const reduce = useReducedMotion();
 
-  /* Offset above centre so the light has a direction. --wash at full strength
-     in the middle is only three steps off white, which is the whole point:
+  /* Offset above centre so the light has a direction. --rule at full strength
+     in the middle is one step down the paper family, which is the whole point:
      the card should warm, not change colour. */
   const spotlight =
-    "radial-gradient(120% 88% at 50% 8%, var(--wash) 0%, color-mix(in srgb, var(--wash) 45%, #ffffff) 42%, #ffffff 78%)";
+    "radial-gradient(120% 88% at 50% 8%, var(--rule) 0%, color-mix(in srgb, var(--rule) 45%, var(--paper-hi)) 42%, var(--paper-hi) 78%)";
 
   const transition = reduce
     ? { duration: 0 }
@@ -61,16 +61,16 @@ export function SpotlightCard({
          arrives rather than the card wearing both at once. */
       variants={{
         rest: {
-          boxShadow: "0 0 0 0 rgba(98, 56, 199, 0)",
+          boxShadow: "0 0 0 0 rgb(84 22 196 / 0)",
           borderColor: "var(--border)",
         },
         active: {
           boxShadow: "var(--shade-accent)",
-          borderColor: "rgba(0, 0, 0, 0)",
+          borderColor: "rgb(221 214 243 / 0)",
         },
       }}
       transition={transition}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-card border bg-surface p-1.5 ${className}`}
+      className={`group relative z-raise flex h-full flex-col overflow-hidden rounded-card border bg-surface p-1.5 ${className}`}
     >
       {/* The spotlight fill. Opacity is the only animated property on it. */}
       <motion.span
@@ -92,7 +92,7 @@ export function SpotlightCard({
   if (!href) return inner;
 
   return (
-    <Link href={href} className="block h-full rounded-card">
+    <Link href={href} className="relative z-raise block h-full rounded-card">
       {inner}
     </Link>
   );

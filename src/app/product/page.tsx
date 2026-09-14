@@ -13,6 +13,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { RecognitionFigure } from "@/components/product/RecognitionFigure";
 import { Button } from "@/components/ui/Button";
+import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Smart Vision",
@@ -90,7 +91,8 @@ export default function ProductPage() {
                 >
                   <span
                     aria-hidden
-                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                    style={{ backgroundColor: sequenceAccent(i, SHARED.length) }}
                   >
                     <item.Icon size={22} weight="light" />
                   </span>
@@ -130,7 +132,8 @@ export default function ProductPage() {
                 <div className="flex h-full flex-col">
                   <span
                     aria-hidden
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                    style={{ backgroundColor: sequenceAccent(0, 2) }}
                   >
                     <SCHOOLS.Icon size={26} weight="light" />
                   </span>
@@ -142,8 +145,8 @@ export default function ProductPage() {
                   </p>
                   {/* A span, not a nested link: the whole card is already the
                       anchor, and a link inside a link is invalid. */}
-                  <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-accent-on-light">
-                    <span className="border-b border-accent-line pb-0.5 transition-colors duration-150 group-hover:border-accent">
+                  <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-link transition-colors duration-150 group-hover:text-link-hover">
+                    <span className="border-b border-link-rule pb-0.5 transition-colors duration-150 group-hover:border-link-hover">
                       {SCHOOLS.cta}
                     </span>
                   </span>
@@ -159,7 +162,8 @@ export default function ProductPage() {
               <div className="flex h-full flex-col border-t border-border pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-2">
                 <span
                   aria-hidden
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                  style={{ backgroundColor: sequenceAccent(1, 2) }}
                 >
                   <Buildings size={26} weight="light" />
                 </span>

@@ -5,6 +5,7 @@ import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { Button } from "@/components/ui/Button";
+import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -144,7 +145,8 @@ export default function PricingPage() {
                           size={18}
                           weight="bold"
                           aria-hidden
-                          className="mt-[3px] shrink-0 text-accent-on-light"
+                          className="mt-[3px] shrink-0"
+                          style={{ color: sequenceAccent(i, PLANS.length) }}
                         />
                         <span className="leading-relaxed text-muted">{feature}</span>
                       </li>
@@ -171,8 +173,10 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Says why there is no number, rather than leaving a conspicuous gap. */}
-      <section className="bg-surface-raised px-4 py-20 sm:px-6 lg:px-10 lg:py-24">
+      {/* Says why there is no number, rather than leaving a conspicuous gap.
+          The page's violet section; its copy stays in the left column, clear
+          of the gradient's light corner. */}
+      <section className="surface-violet px-4 py-20 sm:px-6 lg:px-10 lg:py-24">
         <Reveal className="mx-auto max-w-[1240px]">
           <h2 className="max-w-[24ch] text-[clamp(1.5rem,3.2vw,2.25rem)] leading-[1.12] tracking-[-0.03em] text-foreground">
             Why there is no price on this page.

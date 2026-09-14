@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { sequenceAccent } from "@/lib/palette";
 
 /*  The sectors, in DYCH's own words and DYCH's own order.
 
@@ -78,7 +79,7 @@ export function Solutions() {
           <h2 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] tracking-[-0.03em] text-foreground">
             One system. Eight vocabularies.
           </h2>
-          <p className="mt-6 max-w-[58ch] text-lg leading-relaxed text-muted">
+          <p className="mt-6 max-w-[58ch] text-lg leading-relaxed text-faint">
             A pupil, an employee, a contractor, a resident and a member of a
             congregation are the same problem wearing different nouns: somebody
             arrived, and the building should know. What changes between these is
@@ -96,7 +97,8 @@ export function Solutions() {
             >
               <span
                 aria-hidden
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-accent-ink"
+                style={{ backgroundColor: sequenceAccent(i, SECTORS.length) }}
               >
                 <sector.Icon size={22} weight="light" />
               </span>
@@ -109,7 +111,7 @@ export function Solutions() {
               {sector.href && (
                 <Link
                   href={sector.href}
-                  className="mt-4 inline-block border-b border-accent-line pb-0.5 text-[0.9375rem] font-semibold text-accent-on-light transition-colors duration-150 hover:border-accent"
+                  className="mt-4 inline-block border-b border-link-rule pb-0.5 text-[0.9375rem] font-semibold text-link transition-colors duration-150 hover:border-link-hover hover:text-link-hover"
                 >
                   See the education product
                 </Link>
@@ -119,7 +121,7 @@ export function Solutions() {
         </ul>
 
         <Reveal delay={0.2}>
-          <p className="mt-12 max-w-[62ch] leading-relaxed text-muted">
+          <p className="mt-12 max-w-[62ch] leading-relaxed text-faint">
             Running something that is not on this list? The questions are the
             same &mdash; who is this person, are they allowed here now, when did
             they arrive and leave, and who else came through. Tell us what your

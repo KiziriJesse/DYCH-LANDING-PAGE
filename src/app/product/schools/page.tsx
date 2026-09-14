@@ -12,6 +12,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Capability, type CapabilityData } from "@/components/product/Capability";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
+import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Smart Vision for Schools",
@@ -279,7 +280,12 @@ export default function ProductSchoolsPage() {
       />
 
       {CAPABILITIES.map((item, i) => (
-        <Capability key={item.id} item={item} tone={i % 2 === 0 ? "base" : "raised"} />
+        <Capability
+          key={item.id}
+          item={item}
+          tone={i % 2 === 0 ? "base" : "raised"}
+          accent={sequenceAccent(i, CAPABILITIES.length)}
+        />
       ))}
 
       <CtaBand

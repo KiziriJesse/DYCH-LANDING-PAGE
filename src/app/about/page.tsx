@@ -20,7 +20,7 @@ const TEAM = [
     photo: "Grace Ddamulira, Founder and Managing Director",
     src: "/founder.png",
     mediaClassName:
-      "bg-gradient-to-b from-[color-mix(in_srgb,var(--accent)_42%,white)] to-[color-mix(in_srgb,var(--accent)_26%,white)]",
+      "surface-violet",
     imageClassName: "object-cover object-[38%_center]",
   },
   /* {
@@ -108,7 +108,7 @@ export default function AboutPage() {
                   <h3 className="mt-5 font-medium tracking-[-0.015em] text-foreground">
                     {person.name}
                   </h3>
-                  <p className="mt-1 text-[0.9375rem] leading-relaxed text-muted">
+                  <p className="mt-1 text-[0.9375rem] leading-relaxed text-faint">
                     {person.role}
                   </p>
                 </div>
@@ -148,7 +148,7 @@ export default function AboutPage() {
               </p>
               <Link
                 href="/schools"
-                className="mt-5 inline-block border-b border-accent-line pb-0.5 font-semibold text-accent-on-light transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-accent"
+                className="mt-5 inline-block border-b border-link-rule pb-0.5 font-semibold text-link transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-link-hover hover:text-link-hover"
               >
                 Where we are so far
               </Link>

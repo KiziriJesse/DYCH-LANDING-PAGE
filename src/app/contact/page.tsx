@@ -10,6 +10,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Button } from "@/components/ui/Button";
 import { CONTACT } from "@/lib/site";
+import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -84,7 +85,8 @@ export default function ContactPage() {
                   <dt className="sr-only">{label}</dt>
                   <span
                     aria-hidden
-                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light"
+                    className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                    style={{ backgroundColor: sequenceAccent(i, CHANNELS.length) }}
                   >
                     <Icon size={22} weight="light" />
                   </span>
@@ -98,7 +100,7 @@ export default function ContactPage() {
                           {...(line.external
                             ? { target: "_blank", rel: "noopener noreferrer" }
                             : {})}
-                          className="nums mt-1 block text-[0.9375rem] text-foreground underline decoration-[var(--accent-line)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-accent-on-light"
+                          className="nums mt-1 block text-[0.9375rem] text-link underline decoration-[var(--link-rule)] decoration-2 underline-offset-4 transition-colors duration-300 hover:text-link-hover"
                         >
                           {line.text}
                         </a>
@@ -119,7 +121,7 @@ export default function ContactPage() {
               it, so it read as the page rather than as one of two ways to
               get in touch. */}
           <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-7">
-            <div className="max-w-[34rem] rounded-card border border-border bg-surface p-6 sm:p-7">
+            <div className="relative z-raise max-w-[34rem] rounded-card border border-border bg-surface p-6 sm:p-7">
               <h2 className="text-xl tracking-[-0.02em] text-foreground">
                 Or send us the details
               </h2>

@@ -72,9 +72,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // --paper. Was the old dark substrate, which tinted the mobile browser
-  // chrome near-black above a white page.
-  themeColor: "#f4f0ff",
+  // The gradient's left stop. Every route opens on the violet gradient - the
+  // hero, or a page header - so the browser chrome continues its dark edge.
+  themeColor: "#2a0a5e",
 };
 
 export default function RootLayout({
