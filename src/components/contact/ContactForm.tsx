@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PaperPlaneTilt, Warning, CheckCircle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
+import { CONTACT } from "@/lib/site";
 
 type Field = "name" | "company" | "email" | "message";
 type Errors = Partial<Record<Field, string>>;
@@ -58,7 +59,8 @@ function validate(values: Record<Field, string>): Errors {
 }
 
 /**
- * Posts to /api/contact, which delivers the enquiry to the DYCH inbox.
+ * Posts straight from the browser to FormSubmit, which delivers the enquiry
+ * to the DYCH inbox. A server-side relay was blocked by FormSubmit.
  */
 export function ContactForm() {
   const uid = useId();
@@ -97,20 +99,52 @@ export function ContactForm() {
     setStatus("sending");
     setServerError("");
 
+    // Bots fill hidden fields. Pretend success so they do not retry.
+    if (honeypot.trim()) {
+      setValues({ name: "", company: "", email: "", message: "" });
+      setStatus("sent");
+      return;
+    }
+
+    const name = values.name.trim();
+    const company = values.company.trim();
+    const email = values.email.trim();
+
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, website: honeypot }),
-      });
+      const response = await fetch(
+        `https://formsubmit.co/ajax/${CONTACT.email.display}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            company,
+            email,
+            message: values.message.trim(),
+            _replyto: email,
+            _subject: `DYCH website enquiry from ${name} (${company})`,
+            _template: "box",
+            _captcha: "false",
+          }),
+        },
+      );
       const result = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
+        | { success?: string | boolean; message?: string }
         | null;
 
-      if (!response.ok || !result?.ok) {
+      const accepted =
+        response.ok && String(result?.success).toLowerCase() === "true";
+
+      if (!accepted) {
+        const note = (result?.message ?? "").toLowerCase();
         setServerError(
-          result?.error ||
-            "The message could not be sent. Please email us directly or reach us on WhatsApp.",
+          note.includes("activation")
+            ? "This form is waiting to be activated. Please email us directly or reach us on WhatsApp for now."
+            : result?.message ||
+                "The message could not be sent. Please email us directly or reach us on WhatsApp.",
         );
         setStatus("error");
         return;
