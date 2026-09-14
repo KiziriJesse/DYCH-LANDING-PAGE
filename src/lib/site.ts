@@ -74,14 +74,10 @@ export const CONTACT = {
     display: "dychtech256@gmail.com",
     href: "https://mail.google.com/mail/?view=cm&fs=1&to=dychtech256@gmail.com",
   },
-  /*  TODO: DYCH to supply the real LinkedIn company page URL.
-
-      The href is "#" on purpose. Guessing a slug from the company name is
-      the one thing not to do here: a wrong LinkedIn URL either 404s or,
-      worse, points at somebody else's page. The footer entry renders as
-      plain, unclickable text until this is filled in, so nothing ships
-      pointing at nowhere. */
-  linkedin: { display: "LinkedIn", href: "#" },
+  linkedin: {
+    display: "LinkedIn",
+    href: "https://www.linkedin.com/company/dychtechnologies/",
+  },
   location: "Kampala, Uganda",
 } as const;
 

@@ -146,7 +146,7 @@ export function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
           className={
-            "glass pointer-events-auto flex h-12 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-14 lg:gap-1 lg:pl-2 lg:pr-2 " +
+            "glass pointer-events-auto flex h-11 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-12 lg:gap-0.5 lg:pl-1.5 lg:pr-1.5 " +
             (lifted
               ? "border-transparent bg-surface/90 shadow-[var(--shade)]"
               : "border-transparent bg-surface/70")
@@ -176,7 +176,7 @@ export function Navbar() {
                 aria-current={productActive ? "page" : undefined}
                 onClick={() => setMenuOpen((v) => !v)}
                 className={
-                  "relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-300 xl:px-3 " +
+                  "relative flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[0.8125rem] font-medium transition-colors duration-300 xl:px-2.5 " +
                   (productActive ? "text-foreground" : "text-muted hover:text-foreground")
                 }
               >
@@ -261,7 +261,7 @@ export function Navbar() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={
-                      "relative block whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium transition-colors duration-300 xl:px-3 " +
+                      "relative block whitespace-nowrap rounded-full px-2 py-1.5 text-[0.8125rem] font-medium transition-colors duration-300 xl:px-2.5 " +
                       (active ? "text-foreground" : "text-muted hover:text-foreground")
                     }
                   >

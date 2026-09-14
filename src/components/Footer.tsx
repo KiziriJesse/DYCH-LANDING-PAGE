@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   EnvelopeSimple,
+  LinkedinLogo,
   MapPin,
   PhoneCall,
   WhatsappLogo,
@@ -12,7 +13,7 @@ import { sequenceAccent } from "@/lib/palette";
 const ICON = { size: 18, weight: "light" } as const;
 
 // Every contact line is one step along the brand gradient, in list order.
-const CONTACT_COUNT = CONTACT.whatsapp.length + CONTACT.phones.length + 1;
+const CONTACT_COUNT = CONTACT.whatsapp.length + CONTACT.phones.length + 2;
 
 export function Footer() {
   return (
@@ -121,7 +122,7 @@ export function Footer() {
                   <span
                     aria-hidden
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent-ink transition-transform duration-300 group-hover:scale-105"
-                    style={{ backgroundColor: sequenceAccent(CONTACT_COUNT - 1, CONTACT_COUNT) }}
+                    style={{ backgroundColor: sequenceAccent(CONTACT_COUNT - 2, CONTACT_COUNT) }}
                   >
                     <EnvelopeSimple {...ICON} />
                   </span>
@@ -129,36 +130,23 @@ export function Footer() {
                 </a>
               </li>
 
-              {/* LinkedIn — restore when CONTACT.linkedin.href is a real URL.
               <li>
-                {CONTACT.linkedin.href === "#" ? (
-                  <span className="inline-flex items-center gap-3 text-[0.9375rem] text-faint">
-                    <span
-                      aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface-raised text-faint"
-                    >
-                      <LinkedinLogo {...ICON} />
-                    </span>
-                    LinkedIn &mdash; link to follow
-                  </span>
-                ) : (
-                  <a
-                    href={CONTACT.linkedin.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                <a
+                  href={CONTACT.linkedin.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent-ink transition-transform duration-300 group-hover:scale-105"
+                    style={{ backgroundColor: sequenceAccent(CONTACT_COUNT - 1, CONTACT_COUNT) }}
                   >
-                    <span
-                      aria-hidden
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent-line bg-wash text-accent-on-light transition-transform duration-300 group-hover:scale-105"
-                    >
-                      <LinkedinLogo {...ICON} />
-                    </span>
-                    {CONTACT.linkedin.display}
-                  </a>
-                )}
+                    <LinkedinLogo {...ICON} />
+                  </span>
+                  {CONTACT.linkedin.display}
+                </a>
               </li>
-              */}
             </ul>
           </div>
         </div>
