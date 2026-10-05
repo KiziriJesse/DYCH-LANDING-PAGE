@@ -61,7 +61,7 @@ export function SpotlightCard({
          arrives rather than the card wearing both at once. */
       variants={{
         rest: {
-          boxShadow: "0 0 0 0 rgb(84 22 196 / 0)",
+          boxShadow: "0 0 0 0 rgb(47 2 172 / 0)",
           borderColor: "var(--border)",
         },
         active: {

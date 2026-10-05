@@ -307,8 +307,8 @@ function Sweep({
   return (
     <motion.div className="absolute inset-0" style={{ y, opacity }}>
       <div className="absolute left-[-7.96%] top-0 h-[2px] w-[107.96%]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(244_240_255/0)_0%,rgb(215_199_250/0.95)_30%,#f4f0ff_60%,rgb(244_240_255/0)_100%)] shadow-[0_0_24px_6px_rgb(126_59_232/0.55)]" />
-        <div className="absolute inset-x-0 bottom-0 h-[12.39cqw] bg-[linear-gradient(to_top,rgb(183_155_242/0.18),rgb(183_155_242/0))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(244_240_255/0)_0%,rgb(215_199_250/0.95)_30%,#f4f0ff_60%,rgb(244_240_255/0)_100%)] shadow-[0_0_24px_6px_rgb(89_9_246/0.55)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[12.39cqw] bg-[linear-gradient(to_top,rgb(208_208_244/0.18),rgb(208_208_244/0))]" />
       </div>
     </motion.div>
   );

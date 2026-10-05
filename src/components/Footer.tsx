@@ -24,11 +24,14 @@ export function Footer() {
           <div className="md:col-span-5">
             <Link href="/" aria-label="DYCH Technologies, home" className="relative z-raise inline-block">
               <Image
-                src="/logo/dych-lockup.png"
+                src="/logo/dych-lockup-v2.png"
                 alt="DYCH Technologies"
                 width={640}
-                height={591}
-                className="h-auto w-[7.25rem]"
+                height={464}
+                /* Wider than the old lockup sat here: this one carries the
+                   wordmark and the script tagline, which need the width to
+                   stay readable. */
+                className="h-auto w-[10.5rem]"
               />
             </Link>
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">

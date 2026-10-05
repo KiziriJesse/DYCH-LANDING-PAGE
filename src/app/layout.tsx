@@ -74,7 +74,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   // The gradient's left stop. Every route opens on the violet gradient - the
   // hero, or a page header - so the browser chrome continues its dark edge.
-  themeColor: "#2a0a5e",
+  themeColor: "#10014a",
 };
 
 export default function RootLayout({

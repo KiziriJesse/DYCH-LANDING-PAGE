@@ -38,11 +38,11 @@ export function Wordmark({
   return (
     <span className="flex items-center gap-3">
       <Image
-        src="/logo/dych-mark.png"
+        src="/logo/dych-mark-v2.png"
         alt=""
         aria-hidden
         width={320}
-        height={235}
+        height={222}
         priority={priority}
         loading={priority ? undefined : "lazy"}
         style={{ height: markHeight, width: "auto" }}

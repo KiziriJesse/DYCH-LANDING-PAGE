@@ -27,7 +27,7 @@ type Edge = [number, number];
 type Tri = [number, number, number];
 
 /** A lightened step of the brand core, NOT --accent - the two-colour rebrand
-    moved --accent to #5416C4 and this value stayed where it was. It is kept
+    moved --accent to #2F02AC and this value stayed where it was. It is kept
     because line art is held to 3:1, which it clears on every paper tone
     (3.94-4.70:1) while reading as a web rather than a drawn line. */
 const DEFAULT_STROKE: [number, number, number] = [131, 105, 211];

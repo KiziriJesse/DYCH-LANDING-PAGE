@@ -6,11 +6,15 @@
  * so the group reads as one span of the brand rather than as a row of
  * arbitrary tints.
  *
- * Every stop clears 4.5:1 on both light surfaces (#7E3BE8, the lightest, is
- * 5.12:1 on paper), so an accent is safe as text as well as a fill, and the
- * #f4f0ff glyph a filled well carries is 5.10:1 at worst.
+ * Re-sampled from the new logo: the mark's shadowed curve, its median band
+ * and its upper quartile, with the midpoints interpolated between them.
+ *
+ * Every stop clears 4.5:1 on all three light surfaces (#5909F6, the
+ * lightest, is 6.74:1 on paper, 6.18:1 on cream), so an accent is safe as
+ * text as well as a fill, and the #f4f0ff glyph a filled well carries is
+ * 6.71:1 at worst. The whole ramp gained roughly 1.6:1 over the old one.
  */
-export const BRAND_SEQUENCE = ["#2A0A5E", "#3E0F91", "#5416C4", "#6A2AD8", "#7E3BE8"] as const;
+export const BRAND_SEQUENCE = ["#10014A", "#20027B", "#2F02AC", "#4406D1", "#5909F6"] as const;
 
 const channels = (hex: string) =>
   [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));

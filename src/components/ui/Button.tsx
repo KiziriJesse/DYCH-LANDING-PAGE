@@ -7,8 +7,8 @@ import type { ComponentType, ReactNode } from "react";
  * Spec: ghost at rest, fill only on hover. DYCH purple tokens instead of
  * main's reference blue (#0071e3 / #006ad6 / #2d87e2).
  *
- *   --accent           #5416C4   border and hover fill
- *   --accent-on-light  #5416C4   label on paper
+ *   --accent           #2F02AC   border and hover fill
+ *   --accent-on-light  #2F02AC   label on paper
  *   --accent-ink       #F4F0FF   label once the pill fills
  *
  * Public API is unchanged: href, size, type, icon (Phosphor component),
@@ -125,7 +125,7 @@ Button.Icon = ButtonIcon;
 
 /**
  * The link tier. Used for the secondary hero action and inline links that
- * need an arrow. Colour is the scope's --link: #b79bf2 going white on dark
+ * need an arrow. Colour is the scope's --link: #d0d0f4 going white on dark
  * grounds, the core violet going to the wordmark indigo on light.
  */
 export function TextLink({

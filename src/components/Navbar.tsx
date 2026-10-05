@@ -131,10 +131,14 @@ export function Navbar() {
           aria-label="DYCH Technologies, home"
         >
           <Image
-            src="/logo/dych-lockup.png"
+            /* The mark in its cream dome, not the full lockup. The new
+               lockup carries the wordmark and the script tagline, and at
+               60px across a pill neither is legible - the mark alone is
+               what reads at this size. */
+            src="/logo/dych-mark-v2.png"
             alt="DYCH Technologies"
-            width={640}
-            height={591}
+            width={320}
+            height={222}
             priority
             className="h-full w-full object-contain"
           />

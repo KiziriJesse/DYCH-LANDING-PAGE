@@ -10,31 +10,52 @@
    lift, it takes a darker or lighter step of the same violet, never a new
    colour. If a new surface is ever needed, derive it the same way.
 
-   SAMPLED FROM THE LOGO
-     #2A0A5E  the deep indigo of the wordmark      gradient 0%
-     #5416C4  the core violet of the mark          gradient 52%
-     #7E3BE8  the mark's highlight edge            gradient 100%
+   SAMPLED FROM THE LOGO (brand/Dych_Logo-01.png, 2638x1936)
+
+   Every value below was read off the file programmatically - patch means
+   over thousands of pixels, not a single sample that might catch an
+   anti-aliased edge - and every ratio was computed, not estimated.
+
+     #10014A  the mark's shadowed curve, its darkest decile   gradient 0%
+     #2F02AC  the mark's median band, its true body colour    gradient 52%
+     #5909F6  the mark's upper quartile                       gradient 100%
+     #8B3AFA  the specular highlight along the lit edge. NOT the gradient's
+              light end: body copy measures 4.41:1 on it and misses AA. It
+              is a 10%-of-the-mark glint, so the gradient stops short of it.
+     #F7E7CE  the cream circle behind the mark   -> --cream
+     #D0D0F4  the periwinkle script tagline      -> the accent on dark
+     #E8CCAA  the tan wordmark. Reference only: 1.38:1 on paper, so it can
+              carry no text on any light surface this site has.
 
    SURFACES
      violet    every dark section - the hero, page headers, violet bands and
                the closing CTA - takes the one brand gradient, identical
                everywhere, plus its two overlays
-     ground    #0A0620  the page background behind everything
-     recess    #1E0A52  recessed panels set into a violet section, 11% stripes
+     ground    #07001f  the page background behind everything
+     recess    #150451  recessed panels set into a violet section, 11% stripes
      paper     #f4f1fd  light sections
      paper-hi  #faf8fe  derived: paper's hue and saturation at L 98.5, so
                         alternating light sections and cards still step
+     cream     #f7e7ce  the logo's own warm neutral. An occasional surface,
+                        on the same footing as the wash: a card, a pull
+                        quote, one section break. Not a third ground in
+                        rotation, and never under long body copy.
      rule      #ddd6f3  hairlines, table rules, grid lines. Never a grey.
 
    CONTRAST. Measured (WCAG 2.x relative luminance), not estimated. Every
    text pairing clears 4.5:1 against what sits behind it.
 
-     paper #f4f1fd      heading 16.45   body 12.78   sub 6.92   link 8.23
-     paper-hi #faf8fe                                sub 7.47   link 8.88
-     recess #1E0A52    heading 15.37   body 11.50   label 7.89   link 7.36
-       under a stripe   heading 11.63   body  8.70   label 5.97   link 5.57
-     violet, worst      heading  5.10   body 4.5+ (the #7E3BE8 edge, with a
-                        4% tail of the white overlay allowed for)
+     paper #f4f1fd      heading 16.45   body 12.78   sub 6.92   link 10.92
+     paper-hi #faf8fe                                sub 7.47   link 11.55
+     cream #f7e7ce      heading 15.08   body 11.72   sub 6.34   link 10.01
+     recess #150451    heading 16.06   body 11.91   label 8.05   link 11.99
+       under a stripe   heading 12.40   body  9.20   label 6.22   link  9.27
+     violet, worst      heading  6.71   body 6.45   link 5.01 (the #5909F6
+                        end, with a 4% tail of the white overlay allowed for)
+
+   The deeper mark bought contrast everywhere: the link on paper went from
+   8.23:1 to 10.92:1 and body on the gradient's light end from 4.90:1 to
+   6.45:1.
 
    TYPE IS NEVER TINTED WITH OPACITY. "86% for body, 70% for mono labels" is
    realised as solid ink: #f4f0ff mixed into each ground at that weight, so a
@@ -42,10 +63,10 @@
    ground, re-pointed in each surface scope below.
 
    WHERE THE SPEC COULD NOT HOLD AS WRITTEN. On the violet gradient the light
-   end is too light for 86% and 70%: they measure 4.18 and 3.28 on #7E3BE8.
-   So on violet, body and label both take #f0ebfe - lighter than 86%, never
-   darker - which clears 4.5 there. #b79bf2 is 2.44 on that edge, so links
-   on violet take a lighter step of their own hue, #efe9fc. The white
+   end is still too light for 86% and 70%, so on violet body and label both
+   take #f0ebfe - lighter than 86%, never darker - which clears 4.5 there at
+   6.45:1. Links there no longer need the almost-white the old gradient
+   forced: the logo's periwinkle clears the light end at 5.01:1. The white
    overlay is kept compact (a 24rem circle, gone by 70%) because under its
    core even full-strength ink falls to 3.89: only headings, which need 3:1,
    ever sit in that corner, and violet sections keep copy in the left column.
@@ -58,15 +79,18 @@
   color-scheme: light;
 
   /* ---- The family ---- */
-  --brand-deep: #2a0a5e;
-  --brand-core: #5416c4;
-  --brand-edge: #7e3be8;
-  --brand-gradient: linear-gradient(105deg, #2a0a5e 0%, #5416c4 52%, #7e3be8 100%);
+  --brand-deep: #10014a;
+  --brand-core: #2f02ac;
+  --brand-edge: #5909f6;
+  --brand-gradient: linear-gradient(105deg, #10014a 0%, #2f02ac 52%, #5909f6 100%);
 
-  --ground: #0a0620;
-  --recess: #1e0a52;
+  --ground: #07001f;
+  --recess: #150451;
   --paper: #f4f1fd;
   --paper-hi: #faf8fe;
+  /* The logo's circle. A warm neutral the paper family does not have, kept
+     for occasional use rather than put into the section rotation. */
+  --cream: #f7e7ce;
   --rule: #ddd6f3;
   /* Input boundaries need 3:1 where a hairline does not. The rule's hue at
      L 64: 3.12:1 on paper, 3.37:1 on paper-hi. */
@@ -112,8 +136,9 @@
   --accent-soft: var(--paper);
   --accent-line: var(--rule);
 
-  /* #b79bf2 is 2.10:1 on paper, so on light the link steps down the family
-     instead: core violet at rest, the wordmark indigo on hover (15.60:1). */
+  /* The periwinkle is 1.35:1 on paper, so on light the link steps down the
+     family instead: the mark's core violet at rest (10.92:1), its shadowed
+     curve on hover (16.75:1). */
   --link: var(--brand-core);
   --link-hover: var(--brand-deep);
   --link-rule: var(--rule);
@@ -128,7 +153,7 @@
      on an interactive card leans further toward the core violet. */
   --shade: 0 24px 60px -28px rgb(23 11 58 / 0.18);
   --shade-lift: 0 32px 80px -30px rgb(23 11 58 / 0.26);
-  --shade-accent: 0 18px 44px -20px rgb(84 22 196 / 0.28);
+  --shade-accent: 0 18px 44px -20px rgb(47 2 172 / 0.28);
 
   /* ---- Interactive element metrics, from the button spec ---- */
   --btn-h: 2.25rem; /* 36px desktop */
@@ -166,26 +191,31 @@
     --border: rgb(244 240 255 / 0.16);
     --border-strong: rgb(244 240 255 / 0.32);
     --border-fade: rgb(244 240 255 / 0);
-    --accent: #b79bf2;
-    --accent-on-light: #b79bf2;
+    /* The logo's periwinkle, and the one place a sampled logo colour earns a
+       functional job. The light violet that used to sit here measured
+       3.21:1 on the new gradient's light end - the deeper mark pushed it
+       under AA - while the periwinkle clears it at 5.01:1 and is brighter
+       against every dark ground besides. */
+    --accent: #d0d0f4;
+    --accent-on-light: #d0d0f4;
     --accent-soft: rgb(244 240 255 / 0.06);
     --accent-line: rgb(244 240 255 / 0.24);
 
-    --link: #b79bf2;
+    --link: #d0d0f4;
     --link-hover: #ffffff;
-    --link-rule: rgb(183 155 242 / 0.45);
+    --link-rule: rgb(208 208 244 / 0.45);
 
-    /* The HUD furniture in home/Hero.tsx reads this: the family's light
-       violet, where it used to read an electric cyan. */
-    --hud-glint-rgb: 183 155 242;
+    /* The HUD furniture in home/Hero.tsx reads this: the periwinkle, where
+       it used to read an electric cyan and then a light violet. */
+    --hud-glint-rgb: 208 208 244;
   }
 
   .surface-recess {
     background-color: var(--recess);
     background-image: var(--stripes);
     --surface: var(--recess);
-    --muted: #d6d0e7; /* #f4f0ff at 86% into #1E0A52 */
-    --faint: #b4abcb; /* at 70% - mono labels only */
+    --muted: #d5cfe7; /* #f4f0ff at 86% into #150451 */
+    --faint: #b1a9cb; /* at 70% - mono labels only */
     --accent-ink: var(--recess);
   }
 
@@ -197,7 +227,7 @@
     background-color: var(--brand-core);
     background-image:
       radial-gradient(circle 24rem at 100% 0%, rgb(255 255 255 / 0.15), transparent 70%),
-      radial-gradient(circle 40rem at 0% 100%, rgb(10 6 32 / 0.5), transparent 70%),
+      radial-gradient(circle 40rem at 0% 100%, rgb(7 0 31 / 0.5), transparent 70%),
       var(--brand-gradient);
     --surface: var(--brand-core);
     --muted: #f0ebfe; /* see WHERE THE SPEC COULD NOT HOLD, above */
@@ -205,12 +235,16 @@
     --accent: var(--ink-light);
     --accent-on-light: var(--ink-light);
     --accent-ink: var(--brand-deep);
-    --link: #efe9fc;
+    /* The periwinkle again. On the old gradient a link here had to be an
+       almost-white (#efe9fc) because the family's light violet failed; the
+       deeper gradient has the headroom for the logo's own colour. */
+    --link: #d0d0f4;
   }
 }
 
 @theme inline {
   --color-paper: var(--paper);
+  --color-cream: var(--cream);
   --color-wash: var(--surface-raised);
 
   --color-background: var(--background);
@@ -327,7 +361,7 @@
   summary,
   [role="button"] {
     touch-action: manipulation;
-    -webkit-tap-highlight-color: rgb(84 22 196 / 0.2);
+    -webkit-tap-highlight-color: rgb(47 2 172 / 0.2);
   }
 }
 
@@ -398,7 +432,7 @@
     border: 1px solid rgb(244 240 255 / 0.15);
     background:
       linear-gradient(145deg, rgb(244 240 255 / 0.1), rgb(244 240 255 / 0.02)),
-      rgb(30 10 82 / 0.22);
+      rgb(21 4 81 / 0.22);
     backdrop-filter: blur(16px) saturate(150%);
     -webkit-backdrop-filter: blur(16px) saturate(150%);
     box-shadow:
@@ -522,12 +556,12 @@
     border-radius: 1.5rem;
     background:
       linear-gradient(145deg, rgb(244 240 255 / 0.09), rgb(244 240 255 / 0.015)),
-      rgb(30 10 82 / 0.28);
+      rgb(21 4 81 / 0.28);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     box-shadow:
       inset 0 1px 0 rgb(244 240 255 / 0.16),
-      0 24px 64px -32px rgb(10 6 32 / 0.7);
+      0 24px 64px -32px rgb(7 0 31 / 0.7);
   }
 
   .hero-fade {
@@ -611,8 +645,9 @@
     pointer-events: none;
   }
 
-  /* Particles never pass behind type. A #b79bf2 square at peak alpha behind
-     the hero link measured 3.93:1, and a white triangle is worse, so the
+  /* Particles never pass behind type. A periwinkle square at peak alpha
+     behind the hero link is worse than the light violet it replaced, and a
+     white triangle is worse still, so the
      field is masked out of the copy column: fully clear to 48% of the width
      (the copy ends near 41-45% at every desktop width), in by 62%. */
   .scan-particles {
@@ -827,7 +862,7 @@
   .hero-panel {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: rgb(30 10 82 / 0.86) !important;
+    background: rgb(21 4 81 / 0.86) !important;
   }
 
   body::after,

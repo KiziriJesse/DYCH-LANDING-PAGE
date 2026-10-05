@@ -139,7 +139,11 @@ export function TimeSaved() {
   const perWeek = perDay * DAYS_PER_WEEK;
 
   return (
-    <section className="bg-surface px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
+    /* The one place --cream is used so far: a section break between two
+       paper sections and the violet proof band, which is exactly the
+       occasional role the wash has. Every ink on it was measured - heading
+       15.08:1, body 11.72:1, sub-copy 6.34:1, accent 10.01:1. */
+    <section className="bg-cream px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
           <p className="text-sm font-medium tracking-[0.1em] text-accent-on-light">
