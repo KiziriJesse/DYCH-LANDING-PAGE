@@ -86,7 +86,7 @@ export function WireframeHead({
       {/* Bright nodes at every landmark vertex. */}
       <points geometry={packed.landmarks} renderOrder={5}>
         <pointsMaterial
-          color="#f2fdff"
+          color="#f4f0ff"
           size={0.034}
           transparent
           opacity={1}

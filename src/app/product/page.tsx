@@ -13,6 +13,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { RecognitionFigure } from "@/components/product/RecognitionFigure";
 import { Button } from "@/components/ui/Button";
+import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -103,6 +104,22 @@ export default function ProductPage() {
                     <dd className="mt-2 max-w-[48ch] leading-relaxed text-muted">
                       {item.body}
                     </dd>
+                    {/* Only the first item gets one. "On a unit on your own
+                        premises" is the claim a non-technical reader is most
+                        likely to half-understand, and the one that matters
+                        most if they have children at the school. */}
+                    {i === 0 && (
+                      <div className="mt-4">
+                        <HelpTip label="What does on-device mean?" title="The matching happens at your gate">
+                          The camera compares an arriving face against records
+                          held on a box standing on your own premises. Nothing
+                          is sent to us or to anyone else, no photo is uploaded
+                          anywhere, and the entrance keeps working when the
+                          internet does not — because nothing has to travel for
+                          a match to happen.
+                        </HelpTip>
+                      </div>
+                    )}
                   </div>
                 </Reveal>
               ))}

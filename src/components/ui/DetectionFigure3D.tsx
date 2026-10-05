@@ -47,7 +47,8 @@ import {
  * Static under prefers-reduced-motion: one render, held pose, no cycle.
  */
 
-/** --accent, #7C5CE0, matching the flat figure's web. */
+/** A lightened step of the brand core, matching the flat figure's web. Not
+    --accent: see the note on DEFAULT_STROKE in DetectionFigure. */
 const DEFAULT_STROKE: [number, number, number] = [124, 92, 224];
 
 /* The two ends of the matte ramp: --iris deepened for the shadow, and a

@@ -79,7 +79,7 @@ export default function ContactPage() {
               </ul>
             </Reveal>
 
-            <dl className="mt-12 divide-y divide-[var(--border)] border-t border-border">
+            <dl className="mt-12 divide-y divide-border border-t border-border">
               {CHANNELS.map(({ Icon, label, lines }, i) => (
                 <Reveal key={label} delay={0.06 * i} className="flex gap-5 py-6">
                   <dt className="sr-only">{label}</dt>

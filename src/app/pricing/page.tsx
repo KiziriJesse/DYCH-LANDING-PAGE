@@ -5,6 +5,7 @@ import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { Button } from "@/components/ui/Button";
+import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -165,6 +166,19 @@ export default function PricingPage() {
                     <Button href="/contact" size="lg" className="w-full justify-center">
                       Book a site visit
                     </Button>
+                    {/* The full reasoning is the violet section further down
+                        this page; this is the two-sentence version, for a
+                        reader whose question is "why am I booking a visit
+                        instead of reading a price". */}
+                    <div className="mt-4">
+                      <HelpTip label="Why no price?" title="The visit comes first">
+                        The cost depends on how many entry points you have, how
+                        many pupils are on the roll, and what power and network
+                        already reach the gate. We would be guessing without
+                        seeing it. The visit is free either way and ends with a
+                        written scope you can take to your board.
+                      </HelpTip>
+                    </div>
                   </div>
                 </div>
               </SpotlightCard>

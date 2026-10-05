@@ -3,13 +3,20 @@ import { Problem } from "@/components/home/Problem";
 import { ProductSnapshot } from "@/components/home/ProductSnapshot";
 import { HowItWorksTeaser } from "@/components/home/HowItWorksTeaser";
 import { Solutions } from "@/components/home/Solutions";
+import { TimeSaved } from "@/components/home/TimeSaved";
 import { Proof } from "@/components/home/Proof";
 import { ClosingCta } from "@/components/home/ClosingCta";
 
 /**
- * Seven sections, seven different layout families: media hero, text-led
- * comparison, asymmetric bento, sector grid, horizontal rail, split proof,
- * solid panel.
+ * Eight sections, eight different layout families: media hero, text-led
+ * comparison, asymmetric bento, sector grid, horizontal rail, the
+ * calculator's split form-and-readout, split proof, solid panel.
+ *
+ * TimeSaved sits after the pipeline and before the proof: the reader has
+ * just seen how the thing works, so this is the first point at which "how
+ * much of my morning does it give back" is a question they can answer with
+ * their own numbers - and the claim it produces is theirs, which is a better
+ * way into Proof than another of ours.
  *
  * Section rhythm comes from lightness along the logo's one hue: the recessed
  * hero, paper and paper-hi light sections, the violet gradient on Proof, and
@@ -29,6 +36,7 @@ export default function Home() {
       <ProductSnapshot />
       <Solutions />
       <HowItWorksTeaser />
+      <TimeSaved />
       <Proof />
       <ClosingCta />
     </>

@@ -66,7 +66,7 @@ export function SpotlightCard({
         },
         active: {
           boxShadow: "var(--shade-accent)",
-          borderColor: "rgb(221 214 243 / 0)",
+          borderColor: "var(--border-fade)",
         },
       }}
       transition={transition}

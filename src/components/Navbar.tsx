@@ -37,8 +37,8 @@ const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
  * seven anchors was already the longest thing in the nav.
  */
 const PRODUCT_MENU = {
-  /* Not a link. The software name labels the group; the verticals are the
-     destinations. */
+  /* The software name, and the panel's link to the product overview. The
+     verticals under it are the other two destinations. */
   heading: "Smart Vision",
   blurb: "Facial-recognition access, attendance and alerts.",
   items: PRODUCT_VERTICALS,
@@ -193,7 +193,7 @@ export function Navbar() {
                   <motion.span
                     layoutId="nav-active"
                     aria-hidden
-                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-[var(--accent-line)]"
+                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-accent-line"
                     transition={{ duration: 0.45, ease: EASE_GLIDE }}
                   />
                 )}
@@ -211,18 +211,26 @@ export function Navbar() {
                     // between the trigger and the panel.
                     className="absolute left-0 top-full pt-3"
                   >
-                    <div className="min-w-[17.5rem] rounded-[1rem] bg-surface p-2 shadow-[var(--shade-lift)]">
-                      {/* The software name, as a label rather than a third
-                          level of menu. Not focusable, not clickable. */}
-                      <p
+                    <div className="min-w-[17.5rem] rounded-card bg-surface p-2 shadow-[var(--shade-lift)]">
+                      {/* The software name, and the way in to /product.
+                          It was a plain label, which left that page with no
+                          route to it anywhere on desktop: the trigger is a
+                          disclosure rather than a link, and the panel listed
+                          only the verticals. The overview is where the two
+                          verticals are explained as one product, so it has
+                          to be reachable. */}
+                      <Link
                         id="product-menu-heading"
-                        className="px-3.5 pb-2 pt-2.5 text-sm font-semibold tracking-[-0.01em] text-foreground"
+                        href="/product"
+                        aria-current={pathname === "/product" ? "page" : undefined}
+                        onClick={() => setMenuOpen(false)}
+                        className="block rounded-[calc(var(--radius-card)-0.25rem)] px-3.5 pb-2 pt-2.5 text-sm font-semibold tracking-[-0.01em] text-foreground transition-colors duration-200 hover:bg-wash"
                       >
                         {PRODUCT_MENU.heading}
                         <span className="mt-0.5 block text-[0.8125rem] font-normal leading-snug text-faint">
                           {PRODUCT_MENU.blurb}
                         </span>
-                      </p>
+                      </Link>
                       <ul
                         aria-labelledby="product-menu-heading"
                         className="mt-1 border-t border-border pt-1"
@@ -235,7 +243,7 @@ export function Navbar() {
                                 pathname === item.href ? "page" : undefined
                               }
                               onClick={() => setMenuOpen(false)}
-                              className="block rounded-[0.75rem] px-3.5 py-2.5 transition-colors duration-200 hover:bg-wash"
+                              className="block rounded-[calc(var(--radius-card)-0.25rem)] px-3.5 py-2.5 transition-colors duration-200 hover:bg-wash"
                             >
                               <span className="block text-sm font-medium text-foreground">
                                 {item.label}
@@ -270,7 +278,7 @@ export function Navbar() {
                       <motion.span
                         layoutId="nav-active"
                         aria-hidden
-                        className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-[var(--accent-line)]"
+                        className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-accent-line"
                         transition={{ duration: 0.45, ease: EASE_GLIDE }}
                       />
                     )}

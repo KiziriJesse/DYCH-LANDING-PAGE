@@ -30,7 +30,10 @@ const HEADLINE = "Know who is on your premises — in real time.";
 // The comp sets its headline as three hand-broken lines, not a reflow.
 const HEADLINE_LINES = ["Know who is on", "your premises —", "in real time."];
 
-const MATCH_DOT = "#b79bf2"; // the family's light violet, the link value on this ground
+/* The family's light violet, read from the surface scope rather than restated
+   as a literal: both dark scopes in globals.css define --hud-glint-rgb, so
+   the dot follows the ground it is placed on. */
+const MATCH_DOT = "rgb(var(--hud-glint-rgb))";
 
 /* ---- Easing, ported from animations-v3.jsx so timings match the comp ---- */
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -257,7 +260,9 @@ function Particle({ p, clock }: { p: ParticleSpec; clock: MotionValue<number> })
         top: `${p.top}%`,
         width: p.size,
         height: p.size,
-        background: p.tri ? "rgb(244 240 255 / 0.85)" : "rgb(183 155 242 / 0.75)",
+        background: p.tri
+          ? "rgb(244 240 255 / 0.85)"
+          : "rgb(var(--hud-glint-rgb) / 0.75)",
         clipPath: p.tri ? "polygon(50% 0, 100% 100%, 0 100%)" : undefined,
         opacity,
         y,

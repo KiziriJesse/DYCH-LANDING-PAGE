@@ -99,6 +99,10 @@
 
   --border: var(--rule);
   --border-strong: var(--rule-strong);
+  /* The hairline at zero alpha. A card that swaps its border for a shadow
+     animates to this rather than restating the rule's channels inline, which
+     is how a component ends up carrying a stale copy of a token. */
+  --border-fade: rgb(221 214 243 / 0);
 
   /* Icons, focus rings and marks on light take the core violet. It is
      8.23:1 on paper, so the same value is safe wherever it lands on text. */
@@ -161,6 +165,7 @@
     --foreground: var(--ink-light);
     --border: rgb(244 240 255 / 0.16);
     --border-strong: rgb(244 240 255 / 0.32);
+    --border-fade: rgb(244 240 255 / 0);
     --accent: #b79bf2;
     --accent-on-light: #b79bf2;
     --accent-soft: rgb(244 240 255 / 0.06);
