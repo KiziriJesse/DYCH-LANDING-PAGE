@@ -79,7 +79,7 @@ export function HowItWorksTeaser() {
             connector loses no information, it was decoration. Spacing
             carries the sequence now. */}
         <div className="mt-16">
-          <ol className="grid gap-10 md:grid-cols-4 md:gap-6">
+          <ol className="grid gap-6 md:grid-cols-4 md:gap-4">
             {FLOW.map((step, i) => (
               <Reveal
                 key={step.title}

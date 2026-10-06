@@ -129,7 +129,7 @@ export function ProductSnapshot() {
           </p>
         </Reveal>
 
-        <div className="mt-16 grid gap-5 md:grid-cols-12">
+        <div className="mt-16 grid gap-4 md:grid-cols-12">
           {FEATURES.map((feature, i) => (
             <Reveal key={feature.title} delay={0.06 * i} className={feature.span}>
               <SpotlightCard
@@ -150,7 +150,7 @@ export function ProductSnapshot() {
                 }
               >
                 {feature.shape === "wide" ? (
-                  <div className="grid h-full gap-6 md:grid-cols-12 md:items-center">
+                  <div className="grid h-full gap-4 md:grid-cols-12 md:items-center">
                     {/* Icon and title sit inline here so the two columns of the
                         wide cell balance instead of one hanging low. */}
                     <div className="flex items-center gap-4 md:col-span-6">

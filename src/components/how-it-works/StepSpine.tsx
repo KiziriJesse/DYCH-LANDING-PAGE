@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   DeviceMobileSpeaker,
@@ -20,6 +21,28 @@ const STEPS = [
     title: "Recognition",
     Icon: ScanSmiley,
     lead: "Recognition happens at the boundary, so the record starts at the moment someone actually arrives rather than when a teacher gets to it.",
+    /* Only the first step carries one. This page was four columns of text
+       before any screenshot appeared, and the step that needs an anchor is
+       the one a reader meets first.
+
+       The caption is about COVERAGE, not accuracy. A grid of visibly varied
+       faces placed next to body copy is read as a claim that the system
+       performs equally well across all of them, and nothing on this site
+       carries figures that would support that claim. What it illustrates
+       instead is the enrolment roll: everyone who belongs on the grounds is
+       on it. If DYCH ever publishes measured accuracy across demographics,
+       that is the point to say more here, not before. */
+    figure: {
+      src: "/figures/faces.png",
+      alt: "Six enrolled people, drawn as a group",
+      caption:
+        "Every pupil, teacher and regular visitor is enrolled once. The roll is the school's own, and the gate matches against nothing else.",
+      /* Each figure crops to its own subject, so no two share a ratio.
+         Carried here so Next reserves the right box and the column does not
+         jump as the drawing loads. */
+      width: 1257,
+      height: 1240,
+    },
     detail: [
       {
         label: "What it needs",
@@ -40,6 +63,14 @@ const STEPS = [
     title: "Attendance",
     Icon: ListChecks,
     lead: "The entry event is the attendance record. There is no second step for anyone to remember, and no paper register to transcribe afterwards.",
+    figure: {
+      src: "/figures/attendance.png",
+      alt: "A person walking through a doorway beside a register marking itself",
+      caption:
+        "The walk through the gate is the register entry. Nothing is transcribed afterwards, and nothing waits for a teacher to find a moment.",
+      width: 2281,
+      height: 1979,
+    },
     detail: [
       {
         label: "What it needs",
@@ -60,6 +91,14 @@ const STEPS = [
     title: "Alerts",
     Icon: DeviceMobileSpeaker,
     lead: "A parent hears the same morning, not at the end of the day. This is the part that changes what a school can promise a family.",
+    figure: {
+      src: "/figures/alerts.png",
+      alt: "A phone receiving a message, with a morning sun beside it",
+      caption:
+        "The message leaves on the same event that marked the register, which is why it arrives while the morning can still be acted on.",
+      width: 2121,
+      height: 2467,
+    },
     detail: [
       {
         label: "What it needs",
@@ -80,6 +119,14 @@ const STEPS = [
     title: "Records",
     Icon: Export,
     lead: "Everything above produces records. This is where they become something a head teacher can take into a meeting.",
+    figure: {
+      src: "/figures/records.png",
+      alt: "A folder of documents with a chart drawn on the front sheet",
+      caption:
+        "The reports are drawn from the entry and exit events themselves. Nobody assembles them by hand, so the figures and the gate cannot disagree.",
+      width: 1937,
+      height: 1958,
+    },
     detail: [
       {
         label: "What it needs",
@@ -130,7 +177,7 @@ export function StepSpine() {
 
   return (
     <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
-      <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-12 lg:gap-16">
+      <div className="mx-auto grid max-w-[1240px] gap-8 lg:grid-cols-12 lg:gap-10">
         <nav
           aria-label="Steps"
           className="z-raise hidden lg:col-span-4 lg:block lg:self-start"
@@ -212,6 +259,25 @@ export function StepSpine() {
               <p className="mt-5 max-w-[58ch] text-lg leading-relaxed text-muted">
                 {step.lead}
               </p>
+
+              {"figure" in step && step.figure && (
+                <figure className="mt-9 rounded-card border border-border bg-surface-raised p-6 sm:p-8">
+                  <Image
+                    src={step.figure.src}
+                    alt={step.figure.alt}
+                    width={step.figure.width}
+                    height={step.figure.height}
+                    /* Capped on height as well as width. The four crops run
+                       from square to tall, and sizing on width alone would
+                       leave the tallest figure half as big again as the
+                       others down a column where they are read in sequence. */
+                    className="mx-auto h-auto max-h-[16rem] w-auto max-w-full object-contain"
+                  />
+                  <figcaption className="mt-4 max-w-[52ch] text-[0.9375rem] leading-relaxed text-muted">
+                    {step.figure.caption}
+                  </figcaption>
+                </figure>
+              )}
 
               <dl className="mt-9 border-t border-border">
                 {step.detail.map((row) => (

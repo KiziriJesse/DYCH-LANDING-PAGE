@@ -4,7 +4,6 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
-import { ShapeField } from "@/components/ui/ShapeField";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -90,9 +89,6 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {/* Site-wide drifting shapes. Here rather than per page for the same
-            reason as the widget below: one field that survives navigation. */}
-        <ShapeField />
         <Navbar />
         <main id="main">{children}</main>
         <Footer />

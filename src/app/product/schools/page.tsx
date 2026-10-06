@@ -12,6 +12,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Capability, type CapabilityData } from "@/components/product/Capability";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
+import { LineFigure } from "@/components/product/LineFigure";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -75,15 +76,20 @@ const CAPABILITIES: CapabilityData[] = [
         body: "As well as cameras we supply, the system reads an existing NVR or DVR over the network, discovers its channels and assigns them to slots, or takes a single RTSP stream directly. Up to twenty camera positions run at once. A school with CCTV already at the gate is not necessarily buying it twice.",
       },
     ],
+    /* An illustration of what the gate does, not a photograph of an
+       installation, and the alt text says so. The distinction matters on this
+       site more than on most: the previous image carried a specific school's
+       name across the gate, which read as a named customer rather than as a
+       picture of the product working. This one carries no signage. */
     media:
-      "Students arriving at a school gate as the system identifies each person",
+      "Illustration of pupils arriving at a school gate, each recognised face labelled on screen",
     mediaAspect: "aspect-[4/3]",
     renderMedia: () => (
       <PlaceholderMedia
-        description="Students arriving at a school gate as the system identifies each person"
-        src="/school-arrival.png"
+        description="Illustration of pupils arriving at a school gate, each recognised face labelled on screen"
+        src="/school-gate-arrival.jpg"
         aspect="aspect-[4/3]"
-        imageClassName="object-cover object-[center_72%]"
+        imageClassName="object-cover object-[center_62%]"
       />
     ),
     Icon: ScanSmiley,
@@ -113,6 +119,9 @@ const CAPABILITIES: CapabilityData[] = [
     ],
     media: "the attendance dashboard showing a class register for one morning",
     mediaAspect: "aspect-[4/3]",
+    renderMedia: () => (
+      <LineFigure src="/figures/register.png" width={2043} height={1415} />
+    ),
     Icon: ListChecks,
     layout: "split-left",
   },
@@ -154,6 +163,9 @@ const CAPABILITIES: CapabilityData[] = [
     ],
     media: "a phone showing a parent alert as it arrives, with the pupil thumbnail",
     mediaAspect: "aspect-[9/19]",
+    renderMedia: () => (
+      <LineFigure src="/figures/parent-alert.png" width={901} height={1844} />
+    ),
     Icon: PaperPlaneTilt,
     layout: "stage",
   },
@@ -189,6 +201,9 @@ const CAPABILITIES: CapabilityData[] = [
     media:
       "the boarding view showing campus status and a live opening-day count",
     mediaAspect: "aspect-[4/3]",
+    renderMedia: () => (
+      <LineFigure src="/figures/boarding.png" width={1167} height={820} />
+    ),
     Icon: House,
     layout: "split-right",
   },
@@ -198,15 +213,24 @@ const CAPABILITIES: CapabilityData[] = [
     // flow are Month 2.
     id: "guard-app",
     title: "The guard holds one screen, not three books",
-    lead: "No register, no visitor book, no paper pass list. A tablet at the gate tells the person on duty exactly what to do in each situation: a normal arrival, an approved gate pass, an approved exeat, an authorised pickup, a late arrival, a pupil with no pass, or a face the system does not know.",
+    /* TRIMMED at the client's instruction, for the same reason the operations
+       console came off /how-it-works: the detail here was a specification
+       rather than a benefit. The lead used to enumerate all seven situations
+       the screen handles, and the override point set out exactly how it is
+       controlled - individual PIN, written reason, named authoriser, no
+       deletion. Each line now states what a school gets and leaves how it is
+       built for the site visit. The claims are unchanged, only their
+       resolution. The fuller wording is in git history if it is ever wanted
+       back for a tender document. */
+    lead: "No register, no visitor book, no paper pass list. A tablet at the gate tells the person on duty what to do in front of them, whether that is a routine arrival, an approved pass, an authorised pickup or a face the system does not know.",
     points: [
       {
         label: "The override is deliberately awkward",
-        body: "For the case where a school has authorised something verbally but has not created the pass yet. It is tied to that guard’s own PIN, never a shared code, it requires a written reason and who authorised it, and the entry cannot be deleted afterwards.",
+        body: "For the case where a school has authorised something verbally but has not created the pass yet. It is tied to the individual on duty rather than to a shared code, it has to be explained at the time, and the entry stands permanently afterwards.",
       },
       {
         label: "Unknown faces get logged, not waved through",
-        body: "A visitor is recorded with name, phone, purpose and time in and out, which is the paper visitor book replaced rather than digitised alongside.",
+        body: "A visitor is recorded on the way in and on the way out, which is the paper visitor book replaced rather than digitised alongside.",
       },
       {
         label: "It keeps working when the line drops",
@@ -216,6 +240,9 @@ const CAPABILITIES: CapabilityData[] = [
     media:
       "the guard tablet at the gate showing an approved pass decision",
     mediaAspect: "aspect-[4/3]",
+    renderMedia: () => (
+      <LineFigure src="/figures/guard-tablet.png" width={1093} height={890} />
+    ),
     Icon: Devices,
     layout: "split-left",
   },
@@ -266,6 +293,9 @@ const CAPABILITIES: CapabilityData[] = [
     ],
     media: "a class report card view with the grading scale beneath the table",
     mediaAspect: "aspect-[16/10]",
+    renderMedia: () => (
+      <LineFigure src="/figures/report-cards.png" width={759} height={789} />
+    ),
     Icon: Export,
     layout: "split-right",
   },

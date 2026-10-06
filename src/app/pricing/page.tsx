@@ -31,11 +31,11 @@ const PLANS = [
     name: "Basic",
     tagline: "The gate, the register and the parent line. Where most schools start.",
     features: [
-      "Weatherproof gate camera with on-device face matching",
-      "Automatic attendance from the gate scan",
-      "Arrival, absence and late-arrival alerts to parents",
-      "Admin dashboard for records, cameras and reporting",
-      "Installation and staff training included",
+      "Gate camera, matched on-device",
+      "Automatic attendance",
+      "Parent alerts",
+      "Admin dashboard",
+      "Installation and training",
     ],
     recommended: false,
   },
@@ -44,11 +44,11 @@ const PLANS = [
     tagline: "Adds the Guard App, so the gate stops running on paper entirely.",
     features: [
       "Everything in Basic",
-      "Guard App on a tablet at the gate",
-      "Authorised pickup handling",
-      "Digital visitor log, replacing the paper book",
-      "Guard overrides, logged against an individual PIN",
-      "SMS fallback available as a metered add-on",
+      "Guard App",
+      "Authorised pickup",
+      "Digital visitor log",
+      "Logged guard overrides",
+      "SMS fallback, metered",
     ],
     recommended: true,
   },
@@ -57,10 +57,10 @@ const PLANS = [
     tagline: "More than one site, or a school that needs us closer than a phone line.",
     features: [
       "Everything in Standard",
-      "Multi-site coverage across campuses",
-      "Dedicated support contact who has walked your sites",
-      "Custom integrations with systems you already run",
-      "Boarding management where a school has boarders",
+      "Multi-site coverage",
+      "Dedicated support contact",
+      "Custom integrations",
+      "Boarding management",
     ],
     recommended: false,
   },
@@ -116,7 +116,7 @@ export default function PricingPage() {
       />
 
       <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
-        <div className="mx-auto grid max-w-[1240px] gap-6 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-[1240px] gap-4 lg:grid-cols-3">
           {PLANS.map((plan, i) => (
             <Reveal key={plan.name} delay={0.07 * i}>
               <SpotlightCard
@@ -225,7 +225,7 @@ export default function PricingPage() {
               <Reveal
                 key={faq.question}
                 delay={0.05 * i}
-                className="grid gap-x-12 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
+                className="grid gap-x-8 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
               >
                 <dt className="text-lg font-medium leading-snug text-foreground lg:col-span-5">
                   {faq.question}

@@ -54,7 +54,7 @@ export function Problem() {
             <Reveal
               key={item.lead}
               delay={0.06 * i}
-              className="grid gap-x-8 gap-y-3 border-b border-border py-9 md:grid-cols-12"
+              className="grid gap-x-5 gap-y-3 border-b border-border py-9 md:grid-cols-12"
             >
               <dt className="text-xl font-semibold leading-snug tracking-[-0.015em] text-foreground md:col-span-5">
                 {item.lead}

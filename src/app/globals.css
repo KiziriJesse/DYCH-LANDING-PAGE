@@ -182,8 +182,9 @@
   .surface-violet {
     position: relative;
     isolation: isolate;
-    /* Above the site-wide shape field (z-index 1), which multiplies and would
-       leave dark smudges on these grounds. Well under the nav (50). */
+    /* z-index 1 is free now that the drifting shape field is gone; these
+       grounds keep their own stacking context so the panels and cards
+       inside them layer against each other. Well under the nav (50). */
     z-index: 2;
     color: var(--foreground);
 
@@ -239,6 +240,47 @@
        almost-white (#efe9fc) because the family's light violet failed; the
        deeper gradient has the headroom for the logo's own colour. */
     --link: #d0d0f4;
+  }
+}
+
+@layer components {
+  /* The navbar at the top of a page, where it floats over a violet section
+     on every route. It paints no ground of its own there, so it re-points
+     the role tokens to their on-violet values and every control inside -
+     links, the Product disclosure, the Button, the hamburger - resolves to
+     light ink with no per-component branch. Once scrolled, the class comes
+     off and the bar takes the paper surface and the root tokens back. */
+  .nav-on-dark {
+    --foreground: var(--ink-light);
+    --muted: #f0ebfe;
+    --faint: #f0ebfe;
+    --border: rgb(244 240 255 / 0.16);
+    --border-strong: rgb(244 240 255 / 0.32);
+    --accent: var(--ink-light);
+    --accent-on-light: var(--ink-light);
+    --accent-ink: var(--brand-deep);
+    --accent-soft: rgb(244 240 255 / 0.1);
+    --accent-line: rgb(244 240 255 / 0.24);
+    color: var(--foreground);
+  }
+
+  /* Anything the bar opens onto its own pale ground - the Product panel -
+     has to climb back out of nav-on-dark, or it inherits light ink and
+     paints white type on a white card. It takes the root values back
+     explicitly rather than relying on where it happens to sit. */
+  .nav-panel {
+    --foreground: var(--ink);
+    --muted: var(--ink-body);
+    --faint: var(--ink-sub);
+    --surface: var(--paper-hi);
+    --surface-raised: var(--paper);
+    --border: var(--rule);
+    --border-strong: var(--rule-strong);
+    --accent: var(--brand-core);
+    --accent-on-light: var(--brand-core);
+    --accent-soft: var(--paper);
+    --accent-line: var(--rule);
+    color: var(--foreground);
   }
 }
 
@@ -584,9 +626,22 @@
      width use cqw, which is why it is an inline-size container. */
   .scan-rig {
     position: absolute;
-    right: 0;
+    /* Pulled in off the right edge, which closes the gap between the face
+       and the copy it belongs to. */
+    right: 5%;
     top: 50%;
-    width: 58.85%; /* 1130 / 1920 */
+    /* The comp's own share is 58.85% (1130 / 1920); held well under it so
+       the tracking brackets clear the fixed navbar, which the comp did not
+       have to account for. The rig is centred vertically, so a narrower
+       column is also a shorter one and its top edge drops away from the
+       nav. Everything inside is placed in percentages of the rig, so the
+       whole assembly - brackets, readout, particles - scales with this one
+       number. */
+    width: 42%;
+    /* Nudged below centre so the tracking brackets clear the header rather
+       than meeting it: the bar is 4.5rem tall and the rig is centred, so
+       half that height is the offset it needs. */
+    margin-top: 2.25rem;
     aspect-ratio: 1130 / 1080;
     translate: 0 -50%;
     container-type: inline-size;
@@ -737,68 +792,6 @@
     top: 1rem;
   }
 
-  /* ---- Site-wide shape field (ShapeField.tsx) ----
-
-     A fixed overlay rather than a backdrop, because half the sections paint
-     an opaque ground that would hide a backdrop. z-index 1 keeps it under
-     every named layer in the locked scale, and under the dark and violet
-     surfaces (z-index 2), so it only ever crosses paper. Cards and images
-     take z-raise, so the shapes pass under them rather than over them. Under multiply,
-     body ink over a shape at peak alpha still measures 8.4:1 and sub-copy
-     5.2:1. */
-  .shape-field {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-  }
-
-  /* Two identical bands, moved together on scroll by ShapeField.tsx and
-     wrapped at one band's height. 150lvh: taller than any viewport, and the
-     large-viewport unit, so a phone's collapsing address bar never resizes
-     it mid-scroll. */
-  .shape-field__strip {
-    position: absolute;
-    inset: 0 0 auto;
-    will-change: transform;
-  }
-
-  .shape-field__band {
-    position: relative;
-    height: 150vh;
-    height: 150lvh;
-  }
-
-  .shape-field__item {
-    position: absolute;
-    opacity: 0;
-    background: var(--brand-edge);
-    animation: shape-rise var(--shape-dur) ease-in-out var(--shape-delay) infinite;
-  }
-
-  .shape-field__item--tri {
-    background: var(--brand-core);
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  }
-
-  /* Opacity peaks mid-rise and returns to zero, so a shape is never visible
-     at the moment it jumps back to its start. Transform and opacity only. */
-  @keyframes shape-rise {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 0, 0) rotate(var(--shape-rot));
-    }
-    50% {
-      opacity: var(--shape-alpha);
-    }
-    100% {
-      opacity: 0;
-      transform: translate3d(0, calc(var(--shape-rise) * -1), 0)
-        rotate(calc(var(--shape-rot) + 40deg));
-    }
-  }
 }
 
 /* Reduced motion: loops, parallax and transitions collapse to static. */
@@ -840,14 +833,6 @@
     animation: none !important;
   }
 
-  /* The shape field holds still. The blanket rule would end each shape on its
-     last keyframe - opacity 0 - and the field would vanish; instead every
-     shape rests at its start, a little under its peak alpha. */
-  .shape-field__item {
-    animation: none !important;
-    opacity: calc(var(--shape-alpha) * 0.7) !important;
-    transform: rotate(var(--shape-rot)) !important;
-  }
 }
 
 /* Transparency-sensitive users get solid surfaces instead of glass. */

@@ -52,7 +52,7 @@ export default function ContactPage() {
           so one more "Book a Demo" would loop the reader back to where they
           already are. */}
       <section className="bg-background px-4 pb-28 pt-16 sm:px-6 lg:px-10 lg:pb-40 lg:pt-20">
-        <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="mx-auto grid max-w-[1240px] gap-10 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
             {/* WhatsApp first and as real buttons: it is the channel that
                 actually reaches us fastest, and the form below cannot yet

@@ -47,6 +47,10 @@ const PRODUCT_MENU = {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  /* The mobile Product row is a disclosure of its own. It starts open when
+     the reader is already somewhere under /product, so the sheet shows them
+     where they are rather than hiding it behind a tap. */
+  const [mobileProduct, setMobileProduct] = useState(false);
   const [lifted, setLifted] = useState(false);
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
@@ -114,49 +118,69 @@ export function Navbar() {
 
   return (
     <>
+      {/* One flat bar across the full width, rather than a floating pill
+          with the mark on a badge of its own.
+
+          It carries no ground of its own at the top of a page, where it
+          always sits over a violet section, and takes the paper surface
+          once the reader scrolls. The two states need opposite inks, which
+          is what nav-on-dark does: it re-points the role tokens the way the
+          surface scopes do, so the links, the disclosure and the Button all
+          follow without a single light-mode special case between them. */}
       <motion.header
-        className="safe-x pointer-events-none fixed inset-x-0 top-0 z-nav flex items-center justify-between gap-4 px-4 pt-4 sm:px-6 sm:pt-5 lg:px-10"
+        className={
+          "fixed inset-x-0 top-0 z-nav border-b transition-[background-color,border-color,backdrop-filter] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] " +
+          (open
+            ? "border-border bg-paper"
+            : lifted
+              ? "glass border-border bg-surface/92 backdrop-blur-xl"
+              : "nav-on-dark border-transparent bg-transparent")
+        }
         initial={false}
         animate={{ y: hidden ? "-130%" : 0 }}
         transition={reduce ? { duration: 0 } : { duration: 0.45, ease: EASE_GLIDE }}
       >
-        <Link
-          href="/"
-          className={
-            "glass pointer-events-auto ml-4 flex size-[3.75rem] shrink-0 items-center justify-center rounded-full border p-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:ml-6 sm:size-[4.25rem] sm:p-2 lg:ml-8 " +
-            (lifted
-              ? "border-transparent bg-surface/90 shadow-[var(--shade)]"
-              : "border-transparent bg-surface/70")
-          }
-          aria-label="DYCH Technologies, home"
-        >
-          <Image
-            /* The mark in its cream dome, not the full lockup. The new
-               lockup carries the wordmark and the script tagline, and at
-               60px across a pill neither is legible - the mark alone is
-               what reads at this size. */
-            src="/logo/dych-mark-v2.png"
-            alt="DYCH Technologies"
-            width={320}
-            height={222}
-            priority
-            className="h-full w-full object-contain"
-          />
-        </Link>
-
-        <motion.nav
-          aria-label="Primary"
-          initial={reduce ? false : { y: -28, opacity: 0 }}
+        <motion.div
+          initial={reduce ? false : { y: -16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-          className={
-            "glass pointer-events-auto flex h-11 w-fit items-center gap-0.5 rounded-full border pl-1.5 pr-1.5 backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] lg:h-12 lg:gap-0.5 lg:pl-1.5 lg:pr-1.5 " +
-            (lifted
-              ? "border-transparent bg-surface/90 shadow-[var(--shade)]"
-              : "border-transparent bg-surface/70")
-          }
+          className="safe-x mx-auto flex h-20 w-full max-w-[1480px] items-center justify-between gap-6 px-4 sm:px-6 lg:h-[5.5rem] lg:px-10"
         >
-          <ul className="hidden items-center gap-0.5 lg:flex">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2"
+            aria-label="DYCH Technologies, home"
+          >
+            <Image
+              /* The mark in its cream dome, not the full lockup. The new
+                 lockup carries the wordmark and the script tagline, and at
+                 this height neither is legible - the mark alone is what
+                 reads, with the name set in the site's own type beside it. */
+              src="/logo/dych-mark-v2.png"
+              alt=""
+              aria-hidden
+              width={320}
+              height={222}
+              priority
+              className="h-10 w-auto lg:h-12"
+            />
+            {/* Both words at one size, the way the supplied lockup sets
+                them. TECHNOLOGIES keeps its wider tracking and lighter
+                weight, which is what separates the two without shrinking
+                either. */}
+            <span className="font-display text-[1rem] font-medium leading-none tracking-[-0.01em] text-foreground sm:text-[1.125rem]">
+              DYCH
+              <span className="ml-1.5 font-normal tracking-[0.12em] text-muted sm:ml-2 sm:tracking-[0.14em]">
+                TECHNOLOGIES
+              </span>
+            </span>
+          </Link>
+
+        {/* The links take the middle rather than crowding the right edge,
+            so the bar carries its full width instead of leaving a dead
+            stretch between the mark and the menu. */}
+        <nav aria-label="Primary" className="flex flex-1 items-center justify-end gap-1 lg:justify-center lg:gap-2">
+          <ul className="hidden items-center gap-1 lg:flex xl:gap-2">
             {/* Product is a disclosure rather than a link: it reveals the
                 software name and the two verticals under it. */}
             <li
@@ -180,7 +204,7 @@ export function Navbar() {
                 aria-current={productActive ? "page" : undefined}
                 onClick={() => setMenuOpen((v) => !v)}
                 className={
-                  "relative flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[0.8125rem] font-medium transition-colors duration-300 xl:px-2.5 " +
+                  "relative flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-300 xl:px-3.5 " +
                   (productActive ? "text-foreground" : "text-muted hover:text-foreground")
                 }
               >
@@ -215,7 +239,7 @@ export function Navbar() {
                     // between the trigger and the panel.
                     className="absolute left-0 top-full pt-3"
                   >
-                    <div className="min-w-[17.5rem] rounded-card bg-surface p-2 shadow-[var(--shade-lift)]">
+                    <div className="nav-panel min-w-[17.5rem] rounded-card border border-border bg-surface p-2 shadow-[var(--shade-lift)]">
                       {/* The software name, and the way in to /product.
                           It was a plain label, which left that page with no
                           route to it anywhere on desktop: the trigger is a
@@ -273,7 +297,7 @@ export function Navbar() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={
-                      "relative block whitespace-nowrap rounded-full px-2 py-1.5 text-[0.8125rem] font-medium transition-colors duration-300 xl:px-2.5 " +
+                      "relative block whitespace-nowrap rounded-full px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-300 xl:px-3.5 " +
                       (active ? "text-foreground" : "text-muted hover:text-foreground")
                     }
                   >
@@ -291,36 +315,47 @@ export function Navbar() {
               );
             })}
           </ul>
+        </nav>
 
+        <div className="flex shrink-0 items-center gap-2">
           <div className="hidden lg:block">
-            <Button href="/contact" size="sm">Book a Demo</Button>
+            <Button href="/contact" size="md">Book a Demo</Button>
           </div>
 
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => {
+              if (!open) setMobileProduct(pathname.startsWith("/product"));
+              setOpen((v) => !v);
+            }}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface/60 transition-transform duration-300 active:scale-[0.94] lg:hidden"
+            className="relative -mr-1.5 flex h-11 w-11 shrink-0 items-center justify-center transition-transform duration-300 active:scale-[0.94] lg:hidden"
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             {/* Two bars that rotate and translate into an X, rather than
                 swapping one icon for another. Both bars sit at top-0 and move
                 on `y`, so this animates transform only and never layout. */}
-            <span aria-hidden className="relative block h-3 w-5">
+            <span aria-hidden className="relative block h-[0.875rem] w-[1.375rem]">
               <motion.span
-                className="absolute left-0 top-0 block h-[1.5px] w-5 rounded-full bg-foreground"
+                className="absolute left-0 top-0 block h-[2px] w-full rounded-full bg-foreground"
                 animate={open ? { y: 6, rotate: 45 } : { y: 0, rotate: 0 }}
                 transition={{ duration: 0.4, ease: EASE_GLIDE }}
               />
               <motion.span
-                className="absolute left-0 top-0 block h-[1.5px] w-5 rounded-full bg-foreground"
+                className="absolute left-0 top-[6px] block h-[2px] w-full rounded-full bg-foreground"
+                animate={{ opacity: open ? 0 : 1, scaleX: open ? 0.4 : 1 }}
+                transition={{ duration: 0.25, ease: EASE_GLIDE }}
+              />
+              <motion.span
+                className="absolute left-0 top-0 block h-[2px] w-full rounded-full bg-foreground"
                 animate={open ? { y: 6, rotate: -45 } : { y: 12, rotate: 0 }}
                 transition={{ duration: 0.4, ease: EASE_GLIDE }}
               />
             </span>
           </button>
-        </motion.nav>
+        </div>
+        </motion.div>
       </motion.header>
 
       <AnimatePresence>
@@ -351,24 +386,48 @@ export function Navbar() {
                         ease: EASE_OUT_EXPO,
                       }}
                     >
-                      <Link
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        aria-current={pathname === link.href ? "page" : undefined}
-                        className={
-                          "block py-4 text-2xl font-semibold tracking-tight transition-colors duration-300 " +
-                          (isActive(link.href) ? "text-accent-on-light" : "text-foreground")
-                        }
-                      >
-                        {link.label}
-                      </Link>
+                      <div className="flex items-center justify-between">
+                        <Link
+                          href={link.href}
+                          onClick={() => setOpen(false)}
+                          aria-current={pathname === link.href ? "page" : undefined}
+                          className={
+                            "block flex-1 py-3.5 text-xl font-semibold tracking-tight transition-colors duration-300 " +
+                            (isActive(link.href) ? "text-accent-on-light" : "text-foreground")
+                          }
+                        >
+                          {link.label}
+                        </Link>
+
+                        {link.href === "/product" && (
+                          <button
+                            type="button"
+                            onClick={() => setMobileProduct((v) => !v)}
+                            aria-expanded={mobileProduct}
+                            aria-controls="mobile-product"
+                            className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-muted transition-colors duration-300"
+                          >
+                            <span className="sr-only">
+                              {mobileProduct ? "Hide" : "Show"} product pages
+                            </span>
+                            <motion.span
+                              aria-hidden
+                              className="flex"
+                              animate={{ rotate: mobileProduct ? 180 : 0 }}
+                              transition={{ duration: 0.3, ease: EASE_GLIDE }}
+                            >
+                              <CaretDown size={18} weight="bold" />
+                            </motion.span>
+                          </button>
+                        )}
+                      </div>
 
                       {/* The two verticals, indented under Product rather than
                           behind a second tap. A nested flyout on touch is the
                           pattern this menu exists to avoid; on mobile there is
                           room to simply show both. */}
-                      {link.href === "/product" && (
-                        <ul className="-mt-1 flex flex-col pb-4 pl-5">
+                      {link.href === "/product" && mobileProduct && (
+                        <ul id="mobile-product" className="-mt-1 flex flex-col pb-4 pl-5">
                           {PRODUCT_VERTICALS.map((v) => (
                             <li key={v.href}>
                               <Link

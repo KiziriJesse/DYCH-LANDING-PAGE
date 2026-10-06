@@ -26,9 +26,9 @@ import { Button, TextLink } from "@/components/ui/Button";
  * column's width), so the whole rig scales as one piece.
  */
 
-const HEADLINE = "Know who is on your premises — in real time.";
+const HEADLINE = "Know who is on your premises in real time.";
 // The comp sets its headline as three hand-broken lines, not a reflow.
-const HEADLINE_LINES = ["Know who is on", "your premises —", "in real time."];
+const HEADLINE_LINES = ["Know who is on", "your premises", "in real time."];
 
 /* The family's light violet, read from the surface scope rather than restated
    as a literal: both dark scopes in globals.css define --hud-glint-rgb, so
@@ -403,9 +403,13 @@ export function FaceScanHero() {
                   className="resolve-word block lg:whitespace-nowrap"
                   initial={reduce ? false : { opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
+                  /* Short. The prerendered HTML carries opacity 0, so
+                     nothing in this column is visible until hydration has
+                     run - every tenth of a second of delay here is a tenth
+                     of a second of empty hero on a cold load. */
                   transition={{
-                    duration: 1,
-                    delay: reduce ? 0 : 0.2 + i * 0.22,
+                    duration: 0.7,
+                    delay: reduce ? 0 : 0.04 + i * 0.1,
                     ease: EASE_OUT_CUBIC,
                   }}
                 >
@@ -418,7 +422,7 @@ export function FaceScanHero() {
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: reduce ? 0 : 1.1, ease: EASE_OUT_CUBIC }}
+            transition={{ duration: 0.7, delay: reduce ? 0 : 0.34, ease: EASE_OUT_CUBIC }}
             className="reveal mt-6 max-w-[44ch] text-[clamp(1rem,1.35vw,1.625rem)] leading-[1.55] text-muted lg:mt-8"
           >
             Cards, PINs and paper registers are easy to share, forget or fake.
@@ -431,8 +435,8 @@ export function FaceScanHero() {
             initial={reduce ? false : { opacity: 0, scale: 0.86 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
-              opacity: { duration: 0.6, delay: reduce ? 0 : 1.7, ease: EASE_OUT_CUBIC },
-              scale: { duration: 0.8, delay: reduce ? 0 : 1.7, ease: EASE_OUT_BACK },
+              opacity: { duration: 0.5, delay: reduce ? 0 : 0.52, ease: EASE_OUT_CUBIC },
+              scale: { duration: 0.6, delay: reduce ? 0 : 0.52, ease: EASE_OUT_BACK },
             }}
             className="reveal mt-8 flex origin-left flex-wrap items-center gap-x-3 gap-y-4 lg:mt-11"
           >

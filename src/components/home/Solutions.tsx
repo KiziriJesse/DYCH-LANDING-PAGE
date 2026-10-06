@@ -87,7 +87,7 @@ export function Solutions() {
           </p>
         </Reveal>
 
-        <ul className="mt-16 grid gap-x-10 gap-y-0 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-16 grid gap-x-6 gap-y-0 sm:grid-cols-2 lg:grid-cols-4">
           {SECTORS.map((sector, i) => (
             <Reveal
               as="li"

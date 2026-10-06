@@ -161,7 +161,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-6 sm:grid-cols-2">
+    <form onSubmit={onSubmit} noValidate className="grid gap-4 sm:grid-cols-2">
       <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
         <label htmlFor={`${uid}-website`}>Website</label>
         <input

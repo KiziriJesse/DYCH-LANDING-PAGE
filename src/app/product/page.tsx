@@ -81,7 +81,7 @@ export default function ProductPage() {
       {/* What is true of both. The figure is here rather than on either
           vertical because recognition is the part they actually share. */}
       <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
-        <div className="mx-auto grid max-w-[1240px] items-center gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="mx-auto grid max-w-[1240px] items-center gap-10 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-6">
             <dl>
               {SHARED.map((item, i) => (
@@ -143,7 +143,7 @@ export default function ProductPage() {
             </h2>
           </Reveal>
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-12">
+          <div className="mt-14 grid gap-4 lg:grid-cols-12">
             <Reveal className="lg:col-span-7">
               <SpotlightCard href={SCHOOLS.href} className="h-full">
                 <div className="flex h-full flex-col">

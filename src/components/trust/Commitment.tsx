@@ -21,7 +21,7 @@ export function Commitment({ item, accent }: { item: CommitmentData; accent: str
   return (
     <Reveal
       as="article"
-      className="grid gap-x-12 gap-y-6 border-b border-border py-14 lg:grid-cols-12 lg:py-20"
+      className="grid gap-x-8 gap-y-4 border-b border-border py-14 lg:grid-cols-12 lg:py-20"
     >
       <div className="lg:col-span-4">
         <span

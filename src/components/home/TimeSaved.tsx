@@ -159,7 +159,7 @@ export function TimeSaved() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-12 lg:gap-8">
+        <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:gap-5">
           <Reveal delay={0.07} className="lg:col-span-7">
             <SpotlightCard className="h-full">
               <div className="flex flex-col gap-9">

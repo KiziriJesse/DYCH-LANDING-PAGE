@@ -63,7 +63,7 @@ export default function AboutPage() {
             </p>
           </Reveal>
 
-          <div className="mt-12 grid gap-x-16 gap-y-8 lg:grid-cols-12">
+          <div className="mt-12 grid gap-x-10 gap-y-5 lg:grid-cols-12">
             <Reveal delay={0.06} className="lg:col-span-6">
               <p className="max-w-[58ch] text-lg leading-relaxed text-muted">
                 Most of the tools sold to solve that were designed somewhere with
@@ -94,7 +94,7 @@ export default function AboutPage() {
             </h2>
           </Reveal>
 
-          <ul className="mx-auto mt-14 grid max-w-[64rem] gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mx-auto mt-14 grid max-w-[64rem] gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {TEAM.map((person, i) => (
               <Reveal as="li" key={person.role} delay={0.05 * i}>
                 <div className="flex h-full flex-col">
@@ -119,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
-        <div className="mx-auto grid max-w-[1240px] items-center gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="mx-auto grid max-w-[1240px] items-center gap-10 lg:grid-cols-12 lg:gap-10">
           <Reveal className="lg:col-span-5">
             <h2 className="max-w-[16ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
               Where we operate

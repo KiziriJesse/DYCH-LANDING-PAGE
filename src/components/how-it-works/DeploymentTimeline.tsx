@@ -43,7 +43,7 @@ export function DeploymentTimeline() {
           </p>
         </Reveal>
 
-        <ol className="relative mt-16 grid gap-10 md:grid-cols-4 md:gap-6">
+        <ol className="relative mt-16 grid gap-6 md:grid-cols-4 md:gap-4">
           {/* The track. Vertical on mobile, horizontal from md up. */}
           <div
             aria-hidden

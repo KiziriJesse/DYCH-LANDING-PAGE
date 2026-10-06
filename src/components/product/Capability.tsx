@@ -103,7 +103,7 @@ export function Capability({
             <Head item={item} accent={accent} centered />
           </Reveal>
 
-          <div className="mt-14 grid items-center gap-12 lg:grid-cols-12">
+          <div className="mt-14 grid items-center gap-8 lg:grid-cols-12">
             {hasMedia && (
               <Reveal delay={0.08} className="mx-auto w-full max-w-[16rem] lg:col-span-5 lg:col-start-2">
                 <Media item={item} />
@@ -122,7 +122,7 @@ export function Capability({
     return (
       <section id={item.id} className={section}>
         <div className="mx-auto max-w-[1240px]">
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="grid gap-6 lg:grid-cols-12 lg:gap-10">
             <Reveal className="lg:col-span-6">
               <Head item={item} accent={accent} />
             </Reveal>
@@ -144,7 +144,7 @@ export function Capability({
 
   return (
     <section id={item.id} className={section}>
-      <div className="mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-12 lg:gap-16">
+      <div className="mx-auto grid max-w-[1240px] items-center gap-8 lg:grid-cols-12 lg:gap-10">
         <Reveal
           className={
             mediaFirst ? "lg:col-span-6 lg:col-start-7 lg:row-start-1" : "lg:col-span-6"

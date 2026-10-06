@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   EnvelopeSimple,
@@ -20,19 +19,20 @@ export function Footer() {
     <footer className="border-t border-border bg-surface-sunk px-4 pb-10 pt-20 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1240px]">
         {/* Three columns, not a four-column link farm. */}
-        <div className="grid gap-12 md:grid-cols-12">
+        <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Link href="/" aria-label="DYCH Technologies, home" className="relative z-raise inline-block">
-              <Image
-                src="/logo/dych-lockup-v2.png"
-                alt="DYCH Technologies"
-                width={640}
-                height={464}
-                /* Wider than the old lockup sat here: this one carries the
-                   wordmark and the script tagline, which need the width to
-                   stay readable. */
-                className="h-auto w-[10.5rem]"
-              />
+            {/* The name in the site's own type rather than the lockup
+                artwork. The new lockup sets the wordmark in tan and the
+                tagline in a pale script, neither of which holds up at
+                footer size on this near-white ground. */}
+            <Link
+              href="/"
+              className="relative z-raise inline-block font-display text-xl font-medium tracking-[-0.01em] text-foreground"
+            >
+              DYCH
+              <span className="ml-2 font-normal tracking-[0.14em] text-muted">
+                TECHNOLOGIES
+              </span>
             </Link>
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
               {BRAND.blurb}

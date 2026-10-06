@@ -75,7 +75,7 @@ export default function SchoolsPage() {
       {/* The pilot, stated as a pilot. No numbers, because none exist. */}
       <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
         <div className="mx-auto max-w-[1240px]">
-          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
             <Reveal className="lg:col-span-6">
               {/* The "FIRST DEPLOYMENT" eyebrow that sat here is gone. An
                   eyebrow above a heading is a flat ban in the craft floor -
@@ -162,7 +162,7 @@ export default function SchoolsPage() {
               <Reveal
                 key={item.title}
                 delay={0.06 * i}
-                className="grid gap-x-12 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
+                className="grid gap-x-8 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
               >
                 <dt className="text-lg font-medium leading-snug text-foreground lg:col-span-5">
                   {item.title}

@@ -45,7 +45,7 @@ const POINTS = [
 export function Proof() {
   return (
     <section className="surface-violet px-4 py-28 sm:px-6 lg:px-10 lg:py-40">
-      <div className="mx-auto grid max-w-[1240px] gap-16 lg:grid-cols-12 lg:gap-12">
+      <div className="mx-auto grid max-w-[1240px] gap-10 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-6">
           <Reveal>
             <h2 className="max-w-[15ch] text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.06] tracking-[-0.035em] text-foreground">

@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { Commitment, type CommitmentData } from "@/components/trust/Commitment";
+import { TemplatePipeline } from "@/components/trust/TemplatePipeline";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -234,10 +235,30 @@ export default function SecurityAndTrustPage() {
         intro="Recognition means holding data about people, and about children in particular, so how it is captured, stored, kept apart from other customers, exported and destroyed matters more than any feature on this site. The short version: matching happens on your own hardware, and no photos leave your site. This page is written for schools because that is the strictest case; every commitment on it applies to staff and visitor data at a business too."
       />
 
-      <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">
+      {/* The commitments are split either side of the figure. It belongs
+          under the first one rather than at the end of the page: it is the
+          evidence for that commitment's central claim, and a reader who has
+          just been told no photograph is kept should see what is kept
+          instead before moving on to consent. */}
+      <section className="bg-background px-4 pt-20 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-[1240px]">
-          {COMMITMENTS.map((item, i) => (
-            <Commitment key={item.id} item={item} accent={sequenceAccent(i, COMMITMENTS.length)} />
+          <Commitment
+            item={COMMITMENTS[0]}
+            accent={sequenceAccent(0, COMMITMENTS.length)}
+          />
+        </div>
+      </section>
+
+      <TemplatePipeline />
+
+      <section className="bg-background px-4 pb-24 sm:px-6 lg:px-10 lg:pb-32">
+        <div className="mx-auto max-w-[1240px]">
+          {COMMITMENTS.slice(1).map((item, i) => (
+            <Commitment
+              key={item.id}
+              item={item}
+              accent={sequenceAccent(i + 1, COMMITMENTS.length)}
+            />
           ))}
         </div>
       </section>

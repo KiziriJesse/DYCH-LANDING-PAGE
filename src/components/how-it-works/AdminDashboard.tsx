@@ -125,7 +125,7 @@ export function AdminDashboard() {
           </p>
         </Reveal>
 
-        <div className="mt-16 grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="mt-16 grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
           <Reveal className="lg:col-span-6">
             <span
               aria-hidden
@@ -158,7 +158,7 @@ export function AdminDashboard() {
           </Reveal>
         </div>
 
-        <div className="mt-20 grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="mt-20 grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
           <Reveal className="lg:col-span-6 lg:col-start-7 lg:row-start-1">
             <span
               aria-hidden
@@ -192,7 +192,7 @@ export function AdminDashboard() {
         {/* Report cards get their own beat: it is the one part of the dashboard
             a parent sees the output of directly. */}
         <Reveal delay={0.1}>
-          <div className="mt-20 grid gap-x-12 gap-y-4 border-y border-border py-10 lg:grid-cols-12">
+          <div className="mt-20 grid gap-x-8 gap-y-4 border-y border-border py-10 lg:grid-cols-12">
             <h3 className="text-2xl leading-tight tracking-[-0.02em] text-foreground lg:col-span-5">
               And at the end of term, one action
             </h3>
@@ -214,7 +214,7 @@ export function AdminDashboard() {
             <Reveal
               key={area.title}
               delay={0.05 * i}
-              className="grid gap-x-12 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
+              className="grid gap-x-8 gap-y-3 border-b border-border py-8 lg:grid-cols-12"
             >
               <dt className="flex items-center gap-4 lg:col-span-5">
                 <span
@@ -251,7 +251,7 @@ export function AdminDashboard() {
           </h3>
         </Reveal>
 
-        <ul className="mt-8 grid gap-8 md:grid-cols-2">
+        <ul className="mt-8 grid gap-5 md:grid-cols-2">
           {GALLERY.map((shot, i) => (
             <Reveal as="li" key={shot.src} delay={0.06 * i}>
               <figure>
