@@ -16,7 +16,7 @@ import { LineFigure } from "@/components/product/LineFigure";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
-  title: "Smart Vision for Schools",
+  title: "Smart Vizion for Schools",
   description:
     "Facial-recognition entry, automatic attendance, parent alerts, boarding management, the guard app, the admin dashboard and report cards, from DYCH Technologies.",
 };
@@ -40,8 +40,10 @@ export const metadata: Metadata = {
     employer for reimbursement. Neither is a finance module, so the claim is
     gone from this page, from the homepage snapshot and from the nav.
 
-    THE SOFTWARE IS CALLED SMART VISION. The source documents call it Vision
-    One and Smart School Vision; neither name is used on this site. This page
+    THE SOFTWARE IS CALLED SMART VIZION, spelled with a z. The source
+    documents call it Vision One and Smart School Vision, and DYCH has since
+    settled on Smart Vizion; none of the older spellings is used on this
+    site, so a "Smart Vision" anywhere is a regression. This page
     is the schools vertical of that one product, and /product is the landing
     above it.
 
@@ -306,7 +308,7 @@ export default function ProductSchoolsPage() {
     <>
       <PageHeader
         title="Every part of the school day, on one record."
-        intro="Smart Vision for schools. Seven capabilities that share a single pupil record: recognition at the gate, attendance that writes itself, alerts to parents, boarding management, the screen the guard actually holds, the dashboard the office runs on, and report cards. A school can start with one and add the rest without replacing anything."
+        intro="Smart Vizion for schools. Seven capabilities that share a single pupil record: recognition at the gate, attendance that writes itself, alerts to parents, boarding management, the screen the guard actually holds, the dashboard the office runs on, and report cards. A school can start with one and add the rest without replacing anything."
       />
 
       {CAPABILITIES.map((item, i) => (

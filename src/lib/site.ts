@@ -3,8 +3,8 @@
  * the Footer and any future CTA cannot drift apart.
  *
  * The nav label is "Product", not the software name. The software is called
- * Smart Vision, and that name appears as the heading INSIDE the Product menu
- * rather than as the top-level label - because Smart Vision is one product
+ * Smart Vizion, and that name appears as the heading INSIDE the Product menu
+ * rather than as the top-level label - because Smart Vizion is one product
  * with two deployments, and the nav item has to hold both.
  *
  * The source documents call the software Vision One and Smart School Vision.
@@ -50,9 +50,9 @@ export const PRODUCT_VERTICALS = [
 
 /** Full labels, used where horizontal space is not constrained. */
 export const SITEMAP = [
-  { label: "Smart Vision", href: "/product" },
-  { label: "Smart Vision for Schools", href: "/product/schools" },
-  // PARKED: { label: "Smart Vision for Business", href: "/product/business" },
+  { label: "Smart Vizion", href: "/product" },
+  { label: "Smart Vizion for Schools", href: "/product/schools" },
+  // PARKED: { label: "Smart Vizion for Business", href: "/product/business" },
   { label: "How it works", href: "/how-it-works" },
   { label: "Security & trust", href: "/security-and-trust" },
   { label: "Schools", href: "/schools" },
@@ -84,7 +84,7 @@ export const CONTACT = {
 export const BRAND = {
   name: "DYCH Technologies",
   /** The software. One product, two deployments. */
-  product: "Smart Vision",
+  product: "Smart Vizion",
   blurb:
     "Facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda and the wider region.",
 } as const;

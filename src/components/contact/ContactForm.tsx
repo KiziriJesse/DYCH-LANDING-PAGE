@@ -280,8 +280,13 @@ export function ContactForm() {
           >
             <CheckCircle size={20} weight="fill" aria-hidden className="mt-0.5 shrink-0 text-accent-on-light" />
             <span>
-              <strong className="font-semibold">Message sent.</strong> We will
-              come back from Kampala within one working day.
+              {/* "We will come back from Kampala" was meant to place the team
+                  and instead read as though somebody were travelling. The
+                  office is named on the contact page already, so this line
+                  does the one job a confirmation has: say it arrived, and say
+                  when a reply is coming. */}
+              <strong className="font-semibold">Thank you — your message has been sent.</strong>{" "}
+              A member of our team will reply within one working day.
             </span>
           </p>
         )}

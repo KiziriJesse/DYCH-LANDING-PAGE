@@ -26,7 +26,7 @@ const plexSans = IBM_Plex_Sans({
 });
 
 const description =
-  "DYCH Technologies builds Smart Vision: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
+  "DYCH Technologies builds Smart Vizion: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
 
 /* The tab reads "DYCH Technologies" alone, and interior pages read
    "Pricing | DYCH Technologies" through the template below. The product name

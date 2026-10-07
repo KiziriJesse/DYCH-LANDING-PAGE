@@ -19,7 +19,7 @@ import { HelpTip } from "@/components/ui/HelpTip";
  * less than no number.
  */
 
-/** Seconds for one Smart Vision recognition at the entry point, confirmed by
+/** Seconds for one Smart Vizion recognition at the entry point, confirmed by
     DYCH (2026-10-05). If this is ever re-measured, change it here and in the
     assumptions line below, which states it to the reader. */
 const SCAN_SECONDS = 3;
@@ -208,7 +208,7 @@ export function TimeSaved() {
               <div className="mt-8 border-t border-border pt-5">
                 <p className="text-[0.8125rem] leading-relaxed text-faint">
                   <span className="font-semibold text-foreground">Assumptions.</span>{" "}
-                  {SCAN_SECONDS}&nbsp;seconds per Smart Vision recognition, as
+                  {SCAN_SECONDS}&nbsp;seconds per Smart Vizion recognition, as
                   measured by DYCH. One scan per person per day.{" "}
                   {DAYS_PER_WEEK}&nbsp;school days a week. Departures, second entrances and visitors are not
                   counted, so the real figure is higher.

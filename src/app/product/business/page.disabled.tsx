@@ -13,7 +13,7 @@
          Do not simply uncomment - the content is inference, not source.
       2. Uncomment the file and rename it back to `page.tsx`.
       3. Restore the "For Business" entry in PRODUCT_VERTICALS in
-         src/lib/site.ts, the second card on /product, the Smart Vision for
+         src/lib/site.ts, the second card on /product, the Smart Vizion for
          Business line in SITEMAP, and the pointer under the homepage
          product grid. Each of those carries a comment marking the spot.
 */
@@ -32,7 +32,7 @@
 // import { RecognitionFigure } from "@/components/product/RecognitionFigure";
 //
 // export const metadata: Metadata = {
-//   title: "Smart Vision for Business",
+//   title: "Smart Vizion for Business",
 //   description:
 //     "Facial-recognition access at reception, automatic staff time records, real-time alerts to a security desk, and one operations dashboard, from DYCH Technologies.",
 // };
@@ -207,7 +207,7 @@
 //     <>
 //       <PageHeader
 //         title="The same entrance, minus the paperwork behind it."
-//         intro="Smart Vision for business. Recognition at the entry point, hours recorded from that same scan, alerts to the people who need them, and one application over the top. Built on the technology already running at school gates, where an outage is normal and a system that stops when the internet does is worse than paper."
+//         intro="Smart Vizion for business. Recognition at the entry point, hours recorded from that same scan, alerts to the people who need them, and one application over the top. Built on the technology already running at school gates, where an outage is normal and a system that stops when the internet does is worse than paper."
 //       />
 //
 //       {CAPABILITIES.map((item, i) => (

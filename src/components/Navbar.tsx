@@ -28,7 +28,7 @@ const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
  * a touch device it is worse still, because a third level has no hover to
  * open it and needs a tap target that then fights the tap that navigates.
  *
- * So the hierarchy is visual rather than structural: "Smart Vision" is a
+ * So the hierarchy is visual rather than structural: "Smart Vizion" is a
  * plain heading at the top of one panel, and the two verticals are the only
  * clickable items in it. Reads the same, behaves like a single menu.
  *
@@ -39,7 +39,7 @@ const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
 const PRODUCT_MENU = {
   /* The software name, and the panel's link to the product overview. The
      verticals under it are the other two destinations. */
-  heading: "Smart Vision",
+  heading: "Smart Vizion",
   blurb: "Facial-recognition access, attendance and alerts.",
   items: PRODUCT_VERTICALS,
 };

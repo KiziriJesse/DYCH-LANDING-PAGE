@@ -17,14 +17,14 @@ import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
-  title: "Smart Vision",
+  title: "Smart Vizion",
   description:
-    "Smart Vision: facial-recognition access, automatic attendance and real-time alerts on one shared technology, for schools and for business.",
+    "Smart Vizion: facial-recognition access, automatic attendance and real-time alerts on one shared technology, for schools and for business.",
 };
 
 /*  The neutral landing above both verticals.
 
-    DYCH is a software solutions company, and Smart Vision is one product with
+    DYCH is a software solutions company, and Smart Vizion is one product with
     two deployments rather than a schools product with a business edition
     bolted on. So this page carries only what is true of BOTH - the three
     things the shared technology does - and then routes.
@@ -75,7 +75,7 @@ export default function ProductPage() {
     <>
       <PageHeader
         title="One technology, wherever the entrance is."
-        intro="Smart Vision recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. A school uses it at a gate and a business uses it at a reception desk, but underneath it is the same three things doing the same job."
+        intro="Smart Vizion recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. A school uses it at a gate and a business uses it at a reception desk, but underneath it is the same three things doing the same job."
       />
 
       {/* What is true of both. The figure is here rather than on either
