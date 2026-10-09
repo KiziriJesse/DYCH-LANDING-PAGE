@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   Export,
   EyeSlash,
@@ -13,12 +12,14 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Commitment, type CommitmentData } from "@/components/trust/Commitment";
 import { TemplatePipeline } from "@/components/trust/TemplatePipeline";
 import { sequenceAccent } from "@/lib/palette";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Security & trust",
   description:
     "How DYCH Technologies captures, stores, isolates, exports and deletes school records and biometric data.",
-};
+  path: "/security-and-trust",
+});
 
 /*  ============================================================
     STOP. READ BEFORE THIS PAGE GOES LIVE.

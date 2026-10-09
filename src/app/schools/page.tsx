@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Schools",
   description:
     "Where DYCH Technologies is deployed, what the first pilot involved, and what we will publish once a school has reported results.",
-};
+  path: "/schools",
+});
 
 /*  WHAT CHANGED HERE, AND WHY IT MATTERS.
 

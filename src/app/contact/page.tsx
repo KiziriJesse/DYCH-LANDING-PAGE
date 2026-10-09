@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   EnvelopeSimple,
   MapPin,
@@ -11,12 +10,14 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { Button } from "@/components/ui/Button";
 import { CONTACT } from "@/lib/site";
 import { sequenceAccent } from "@/lib/palette";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Contact",
   description:
     "Book a demo with DYCH Technologies, or reach the team in Kampala by phone, WhatsApp or email.",
-};
+  path: "/contact",
+});
 
 const CHANNELS: {
   Icon: typeof PhoneCall;

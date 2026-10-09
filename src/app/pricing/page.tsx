@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
@@ -7,12 +6,14 @@ import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { Button } from "@/components/ui/Button";
 import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Pricing",
   description:
     "DYCH Technologies plans: Basic, Standard and Enterprise. The figure is confirmed after a free, no-obligation site visit.",
-};
+  path: "/pricing",
+});
 
 /*  NO FIGURES ON THIS PAGE, DELIBERATELY.
 

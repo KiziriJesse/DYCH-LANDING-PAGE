@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { MapPin } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -6,12 +5,14 @@ import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { CONTACT } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About",
   description:
     "Who DYCH Technologies is, why the company exists, and where it operates from in Kampala, Uganda.",
-};
+  path: "/about",
+});
 
 const TEAM = [
   {

@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, IBM_Plex_Sans } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
+import { SITE_NAME, SITE_URL, pageMetadata, siteJsonLd } from "@/lib/seo";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -32,16 +34,25 @@ const description =
    "Pricing | DYCH Technologies" through the template below. The product name
    was in here twice over - the company name already identifies the tab, and
    the page segment already says what the page is. */
-const title = "DYCH Technologies";
+const title = SITE_NAME;
+
+/* Public measurement ID. NEXT_PUBLIC_GA_MEASUREMENT_ID overrides it at build
+   time. Loaded only in production so local dev neither sends hits nor errors
+   when the tag is absent. */
+const gaMeasurementId = (() => {
+  const id =
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-L2CHZP0M3B";
+  return /^G-[A-Z0-9]+$/.test(id) ? id : null;
+})();
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://dychtechnologies.com"),
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata({ description, path: "/" }),
   title: {
     default: title,
-    template: "%s | DYCH Technologies",
+    template: `%s | ${SITE_NAME}`,
   },
-  description,
-  applicationName: "DYCH Technologies",
+  applicationName: SITE_NAME,
   // "school fees tracking" was here. There is no fees capability in the
   // product and no source document describing one, so it is not a term this
   // site should be found for.
@@ -53,24 +64,13 @@ export const metadata: Metadata = {
     "parent notification SMS",
     "DYCH Technologies",
   ],
-  authors: [{ name: "DYCH Technologies" }],
-  openGraph: {
-    type: "website",
-    locale: "en_UG",
-    url: "https://dychtechnologies.com",
-    siteName: "DYCH Technologies",
-    title,
-    description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
+  authors: [{ name: SITE_NAME }],
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
   // The gradient's left stop. Every route opens on the violet gradient - the
   // hero, or a page header - so the browser chrome continues its dark edge.
   themeColor: "#10014a",
@@ -86,6 +86,12 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${plexSans.variable} bg-transparent text-foreground antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(siteJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
@@ -95,6 +101,9 @@ export default function RootLayout({
         {/* Mounted once here rather than per page, so it persists across
             navigation and cannot be double-rendered. */}
         <WhatsAppWidget />
+        {process.env.NODE_ENV === "production" && gaMeasurementId ? (
+          <GoogleAnalytics gaId={gaMeasurementId} />
+        ) : null}
       </body>
     </html>
   );

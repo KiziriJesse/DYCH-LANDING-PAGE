@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   DeviceMobileSpeaker,
   GraduationCap,
@@ -15,12 +14,14 @@ import { RecognitionFigure } from "@/components/product/RecognitionFigure";
 import { Button } from "@/components/ui/Button";
 import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Smart Vizion",
   description:
     "Smart Vizion: facial-recognition access, automatic attendance and real-time alerts on one shared technology, for schools and for business.",
-};
+  path: "/product",
+});
 
 /*  The neutral landing above both verticals.
 

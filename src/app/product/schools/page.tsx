@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   ChalkboardTeacher,
   Export,
@@ -14,12 +13,14 @@ import { Capability, type CapabilityData } from "@/components/product/Capability
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { LineFigure } from "@/components/product/LineFigure";
 import { sequenceAccent } from "@/lib/palette";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Smart Vizion for Schools",
   description:
-    "Facial-recognition entry, automatic attendance, parent alerts, boarding management, the guard app, the admin dashboard and report cards, from DYCH Technologies.",
-};
+    "Facial-recognition entry, automatic attendance, parent alerts, boarding management, the guard app, the admin dashboard, report cards, from DYCH Technologies.",
+  path: "/product/schools",
+});
 
 /*  ============================================================
     SOURCES AND BUILD STATUS. READ BEFORE PUBLISHING.

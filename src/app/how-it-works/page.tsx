@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { StepSpine } from "@/components/how-it-works/StepSpine";
@@ -11,11 +10,14 @@ import { DeploymentTimeline } from "@/components/how-it-works/DeploymentTimeline
    public/ - see src/components/how-it-works/AdminDashboard.tsx. */
 // import { AdminDashboard } from "@/components/how-it-works/AdminDashboard";
 
-export const metadata: Metadata = {
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
   title: "How it works",
   description:
-    "How a DYCH Technologies deployment runs: recognition at entry, attendance capture, parent alerts, analytics, the admin dashboard, and what installation involves.",
-};
+    "How a DYCH Technologies deployment runs: recognition at entry, attendance capture, parent alerts, analytics, admin dashboard, and what installation involves.",
+  path: "/how-it-works",
+});
 
 export default function HowItWorksPage() {
   return (
