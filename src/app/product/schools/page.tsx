@@ -18,7 +18,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Smart Vizion for Schools",
   description:
-    "Facial-recognition entry, automatic attendance, parent alerts, boarding management, the guard app, the admin dashboard, report cards, from DYCH Technologies.",
+    "DYCH Technologies provides facial-recognition entry, automatic attendance, parent alerts, boarding and report cards for schools.",
   path: "/product/schools",
 });
 

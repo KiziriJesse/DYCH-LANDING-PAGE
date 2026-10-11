@@ -26,7 +26,7 @@ import { Button, TextLink } from "@/components/ui/Button";
  * column's width), so the whole rig scales as one piece.
  */
 
-const HEADLINE = "Know who is on your premises in real time.";
+const HEADLINE = "DYCH Technologies. Know who is on your premises in real time.";
 // The comp sets its headline as three hand-broken lines, not a reflow.
 const HEADLINE_LINES = ["Know who is on", "your premises", "in real time."];
 
@@ -397,6 +397,9 @@ export function FaceScanHero() {
           >
             <span className="sr-only">{HEADLINE}</span>
             <span aria-hidden className="block">
+              <span className="mb-3 block text-[0.95rem] font-medium leading-none tracking-[0.04em] text-muted lg:mb-4 lg:text-[1.05rem]">
+                DYCH Technologies
+              </span>
               {HEADLINE_LINES.map((line, i) => (
                 <motion.span
                   key={line}

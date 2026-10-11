@@ -65,7 +65,7 @@ const COMMITMENTS: CommitmentData[] = [
   {
     id: "biometric-data",
     title: "Matched on your hardware. No photos leave the school.",
-    lead: "This is the commitment the rest of the page rests on, and it is the one DYCH states plainly in its own materials: all face data is matched and encrypted on-device, and no photos ever leave the school. Recognition happens on a unit on your site, not on a server somewhere else, so there is no upload of children’s faces to anywhere.",
+    lead: "This is the commitment the rest of the page rests on, and it is the one DYCH Technologies states plainly in its own materials: all face data is matched and encrypted on-device, and no photos ever leave the school. Recognition happens on a unit on your site, not on a server somewhere else, so there is no upload of children’s faces to anywhere.",
     points: [
       {
         label: "Enrolment does not keep a photograph",
@@ -89,7 +89,7 @@ const COMMITMENTS: CommitmentData[] = [
   {
     id: "consent",
     title: "Consent and control",
-    lead: "Enrolment is arranged between the school and the guardian, not between DYCH and the family. A school should hold recorded consent for every pupil before a template is created, and should be able to act on a withdrawal the same day it arrives.",
+    lead: "Enrolment is arranged between the school and the guardian, not between DYCH Technologies and the family. A school should hold recorded consent for every pupil before a template is created, and should be able to act on a withdrawal the same day it arrives.",
     points: [
       {
         label: "Consent comes first",

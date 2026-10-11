@@ -6,6 +6,7 @@ import { Solutions } from "@/components/home/Solutions";
 import { TimeSaved } from "@/components/home/TimeSaved";
 import { Proof } from "@/components/home/Proof";
 import { ClosingCta } from "@/components/home/ClosingCta";
+import { SITE_URL } from "@/lib/seo";
 
 /**
  * Eight sections, eight different layout families: media hero, text-led
@@ -31,6 +32,9 @@ import { ClosingCta } from "@/components/home/ClosingCta";
 export default function Home() {
   return (
     <>
+      {/* Hoisted into <head> by React. Set here rather than through metadata
+          so the trailing slash survives; see pageMetadata in lib/seo.ts. */}
+      <link rel="canonical" href={`${SITE_URL}/`} />
       <FaceScanHero />
       <Problem />
       <ProductSnapshot />

@@ -31,7 +31,7 @@ export function Footer() {
             >
               DYCH
               <span className="ml-2 font-normal tracking-[0.14em] text-muted">
-                TECHNOLOGIES
+                Technologies
               </span>
             </Link>
             <p className="mt-5 max-w-[38ch] text-[0.9375rem] leading-relaxed text-muted">
@@ -156,8 +156,7 @@ export function Footer() {
 
         <div className="mt-14 border-t border-border pt-6 text-sm text-faint">
           <p>
-            <span className="nums">{new Date().getFullYear()}</span> {BRAND.name}. All
-            rights reserved.
+            {`© 2026 ${BRAND.name}. All rights reserved.`}
           </p>
           {/* TODO: add Privacy and Terms links here once those routes exist.
               Omitted rather than linked to a 404. */}

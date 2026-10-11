@@ -3,6 +3,8 @@ import { BRAND, CONTACT } from "@/lib/site";
 
 export const SITE_URL = "https://dychtechnologies.com";
 export const SITE_NAME = BRAND.name;
+/** Alternates Google may fall back to when choosing a site name. */
+const SITE_ALTERNATE_NAMES = ["Dych Technologies", "dychtechnologies.com"];
 export const OG_IMAGE_PATH = "/og-image.png";
 
 const OG_IMAGE = {
@@ -22,18 +24,22 @@ export function pageMetadata({
   description,
   path,
 }: {
-  /** Segment title. The layout template appends the brand. Omit on the home page. */
+  /** Segment title. The layout template prefixes the brand. Omit on the home page. */
   title?: string;
   description: string;
   path: `/${string}` | "/";
 }): Metadata {
   const url = path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path}`;
-  const socialTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+  const socialTitle = SITE_NAME;
 
   return {
     ...(title ? { title } : {}),
     description,
-    alternates: { canonical: url },
+    /* Next resolves a root canonical to the bare origin, dropping the
+       trailing slash, so the home page renders its own <link rel="canonical">
+       (see app/page.tsx). Skipping it here also keeps the layout from handing
+       the home canonical down to a route that forgets to set one. */
+    ...(path === "/" ? {} : { alternates: { canonical: url } }),
     openGraph: {
       type: "website",
       locale: "en_UG",
@@ -58,9 +64,9 @@ export const siteJsonLd = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "Dych Technologies",
-      alternateName: SITE_NAME,
-      url: SITE_URL,
+      name: SITE_NAME,
+      alternateName: SITE_ALTERNATE_NAMES,
+      url: `${SITE_URL}/`,
       logo: `${SITE_URL}/logo/dych-lockup-on-white.png`,
       image: `${SITE_URL}${OG_IMAGE_PATH}`,
       email: CONTACT.email.display,
@@ -75,9 +81,9 @@ export const siteJsonLd = {
     {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
-      name: "Dych Technologies",
-      alternateName: SITE_NAME,
-      url: SITE_URL,
+      name: SITE_NAME,
+      alternateName: SITE_ALTERNATE_NAMES,
+      url: `${SITE_URL}/`,
       publisher: { "@id": `${SITE_URL}/#organization` },
     },
   ],

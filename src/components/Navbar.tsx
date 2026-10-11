@@ -157,21 +157,20 @@ export function Navbar() {
                  this height neither is legible - the mark alone is what
                  reads, with the name set in the site's own type beside it. */
               src="/logo/dych-mark-v2.png"
-              alt=""
-              aria-hidden
+              alt="DYCH Technologies"
               width={320}
               height={222}
               priority
               className="h-10 w-auto lg:h-12"
             />
             {/* Both words at one size, the way the supplied lockup sets
-                them. TECHNOLOGIES keeps its wider tracking and lighter
+                them. The second word keeps its wider tracking and lighter
                 weight, which is what separates the two without shrinking
                 either. */}
             <span className="font-display text-[1rem] font-medium leading-none tracking-[-0.01em] text-foreground sm:text-[1.125rem]">
               DYCH
               <span className="ml-1.5 font-normal tracking-[0.12em] text-muted sm:ml-2 sm:tracking-[0.14em]">
-                TECHNOLOGIES
+                Technologies
               </span>
             </span>
           </Link>

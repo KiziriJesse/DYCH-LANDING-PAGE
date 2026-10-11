@@ -19,7 +19,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Smart Vizion",
   description:
-    "Smart Vizion: facial-recognition access, automatic attendance and real-time alerts on one shared technology, for schools and for business.",
+    "DYCH Technologies builds Smart Vizion: facial-recognition access, automatic attendance and real-time alerts for schools and business.",
   path: "/product",
 });
 

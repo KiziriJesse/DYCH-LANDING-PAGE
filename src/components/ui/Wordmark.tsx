@@ -39,8 +39,7 @@ export function Wordmark({
     <span className="flex items-center gap-3">
       <Image
         src="/logo/dych-mark-v2.png"
-        alt=""
-        aria-hidden
+        alt="DYCH Technologies"
         width={320}
         height={222}
         priority={priority}
@@ -50,7 +49,7 @@ export function Wordmark({
       />
       <span className={`${wordsClass} flex-col whitespace-nowrap leading-none`}>
         <span className={`${textClass} font-bold tracking-[-0.02em] text-foreground`}>
-          DYCH TECHNOLOGIES
+          DYCH Technologies
         </span>
         {subline && (
           <span

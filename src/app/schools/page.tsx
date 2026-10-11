@@ -70,7 +70,7 @@ export default function SchoolsPage() {
     <>
       <PageHeader
         title="We are early, and we would rather say so."
-        intro="This is the page where most suppliers would show you a wall of school badges. We are not going to invent one. Here is where DYCH actually is, what the first deployment involved, and what we will publish the moment a school has reported it."
+        intro="This is the page where most suppliers would show you a wall of school badges. We are not going to invent one. Here is where DYCH Technologies actually is, what the first deployment involved, and what we will publish the moment a school has reported it."
       />
 
       {/* The pilot, stated as a pilot. No numbers, because none exist. */}

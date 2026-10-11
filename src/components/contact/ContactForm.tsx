@@ -125,7 +125,7 @@ export function ContactForm() {
             email,
             message: values.message.trim(),
             _replyto: email,
-            _subject: `DYCH website enquiry from ${name} (${company})`,
+            _subject: `DYCH Technologies website enquiry from ${name} (${company})`,
             _template: "box",
             _captcha: "false",
           }),

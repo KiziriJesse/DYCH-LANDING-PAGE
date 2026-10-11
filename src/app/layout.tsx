@@ -30,11 +30,9 @@ const plexSans = IBM_Plex_Sans({
 const description =
   "DYCH Technologies builds Smart Vizion: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
 
-/* The tab reads "DYCH Technologies" alone, and interior pages read
-   "Pricing | DYCH Technologies" through the template below. The product name
-   was in here twice over - the company name already identifies the tab, and
-   the page segment already says what the page is. */
-const title = SITE_NAME;
+/* The tab reads "DYCH Technologies | Facial recognition, attendance and alerts"
+   on the home page, and "DYCH Technologies | Pricing" on interior pages. */
+const title = `${SITE_NAME} | Facial recognition, attendance and alerts`;
 
 /* Public measurement ID. NEXT_PUBLIC_GA_MEASUREMENT_ID overrides it at build
    time. Loaded only in production so local dev neither sends hits nor errors
@@ -50,7 +48,7 @@ export const metadata: Metadata = {
   ...pageMetadata({ description, path: "/" }),
   title: {
     default: title,
-    template: `%s | ${SITE_NAME}`,
+    template: `${SITE_NAME} | %s`,
   },
   applicationName: SITE_NAME,
   // "school fees tracking" was here. There is no fees capability in the
@@ -63,6 +61,7 @@ export const metadata: Metadata = {
     "staff time tracking Africa",
     "parent notification SMS",
     "DYCH Technologies",
+    "Dych Technologies",
   ],
   authors: [{ name: SITE_NAME }],
   robots: { index: true, follow: true },

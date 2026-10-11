@@ -209,7 +209,7 @@ export function TimeSaved() {
                 <p className="text-[0.8125rem] leading-relaxed text-faint">
                   <span className="font-semibold text-foreground">Assumptions.</span>{" "}
                   {SCAN_SECONDS}&nbsp;seconds per Smart Vizion recognition, as
-                  measured by DYCH. One scan per person per day.{" "}
+                  measured by DYCH Technologies. One scan per person per day.{" "}
                   {DAYS_PER_WEEK}&nbsp;school days a week. Departures, second entrances and visitors are not
                   counted, so the real figure is higher.
                 </p>
@@ -219,7 +219,7 @@ export function TimeSaved() {
                     subtracts the {SCAN_SECONDS} seconds a scan takes, and
                     multiplies what is left by the number of people arriving.
                     It is staff and pupil time returned to the day, not money —
-                    DYCH would need far more customer data before putting a
+                    DYCH Technologies would need far more customer data before putting a
                     shilling figure on it.
                   </HelpTip>
                 </div>

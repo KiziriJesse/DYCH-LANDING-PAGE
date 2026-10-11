@@ -34,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
 
     return {
-      url: path === "/" ? SITE_URL : `${SITE_URL}${path}`,
+      url: path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path}`,
       lastModified: LAST_MODIFIED,
       changeFrequency: meta.changeFrequency,
       priority: meta.priority,
