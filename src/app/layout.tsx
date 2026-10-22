@@ -5,13 +5,6 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
-import {
-  SITE_NAME,
-  SITE_URL,
-  googleSiteNameJsonLd,
-  pageMetadata,
-  siteJsonLd,
-} from "@/lib/seo";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -36,9 +29,13 @@ const plexSans = IBM_Plex_Sans({
 const description =
   "DYCH Technologies builds Smart Vizion: facial-recognition entry, automatic attendance and real-time alerts, for schools and for business across Uganda.";
 
-/* The tab reads "DYCH Technologies | Facial recognition, attendance and alerts"
-   on the home page, and "DYCH Technologies | Pricing" on interior pages. */
-const title = `${SITE_NAME} | Facial recognition, attendance and alerts`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "DYCH Technologies",
+  alternateName: ["DYCH", "Dych Technologies"],
+  url: "https://dychtechnologies.com/",
+};
 
 /* Public measurement ID. NEXT_PUBLIC_GA_MEASUREMENT_ID overrides it at build
    time. Loaded only in production so local dev neither sends hits nor errors
@@ -50,16 +47,20 @@ const gaMeasurementId = (() => {
 })();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  ...pageMetadata({ description, path: "/" }),
+  metadataBase: new URL("https://dychtechnologies.com"),
   title: {
-    default: title,
-    template: `${SITE_NAME} | %s`,
+    default: "DYCH Technologies",
+    template: "%s | DYCH Technologies",
   },
-  applicationName: SITE_NAME,
-  // "school fees tracking" was here. There is no fees capability in the
-  // product and no source document describing one, so it is not a term this
-  // site should be found for.
+  description,
+  openGraph: {
+    siteName: "DYCH Technologies",
+    url: "https://dychtechnologies.com",
+  },
+  alternates: {
+    canonical: "https://dychtechnologies.com",
+  },
+  applicationName: "DYCH Technologies",
   keywords: [
     "school security Uganda",
     "facial recognition attendance",
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
     "DYCH Technologies",
     "Dych Technologies",
   ],
-  authors: [{ name: SITE_NAME }],
+  authors: [{ name: "DYCH Technologies" }],
   robots: { index: true, follow: true },
 };
 
@@ -88,23 +89,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(googleSiteNameJsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(siteJsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      </head>
       <body
         className={`${spaceGrotesk.variable} ${plexSans.variable} bg-transparent text-foreground antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
