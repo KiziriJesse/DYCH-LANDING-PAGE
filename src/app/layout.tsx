@@ -5,7 +5,13 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
-import { SITE_NAME, SITE_URL, pageMetadata, siteJsonLd } from "@/lib/seo";
+import {
+  SITE_NAME,
+  SITE_URL,
+  googleSiteNameJsonLd,
+  pageMetadata,
+  siteJsonLd,
+} from "@/lib/seo";
 
 /* Two intentional faces, ported from the prototype on `main`: a characterful
    display grotesk over a legible humanist body face. Replaces Geist Sans and
@@ -82,15 +88,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${spaceGrotesk.variable} ${plexSans.variable} bg-transparent text-foreground antialiased`}
-      >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(googleSiteNameJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(siteJsonLd).replace(/</g, "\\u003c"),
           }}
         />
+      </head>
+      <body
+        className={`${spaceGrotesk.variable} ${plexSans.variable} bg-transparent text-foreground antialiased`}
+      >
         <a href="#main" className="skip-link">
           Skip to content
         </a>

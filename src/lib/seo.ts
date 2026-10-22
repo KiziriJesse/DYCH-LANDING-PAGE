@@ -3,8 +3,17 @@ import { BRAND, CONTACT } from "@/lib/site";
 
 export const SITE_URL = "https://dychtechnologies.com";
 export const SITE_NAME = BRAND.name;
-/** Alternates Google may fall back to when choosing a site name. */
-const SITE_ALTERNATE_NAMES = ["Dych Technologies", "dychtechnologies.com"];
+/** Alternates Google may use when choosing a site name in search results. */
+export const SITE_ALTERNATE_NAMES = ["DYCH", "Dych Technologies"] as const;
+
+/** Standalone WebSite schema for Google site name display (Search Central). */
+export const googleSiteNameJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "DYCH Technologies",
+  alternateName: [...SITE_ALTERNATE_NAMES],
+  url: `${SITE_URL}/`,
+} as const;
 export const OG_IMAGE_PATH = "/og-image.png";
 
 const OG_IMAGE = {
@@ -44,7 +53,7 @@ export function pageMetadata({
       type: "website",
       locale: "en_UG",
       url,
-      siteName: SITE_NAME,
+      siteName: "DYCH Technologies",
       title: socialTitle,
       description,
       images: [OG_IMAGE],
