@@ -19,7 +19,7 @@ const TEAM = [
     name: "Grace Ddamulira",
     role: "Founder and Managing Director",
     photo: "Grace Ddamulira, Founder and Managing Director",
-    src: "/founder.png",
+    src: "/founder.webp",
     mediaClassName:
       "surface-violet",
     imageClassName: "object-cover object-[38%_center]",
@@ -33,13 +33,13 @@ const TEAM = [
     name: "Saida Salim",
     role: "Sales Manager",
     photo: "Saida Salim, Sales Manager",
-    src: "/sales.jpeg",
+    src: "/sales.jpg",
   },
   {
     name: "John Jesse Kiziri",
     role: "Deployment and support",
     photo: "John Jesse Kiziri, Deployment and support",
-    src: "/deployment.JPG",
+    src: "/deployment.jpg",
   },
 ];
 

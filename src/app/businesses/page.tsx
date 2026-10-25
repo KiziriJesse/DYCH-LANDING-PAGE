@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { sequenceAccent } from "@/lib/palette";
 
 export const metadata: Metadata = {
@@ -80,7 +81,23 @@ export default function BusinessesPage() {
         intro="Most workplaces already manage employees, contractors and visitors through separate books and habits that each work until the week somebody needs to check one. DYCH covers the physical moments at an entrance: a visitor arriving, a shift starting, a door that should only open for some people. Nothing more, and nothing you have to run a project to adopt."
       />
 
-      <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
+      {/* The page had no imagery at all, which made a workplace reader work
+          harder than a school one to picture the thing. A reception desk is
+          the moment this page is about, so it opens on one. */}
+      <section className="bg-background px-4 pt-16 sm:px-6 lg:px-10">
+        <div className="mx-auto max-w-[1240px]">
+          <Reveal>
+            <PlaceholderMedia
+              description="A visitor being logged at a reception desk on a handheld tablet"
+              src="/photos/visitor-log.jpg"
+              aspect="aspect-[16/9]"
+              imageClassName="object-cover object-center"
+            />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-background px-4 pb-24 pt-20 sm:px-6 lg:px-10 lg:pb-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[24ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">

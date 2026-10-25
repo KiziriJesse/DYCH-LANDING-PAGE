@@ -34,7 +34,7 @@ const FEATURES: Feature[] = [
     Icon: ScanSmiley,
     span: "md:col-span-8 md:row-span-2",
     shape: "lead" as const,
-    image: "/school-gate.png",
+    image: "/school-gate.jpg",
     imageAlt:
       "Students walking through a school gate as a camera on the post identifies them",
     imageClassName: "object-cover object-[42%_center]",

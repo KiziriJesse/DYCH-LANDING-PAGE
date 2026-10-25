@@ -165,7 +165,12 @@ export const CAPABILITIES: CapabilityData[] = [
     media: "a phone showing a parent alert as it arrives, with the pupil thumbnail",
     mediaAspect: "aspect-[9/19]",
     renderMedia: () => (
-      <LineFigure src="/figures/parent-alert.png" width={901} height={1844} />
+      <PlaceholderMedia
+        description="A parent's phone showing a notification that their child has checked in"
+        src="/photos/parent-alert.jpg"
+        aspect="aspect-[9/19]"
+        imageClassName="object-cover object-center"
+      />
     ),
     Icon: PaperPlaneTilt,
     layout: "stage",
@@ -242,7 +247,12 @@ export const CAPABILITIES: CapabilityData[] = [
       "the guard tablet at the gate showing an approved pass decision",
     mediaAspect: "aspect-[4/3]",
     renderMedia: () => (
-      <LineFigure src="/figures/guard-tablet.png" width={1093} height={890} />
+      <PlaceholderMedia
+        description="A guard at the gate watching the camera view on a handheld tablet"
+        src="/photos/guard-tablet.jpg"
+        aspect="aspect-[4/3]"
+        imageClassName="object-cover object-[30%_center]"
+      />
     ),
     Icon: Devices,
     layout: "split-left",
