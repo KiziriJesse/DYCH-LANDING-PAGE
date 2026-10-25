@@ -74,7 +74,7 @@ const FAQS = [
   {
     question: "Do we need new cameras?",
     answer:
-      "Not always. A built-in webcam, USB cameras, or the NVR or DVR you already have can all feed the system over the network. Where cameras are needed we supply them, along with the machine that does the matching and the tablet for the door, as part of the plan rather than as a separate invoice. What each site needs is what the visit is for.",
+      "Not always. A built-in webcam, USB cameras, or the NVR or DVR you already have can all feed the system over the network. Where something is missing we tell you what the site needs and quote for it, and if you ask us to we will recommend what to buy and help you get hold of it. We are not selling you the hardware. Working out what you already have is what the visit is for.",
   },
   {
     question: "Does it only work for schools?",
@@ -89,7 +89,7 @@ const FAQS = [
   {
     question: "Do we need reliable internet?",
     answer:
-      "No. Matching runs on your own hardware and records are written locally, so the gate and the register keep working through an outage. Connectivity is what carries messages to parents and syncs records afterwards.",
+      "No. Matching runs on your own hardware and the attendance record is written locally, so the gate and the register keep working through an outage. The camera supplies the picture a match is made from; the system is not a video recorder and does not sit there keeping recordings of your entrance. Connectivity is what carries messages to parents and syncs the record afterwards.",
   },
   {
     question: "Why is SMS priced separately?",
@@ -97,14 +97,9 @@ const FAQS = [
       "Push notifications cost nothing per message, so they are the primary channel. SMS exists so parents without a smartphone are still reached, and it carries a real per-message cost. Charging for it honestly is better than folding it into a flat fee and quietly rationing it.",
   },
   {
-    question: "How long is the commitment?",
-    answer:
-      "[Placeholder: confirm contract length and notice period.] The intent is that a school can start on one gate for a term and decide afterwards, rather than signing for a year before seeing it work.",
-  },
-  {
     question: "What happens if something breaks mid-term?",
     answer:
-      "[Placeholder: confirm response times and whether cover is on site or remote.] Support reaches us on the same phone and WhatsApp numbers as everything else, and the person who answers has usually walked your site.",
+      "Support reaches us on the same phone and WhatsApp numbers as everything else, and the person who answers has usually walked your site.",
   },
 ];
 

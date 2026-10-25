@@ -181,7 +181,7 @@ const COMMITMENTS: CommitmentData[] = [
       },
       {
         label: "Ending a contract",
-        body: "On request we delete the school’s data and confirm in writing what was removed and when.",
+        body: "The records belong to the school and stay with the school. On request we export everything in a readable format, hand it over, and uninstall the system from site. We then remove what was held on our side and confirm in writing what went and when.",
       },
       {
         label: "A single pupil leaving",
