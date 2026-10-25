@@ -23,7 +23,7 @@ const POINTS = [
     confirmed deployment count, and no school has given a quotation.
 
     Rather than leave a proof section with nothing in it, the proof is now the
-    thing DYCH can actually stand behind today — the engineering commitment
+    thing DYCH can actually stand behind today: the engineering commitment
     stated verbatim in its own case-study deck, "all face data is matched and
     encrypted on-device, no photos ever leave the school." That is a claim the
     company makes about itself, not a claim borrowed from a customer who has

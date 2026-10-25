@@ -3,7 +3,7 @@ import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import type { ComponentType, ReactNode } from "react";
 
 /**
- * Button — restyled from main's ghost/outline primitive.
+ * Button, restyled from main's ghost/outline primitive.
  * Spec: ghost at rest, fill only on hover. DYCH purple tokens instead of
  * main's reference blue (#0071e3 / #006ad6 / #2d87e2).
  *

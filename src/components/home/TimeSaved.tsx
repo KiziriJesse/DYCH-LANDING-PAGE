@@ -218,7 +218,7 @@ export function TimeSaved() {
                     It takes the seconds a manual check-in costs you today,
                     subtracts the {SCAN_SECONDS} seconds a scan takes, and
                     multiplies what is left by the number of people arriving.
-                    It is staff and pupil time returned to the day, not money —
+                    It is staff and pupil time returned to the day, not money.
                     DYCH Technologies would need far more customer data before putting a
                     shilling figure on it.
                   </HelpTip>

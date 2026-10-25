@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { StepSpine } from "@/components/how-it-works/StepSpine";
+import { OfflineBehaviour } from "@/components/how-it-works/OfflineBehaviour";
 import { DeploymentTimeline } from "@/components/how-it-works/DeploymentTimeline";
 /* The operations-console section is withdrawn at the client's instruction:
    it described the software screen by screen and showed captures of it, and
@@ -36,6 +37,7 @@ export default function HowItWorksPage() {
           and the join needs no filler. */}
       <StepSpine />
       {/* <AdminDashboard /> */}
+      <OfflineBehaviour />
       <DeploymentTimeline />
 
       <CtaBand

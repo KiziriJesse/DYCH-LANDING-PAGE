@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Pricing",
   description:
-    "DYCH Technologies plans: Basic, Standard and Enterprise. The figure is confirmed after a free, no-obligation site visit.",
+    "DYCH Technologies plans: Core, Secure and Complete. The figure is confirmed after a free, no-obligation site visit.",
   path: "/pricing",
 });
 
@@ -29,7 +29,7 @@ export const metadata = pageMetadata({
     the spec is explicit that it must never be absorbed into a flat fee.  */
 const PLANS = [
   {
-    name: "Basic",
+    name: "Core",
     tagline: "The gate, the register and the parent line. Where most schools start.",
     features: [
       "Gate camera, matched on-device",
@@ -41,10 +41,10 @@ const PLANS = [
     recommended: false,
   },
   {
-    name: "Standard",
+    name: "Secure",
     tagline: "Adds the Guard App, so the gate stops running on paper entirely.",
     features: [
-      "Everything in Basic",
+      "Everything in Core",
       "Guard App",
       "Authorised pickup",
       "Digital visitor log",
@@ -54,10 +54,10 @@ const PLANS = [
     recommended: true,
   },
   {
-    name: "Enterprise",
+    name: "Complete",
     tagline: "More than one site, or a school that needs us closer than a phone line.",
     features: [
-      "Everything in Standard",
+      "Everything in Secure",
       "Multi-site coverage",
       "Dedicated support contact",
       "Custom integrations",
@@ -79,7 +79,7 @@ const FAQS = [
   {
     question: "Does it only work for schools?",
     answer:
-      "No. The same recognition, attendance, entry and visitor tools apply anywhere you need to know who came in and when — offices, factories, warehouses, clinics, hotels, estates, places of worship. Schools are one sector we serve, and the one we have the deepest documentation for.",
+      "No. The same recognition, attendance, entry and visitor tools apply anywhere you need to know who came in and when. Offices, factories, warehouses, clinics, hotels, estates, places of worship. Schools are one sector we serve, and the one we have the deepest documentation for.",
   },
   {
     question: "What happens if someone is not enrolled?",

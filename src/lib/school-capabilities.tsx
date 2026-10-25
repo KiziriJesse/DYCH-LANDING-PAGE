@@ -7,21 +7,19 @@ import {
   PaperPlaneTilt,
   ScanSmiley,
 } from "@phosphor-icons/react/dist/ssr";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { CtaBand } from "@/components/ui/CtaBand";
-import { Capability, type CapabilityData } from "@/components/product/Capability";
+import { type CapabilityData } from "@/components/product/Capability";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { LineFigure } from "@/components/product/LineFigure";
-import { sequenceAccent } from "@/lib/palette";
-import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({
-  title: "Smart Vizion for Schools",
-  description:
-    "DYCH Technologies provides facial-recognition entry, automatic attendance, parent alerts, boarding and report cards for schools.",
-  path: "/product/schools",
-});
-
+/**
+ * The seven Smart Vizion capabilities a school buys.
+ *
+ * THE TWO SCHOOLS PAGES WERE MERGED. /product/schools described the schools
+ * deployment and /schools described the pilot. A head teacher arriving from
+ * either link wanted the same page, and keeping both meant every change had
+ * to be made twice. The capabilities live here now, /schools renders them,
+ * and the old route redirects.
+ */
 /*  ============================================================
     SOURCES AND BUILD STATUS. READ BEFORE PUBLISHING.
 
@@ -42,9 +40,9 @@ export const metadata = pageMetadata({
     gone from this page, from the homepage snapshot and from the nav.
 
     THE SOFTWARE IS CALLED SMART VIZION, spelled with a z. The source
-    documents call it Vision One and Smart School Vision, and DYCH has since
-    settled on Smart Vizion; none of the older spellings is used on this
-    site, so a "Smart Vision" anywhere is a regression. This page
+    documents spell it with an s, and use the older names Vision One and
+    Smart School Vision. DYCH has since settled on Smart Vizion, so any
+    s-spelling on this site is a regression rather than a variant. This page
     is the schools vertical of that one product, and /product is the landing
     above it.
 
@@ -55,7 +53,7 @@ export const metadata = pageMetadata({
 
     Everything on THIS page is document-backed.
     ============================================================ */
-const CAPABILITIES: CapabilityData[] = [
+export const CAPABILITIES: CapabilityData[] = [
   {
     // STATUS: shipped. Gate recognition is the pilot's core, Week 1-2.
     id: "security",
@@ -303,28 +301,3 @@ const CAPABILITIES: CapabilityData[] = [
     layout: "split-right",
   },
 ];
-
-export default function ProductSchoolsPage() {
-  return (
-    <>
-      <PageHeader
-        title="Every part of the school day, on one record."
-        intro="Smart Vizion for schools. Seven capabilities that share a single pupil record: recognition at the gate, attendance that writes itself, alerts to parents, boarding management, the screen the guard actually holds, the dashboard the office runs on, and report cards. A school can start with one and add the rest without replacing anything."
-      />
-
-      {CAPABILITIES.map((item, i) => (
-        <Capability
-          key={item.id}
-          item={item}
-          tone={i % 2 === 0 ? "base" : "raised"}
-          accent={sequenceAccent(i, CAPABILITIES.length)}
-        />
-      ))}
-
-      <CtaBand
-        title="Start with the gate, or start with the register."
-        body="Most schools begin with one entry point and add the rest a term later. Tell us where the pressure is and we will scope that first."
-      />
-    </>
-  );
-}

@@ -12,7 +12,7 @@ const HeroHud = dynamic(
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
-const HEADLINE = "Know who is on your premises — in real time.";
+const HEADLINE = "Know who is on your premises in real time.";
 
 /**
  * Full-bleed HUD hero. Copy is pinned to the far left; the Three.js scene

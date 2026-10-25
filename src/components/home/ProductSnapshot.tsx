@@ -30,7 +30,7 @@ const FEATURES: Feature[] = [
   {
     title: "Recognition at the entrance",
     body: "A face matched against your own enrolled people as they walk in, so you know who is on the premises and who is not, without anyone walking a clipboard to the perimeter.",
-    href: "/product/schools#security",
+    href: "/schools#security",
     Icon: ScanSmiley,
     span: "md:col-span-8 md:row-span-2",
     shape: "lead" as const,
@@ -42,7 +42,7 @@ const FEATURES: Feature[] = [
   {
     title: "Attendance and timekeeping",
     body: "Arrival and departure recorded as they happen, against your own hours and late rules. No manual register, so no transcription errors to chase at the end of the month.",
-    href: "/product/schools#attendance",
+    href: "/schools#attendance",
     Icon: ListChecks,
     span: "md:col-span-4",
     shape: "standard" as const,
@@ -50,7 +50,7 @@ const FEATURES: Feature[] = [
   {
     title: "Alerts to the right people",
     body: "A notification carrying the photo, so whoever gets it can see the match was right. You set how soon after the scan it goes; SMS and WhatsApp follow where it goes unopened.",
-    href: "/product/schools#communication",
+    href: "/schools#communication",
     Icon: PaperPlaneTilt,
     span: "md:col-span-4",
     shape: "standard" as const,
@@ -60,8 +60,8 @@ const FEATURES: Feature[] = [
     // feature. The Guard App takes the slot, matching the deck's own list of
     // what a school is buying: camera, software, parent app, guard app.
     title: "The screen on the door",
-    body: "One tablet instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival — allow, late, stop, unknown — and keeps working when the connection drops.",
-    href: "/product/schools#guard-app",
+    body: "One tablet instead of a register, a visitor book and a pass list. It tells the person on duty what to do for each arrival: allow, late, stop or unknown, and keeps working when the connection drops.",
+    href: "/schools#guard-app",
     Icon: Devices,
     span: "md:col-span-12",
     shape: "wide" as const,

@@ -2,12 +2,15 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
+import { Capability } from "@/components/product/Capability";
+import { CAPABILITIES } from "@/lib/school-capabilities";
+import { sequenceAccent } from "@/lib/palette";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Schools",
+  title: "Smart Vizion for Schools",
   description:
-    "Where DYCH Technologies is deployed, what the first pilot involved, and what we will publish once a school has reported results.",
+    "Recognition at the gate, attendance that fills itself, alerts to parents, boarding, the guard's screen, the admin dashboard and report cards, from DYCH Technologies.",
   path: "/schools",
 });
 
@@ -20,8 +23,8 @@ export const metadata = pageMetadata({
     The 100+ figure was inherited from the previous site and has never been
     checked against a real deployment count. The only school reference in any
     DYCH document is the case-study deck, and in that deck the school name is
-    literally "[School name]" and all three result figures — students enrolled,
-    time saved daily, attendance accuracy — are blank underscores waiting to be
+    literally "[School name]" and all three result figures (students enrolled,
+    time saved daily, attendance accuracy) are blank underscores waiting to be
     filled in. So there is no verified count, no named reference school, and no
     reported outcome to quote.
 
@@ -41,7 +44,7 @@ export const metadata = pageMetadata({
     Until all four are done, nothing here should be presented as a result.  */
 
 /*  The one claim the deck does make about the problem, in its own words:
-    "manual registers can cost up to 20 minutes of class time a day — and still
+    "manual registers can cost up to 20 minutes of class time a day, and still
     can't confirm who collected a child." Kept as the framing of the challenge,
     not restated as a measured outcome at any particular school.  */
 const PILOT_METRICS = [
@@ -69,12 +72,40 @@ export default function SchoolsPage() {
   return (
     <>
       <PageHeader
-        title="We are early, and we would rather say so."
-        intro="This is the page where most suppliers would show you a wall of school badges. We are not going to invent one. Here is where DYCH Technologies actually is, what the first deployment involved, and what we will publish the moment a school has reported it."
+        title="From the gate to the end of term."
+        intro="A school day creates the same handful of moments where accountability matters: a pupil arrives, a register has to be right, a parent needs telling, somebody leaves early, and at the end of it all a head teacher needs a record that holds up. Smart Vizion joins those moments to one pupil record. Seven capabilities, which a school can start with one of and add to without replacing anything."
       />
 
+      {/* The capabilities first, then the honest account of how early DYCH
+          is. A head teacher arriving here wants to know what the thing does
+          before they are told how new the company is, and the pilot section
+          below reads as candour rather than as an apology once they have
+          seen the product. */}
+      {CAPABILITIES.map((item, i) => (
+        <Capability
+          key={item.id}
+          item={item}
+          tone={i % 2 === 0 ? "base" : "raised"}
+          accent={sequenceAccent(i, CAPABILITIES.length)}
+        />
+      ))}
+
+      <section className="bg-surface px-4 pt-24 sm:px-6 lg:px-10 lg:pt-32">
+        <div className="mx-auto max-w-[1240px]">
+          <h2 className="max-w-[24ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+            We are early, and we would rather say so.
+          </h2>
+          <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted">
+            This is the part of the page where most suppliers would show you a
+            wall of school badges. We are not going to invent one. Here is
+            where DYCH actually is, what the first deployment involved, and
+            what we will publish the moment a school has reported it.
+          </p>
+        </div>
+      </section>
+
       {/* The pilot, stated as a pilot. No numbers, because none exist. */}
-      <section className="bg-background px-4 pb-24 pt-16 sm:px-6 lg:px-10 lg:pb-32">
+      <section className="bg-surface px-4 pb-24 pt-12 sm:px-6 lg:px-10 lg:pb-32">
         <div className="mx-auto max-w-[1240px]">
           <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
             <Reveal className="lg:col-span-6">

@@ -6,18 +6,40 @@ import { PaperPlaneTilt, Warning, CheckCircle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { CONTACT } from "@/lib/site";
 
-type Field = "name" | "company" | "email" | "message";
+type Field = "name" | "company" | "phone" | "email" | "product" | "message";
 type Errors = Partial<Record<Field, string>>;
 
+const EMPTY: Record<Field, string> = {
+  name: "",
+  company: "",
+  phone: "",
+  email: "",
+  product: "",
+  message: "",
+};
+
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/* The product named here is how an enquiry gets routed, so the options are
+   the three things DYCH sells rather than free text. "Not sure yet" is
+   deliberately on the list: an enquiry from somebody who has not worked out
+   which product they need is still a good enquiry, and leaving them no
+   honest answer only pushes them into guessing. */
+const PRODUCTS = [
+  "Smart Vizion",
+  "Visitor Management",
+  "Staff Attendance",
+  "Not sure yet",
+] as const;
 
 const FIELDS: {
   id: Field;
   label: string;
   helper?: string;
-  type: "text" | "email" | "textarea";
+  type: "text" | "tel" | "email" | "select" | "textarea";
   autoComplete: string;
   spellCheck?: boolean;
+  optional?: boolean;
 }[] = [
   { id: "name", label: "Your name", type: "text", autoComplete: "name" },
   {
@@ -26,16 +48,35 @@ const FIELDS: {
     type: "text",
     autoComplete: "organization",
   },
+  /* Phone before email, and required where email is not. A WhatsApp number
+     is the channel most enquiries here actually continue on, and making an
+     email address the only way to reply loses the people who do not use one
+     day to day. */
   {
-    id: "email",
-    label: "Email",
-    type: "email",
-    autoComplete: "email",
+    id: "phone",
+    label: "Phone or WhatsApp",
+    type: "tel",
+    autoComplete: "tel",
     spellCheck: false,
   },
   {
+    id: "email",
+    label: "Work email",
+    type: "email",
+    autoComplete: "email",
+    spellCheck: false,
+    optional: true,
+  },
+  {
+    id: "product",
+    label: "Which product is this about?",
+    type: "select",
+    autoComplete: "off",
+    optional: true,
+  },
+  {
     id: "message",
-    label: "What would you like to solve?",
+    label: "What would you like to improve?",
     helper:
       "How many people come through, how attendance or hours are recorded today, and anything already installed at the entrance.",
     type: "textarea",
@@ -48,11 +89,14 @@ function validate(values: Record<Field, string>): Errors {
   if (!values.name.trim()) errors.name = "Please tell us who you are.";
   if (!values.company.trim())
     errors.company = "Please name the school or organisation.";
-  if (!values.email.trim()) errors.email = "We need an address to reply to.";
-  else if (!EMAIL.test(values.email.trim()))
+  if (!values.phone.trim())
+    errors.phone = "A number lets us reply the way most people here prefer.";
+  /* Email is optional now that a phone number is required, so it is checked
+     only when somebody has actually typed one. */
+  if (values.email.trim() && !EMAIL.test(values.email.trim()))
     errors.email = "That address looks incomplete.";
   if (!values.message.trim())
-    errors.message = "Tell us what you would like to solve.";
+    errors.message = "Tell us what you would like to improve.";
   else if (values.message.trim().length < 10)
     errors.message = "A sentence or two helps us route this to the right person.";
   return errors;
@@ -65,12 +109,7 @@ function validate(values: Record<Field, string>): Errors {
 export function ContactForm() {
   const uid = useId();
   const reduce = useReducedMotion();
-  const [values, setValues] = useState<Record<Field, string>>({
-    name: "",
-    company: "",
-    email: "",
-    message: "",
-  });
+  const [values, setValues] = useState<Record<Field, string>>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
@@ -101,14 +140,16 @@ export function ContactForm() {
 
     // Bots fill hidden fields. Pretend success so they do not retry.
     if (honeypot.trim()) {
-      setValues({ name: "", company: "", email: "", message: "" });
+      setValues(EMPTY);
       setStatus("sent");
       return;
     }
 
     const name = values.name.trim();
     const company = values.company.trim();
+    const phone = values.phone.trim();
     const email = values.email.trim();
+    const product = values.product.trim();
 
     try {
       const response = await fetch(
@@ -122,9 +163,14 @@ export function ContactForm() {
           body: JSON.stringify({
             name,
             company,
+            phone,
             email,
+            product: product || "Not stated",
             message: values.message.trim(),
-            _replyto: email,
+            /* Only set when an address was given. An empty _replyto makes
+               the reply-to header useless, and the phone number is now the
+               channel an enquiry without an email will come back on. */
+            ...(email ? { _replyto: email } : {}),
             _subject: `DYCH Technologies website enquiry from ${name} (${company})`,
             _template: "box",
             _captcha: "false",
@@ -150,7 +196,7 @@ export function ContactForm() {
         return;
       }
 
-      setValues({ name: "", company: "", email: "", message: "" });
+      setValues(EMPTY);
       setStatus("sent");
     } catch {
       setServerError(
@@ -186,6 +232,11 @@ export function ContactForm() {
           autoComplete: field.autoComplete,
           spellCheck: field.spellCheck,
           "aria-invalid": error ? (true as const) : undefined,
+          /* Marked programmatically, not just visually. The labels carry an
+             "(optional)" suffix on the two fields that are not required,
+             which a sighted reader can scan, but a screen-reader user had no
+             way to know what was needed until the form refused to send. */
+          "aria-required": field.optional ? undefined : (true as const),
           "aria-describedby": describedBy,
           // No focus:outline-none here: the global focus-visible ring is the
           // keyboard affordance and must survive.
@@ -203,6 +254,9 @@ export function ContactForm() {
           >
             <label htmlFor={inputId} className="text-sm font-semibold text-foreground">
               {field.label}
+              {field.optional && (
+                <span className="ml-1.5 font-normal text-faint">(optional)</span>
+              )}
             </label>
             {field.helper && (
               <p id={helperId} className="text-[0.8125rem] leading-relaxed text-faint">
@@ -215,6 +269,18 @@ export function ContactForm() {
                 rows={5}
                 onChange={(e) => update(field.id, e.target.value)}
               />
+            ) : field.type === "select" ? (
+              <select
+                {...shared}
+                onChange={(e) => update(field.id, e.target.value)}
+              >
+                <option value="">Select one</option>
+                {PRODUCTS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             ) : (
               <input
                 {...shared}
@@ -285,7 +351,7 @@ export function ContactForm() {
                   office is named on the contact page already, so this line
                   does the one job a confirmation has: say it arrived, and say
                   when a reply is coming. */}
-              <strong className="font-semibold">Thank you — your message has been sent.</strong>{" "}
+              <strong className="font-semibold">Thank you, your message has been sent.</strong>{" "}
               A member of our team will reply within one working day.
             </span>
           </p>

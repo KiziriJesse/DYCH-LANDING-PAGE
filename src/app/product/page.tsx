@@ -1,6 +1,7 @@
 import {
   DeviceMobileSpeaker,
   GraduationCap,
+  UsersThree,
   ListChecks,
   ScanSmiley,
   Buildings,
@@ -11,7 +12,6 @@ import { CtaBand } from "@/components/ui/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { RecognitionFigure } from "@/components/product/RecognitionFigure";
-import { Button } from "@/components/ui/Button";
 import { HelpTip } from "@/components/ui/HelpTip";
 import { sequenceAccent } from "@/lib/palette";
 import { pageMetadata } from "@/lib/seo";
@@ -38,6 +38,11 @@ export const metadata = pageMetadata({
     DYCH supplies business documents - see
     src/app/product/business/page.disabled.tsx.  */
 
+/* Vision, Safety, Accountability. The order is the order the product
+   works in: it sees, it protects, and it leaves a record that can be
+   checked afterwards. */
+const IDENTITY = ["Vision", "Safety", "Accountability"] as const;
+
 const SHARED = [
   {
     Icon: ScanSmiley,
@@ -63,21 +68,59 @@ const SHARED = [
     conversation rather than a second card, which is the honest shape while
     there is only one page to send anyone to. When the business page returns,
     restore its card here alongside the schools one.  */
-const SCHOOLS = {
-  href: "/product/schools",
-  Icon: GraduationCap,
-  title: "The gate, the register and the parent line",
-  body: "Seven capabilities on one pupil record: recognition at the gate, attendance that fills itself, alerts to parents, boarding management, the guard's screen, the admin dashboard and report cards.",
-  cta: "See the schools product",
-};
+const INDUSTRIES = [
+  {
+    href: "/schools",
+    Icon: GraduationCap,
+    label: "Schools",
+    body: "Seven capabilities on one pupil record: the gate, attendance that fills itself, alerts to parents, boarding, the guard's screen, the dashboard and report cards.",
+    cta: "See Smart Vizion for schools",
+  },
+  {
+    href: "/businesses",
+    Icon: Buildings,
+    label: "Businesses & Workplaces",
+    body: "A reception desk with a record behind it, workforce hours taken from the entrance, and recognition on the few doors that justify it.",
+    cta: "See it for a workplace",
+  },
+  {
+    href: "/churches",
+    Icon: UsersThree,
+    label: "Churches & Worship Centres",
+    body: "Guests on the days a building fills with people nobody recognises, hours for paid staff, and care around the two or three rooms that need it.",
+    cta: "See it for a worship centre",
+  },
+];
 
 export default function ProductPage() {
   return (
     <>
       <PageHeader
         title="One technology, wherever the entrance is."
-        intro="Smart Vizion recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. A school uses it at a gate and a business uses it at a reception desk, but underneath it is the same three things doing the same job."
+        intro="Secure facial-recognition monitoring and attendance. Smart Vizion recognises a face at an entry point, writes the record that scan produces, and tells the person who needs to know. A school uses it at a gate and a workplace uses it at a reception desk, but underneath it is the same three things doing the same job."
       />
+
+      {/* Three words, because the product is three promises and a reader
+          should be able to carry them away without the paragraph. They are
+          set as plain chips rather than headings: this is an identity line,
+          not a section, and giving it a heading would put it in the page
+          outline above the capabilities it summarises. */}
+      <section className="bg-background px-4 pt-10 sm:px-6 lg:px-10">
+        <div className="mx-auto max-w-[1240px]">
+          <Reveal>
+            <ul className="flex flex-wrap gap-2.5">
+              {IDENTITY.map((word) => (
+                <li
+                  key={word}
+                  className="rounded-full border border-accent-line bg-accent-soft px-4 py-2 text-sm font-medium tracking-[0.02em] text-accent-on-light"
+                >
+                  {word}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
 
       {/* What is true of both. The figure is here rather than on either
           vertical because recognition is the part they actually share. */}
@@ -116,7 +159,7 @@ export default function ProductPage() {
                           held on a box standing on your own premises. Nothing
                           is sent to us or to anyone else, no photo is uploaded
                           anywhere, and the entrance keeps working when the
-                          internet does not — because nothing has to travel for
+                          internet does not, because nothing has to travel for
                           a match to happen.
                         </HelpTip>
                       </div>
@@ -133,10 +176,81 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* One published page and one conversation, side by side. Two matching
-          cards would imply two products to compare; there is one, plus an
-          invitation. */}
-      <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
+      {/* FEATURES, NOT PRODUCTS. These two are sold alongside Smart Vizion
+          and a buyer may well arrive asking for one by name, so each has its
+          own heading and its own anchor for the nav to point at. What they
+          do not get is a page each: a page implies a thing you can buy on
+          its own, and both of these run on the same recognition, the same
+          record and the same unit on your premises. Saying that once, here,
+          is more honest than three product pages that quietly describe one
+          product. */}
+      <section
+        id="visitor-management"
+        className="scroll-mt-28 bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32"
+      >
+        <div className="mx-auto grid max-w-[1240px] gap-8 lg:grid-cols-12 lg:gap-10">
+          <Reveal className="lg:col-span-5">
+            <h2 className="max-w-[18ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+              Visitor Management
+            </h2>
+          </Reveal>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <Reveal>
+              <p className="max-w-[58ch] text-lg leading-relaxed text-muted">
+                The paper visitor book replaced, rather than digitised
+                alongside. A visitor is recorded on the way in and on the way
+                out, against the person or the department they came to see, so
+                the question of who was on site last Tuesday has one answer
+                instead of a search through a drawer.
+              </p>
+              <p className="mt-5 max-w-[58ch] leading-relaxed text-muted">
+                It runs on the same unit as recognition and writes to the same
+                record, which is why it is part of Smart Vizion rather than
+                something else to buy and connect.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="staff-attendance"
+        className="scroll-mt-28 bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32"
+      >
+        <div className="mx-auto grid max-w-[1240px] gap-8 lg:grid-cols-12 lg:gap-10">
+          <Reveal className="lg:col-span-5">
+            <h2 className="max-w-[18ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
+              Staff Attendance
+            </h2>
+          </Reveal>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <Reveal>
+              <p className="max-w-[58ch] text-lg leading-relaxed text-muted">
+                The arrival that opens somebody&rsquo;s day is the clock-in, and the
+                departure is the clock-out. Hours come from the entrance
+                rather than from a notebook reconciled at the end of the
+                month, and a manager reviewing them is reading the same events
+                the gate recorded.
+              </p>
+              <p className="mt-5 max-w-[58ch] leading-relaxed text-muted">
+                Deliberately narrow: this is attendance visibility and
+                attendance history. It is not payroll, not leave management
+                and not a human-resources platform, and if that is what you
+                need then this is not the thing that solves it.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Three ways in, one each. This used to be a schools card beside an
+          invitation to talk, which was the honest shape while schools was
+          the only published page. There are three now, so the section routes
+          rather than apologises. The schools card keeps the most detail
+          because it is the only one with a documented deployment behind it,
+          and the cards are deliberately not identical in weight for that
+          reason. */}
+      <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
@@ -144,62 +258,34 @@ export default function ProductPage() {
             </h2>
           </Reveal>
 
-          <div className="mt-14 grid gap-4 lg:grid-cols-12">
-            <Reveal className="lg:col-span-7">
-              <SpotlightCard href={SCHOOLS.href} className="h-full">
-                <div className="flex h-full flex-col">
-                  <span
-                    aria-hidden
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
-                    style={{ backgroundColor: sequenceAccent(0, 2) }}
-                  >
-                    <SCHOOLS.Icon size={26} weight="light" />
-                  </span>
-                  <h3 className="mt-7 max-w-[18ch] text-2xl leading-tight tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
-                    {SCHOOLS.title}
-                  </h3>
-                  <p className="mt-4 max-w-[46ch] leading-relaxed text-muted">
-                    {SCHOOLS.body}
-                  </p>
-                  {/* A span, not a nested link: the whole card is already the
-                      anchor, and a link inside a link is invalid. */}
-                  <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-link transition-colors duration-150 group-hover:text-link-hover">
-                    <span className="border-b border-link-rule pb-0.5 transition-colors duration-150 group-hover:border-link-hover">
-                      {SCHOOLS.cta}
+          <ul className="mt-14 grid gap-4 md:grid-cols-3">
+            {INDUSTRIES.map((item, i) => (
+              <Reveal as="li" key={item.href} delay={0.07 * i}>
+                <SpotlightCard href={item.href} className="h-full">
+                  <div className="flex h-full flex-col">
+                    <span
+                      aria-hidden
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
+                      style={{ backgroundColor: sequenceAccent(i, INDUSTRIES.length) }}
+                    >
+                      <item.Icon size={24} weight="light" />
                     </span>
-                  </span>
-                </div>
-              </SpotlightCard>
-            </Reveal>
-
-            {/* Not a card. An office, a clinic, a campus with both staff and
-                visitors - the technology is the same, but there is no page
-                yet that describes it honestly, so this asks instead of
-                claiming. */}
-            <Reveal delay={0.08} className="lg:col-span-5">
-              <div className="flex h-full flex-col border-t border-border pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-2">
-                <span
-                  aria-hidden
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-accent-ink"
-                  style={{ backgroundColor: sequenceAccent(1, 2) }}
-                >
-                  <Buildings size={26} weight="light" />
-                </span>
-                <h3 className="mt-7 max-w-[18ch] text-2xl leading-tight tracking-[-0.02em] text-foreground">
-                  Anywhere else with a door
-                </h3>
-                <p className="mt-4 max-w-[42ch] leading-relaxed text-muted">
-                  An office reception, a clinic, a site with staff, contractors
-                  and visitors coming through the same gate. The recognition,
-                  the record and the alert do not change; the nouns do. We would
-                  rather scope that with you than publish a page guessing at it.
-                </p>
-                <div className="mt-auto pt-8">
-                  <Button href="/contact">Tell us about your site</Button>
-                </div>
-              </div>
-            </Reveal>
-          </div>
+                    <h3 className="mt-7 max-w-[18ch] text-xl leading-tight tracking-[-0.02em] text-foreground">
+                      {item.label}
+                    </h3>
+                    <p className="mt-3 leading-relaxed text-muted">{item.body}</p>
+                    {/* A span, not a nested link: the whole card is already
+                        the anchor, and a link inside a link is invalid. */}
+                    <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[0.9375rem] font-semibold text-link transition-colors duration-150 group-hover:text-link-hover">
+                      <span className="border-b border-link-rule pb-0.5 transition-colors duration-150 group-hover:border-link-hover">
+                        {item.cta}
+                      </span>
+                    </span>
+                  </div>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 

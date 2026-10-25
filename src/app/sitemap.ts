@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITEMAP } from "@/lib/site";
+import { FOOTER_NAV } from "@/lib/site";
 
 const SITE_URL = "https://dychtechnologies.com";
 
@@ -15,9 +15,12 @@ const PAGE_META: Record<
 > = {
   "/": { changeFrequency: "weekly", priority: 1 },
   "/product": { changeFrequency: "weekly", priority: 0.9 },
-  "/product/schools": { changeFrequency: "monthly", priority: 0.8 },
   "/how-it-works": { changeFrequency: "monthly", priority: 0.8 },
-  "/schools": { changeFrequency: "monthly", priority: 0.7 },
+  /* Schools carries the seven capabilities now that /product/schools has
+     been merged into it, so it ranks above the other two industries. */
+  "/schools": { changeFrequency: "monthly", priority: 0.8 },
+  "/businesses": { changeFrequency: "monthly", priority: 0.7 },
+  "/churches": { changeFrequency: "monthly", priority: 0.7 },
   "/pricing": { changeFrequency: "monthly", priority: 0.7 },
   "/contact": { changeFrequency: "monthly", priority: 0.6 },
   "/security-and-trust": { changeFrequency: "yearly", priority: 0.5 },
@@ -25,7 +28,19 @@ const PAGE_META: Record<
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["/", ...SITEMAP.map((entry) => entry.href)];
+  /* Built from the footer groups, which are the single list of real routes
+     now that the flat SITEMAP is gone. Anchors are stripped and duplicates
+     dropped: /product#visitor-management is a section of /product, not a
+     page of its own, and submitting it as one would ask Google to index
+     the same document three times. */
+  const paths = Array.from(
+    new Set([
+      "/",
+      ...FOOTER_NAV.flatMap((group) =>
+        group.links.map((link) => link.href.split("#")[0]),
+      ),
+    ]),
+  );
 
   return paths.map((path) => {
     const meta = PAGE_META[path] ?? {

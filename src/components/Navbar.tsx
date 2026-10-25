@@ -12,7 +12,7 @@ import {
   useScroll,
 } from "framer-motion";
 import { CaretDown } from "@phosphor-icons/react";
-import { NAV_LINKS, CONTACT, PRODUCT_VERTICALS } from "@/lib/site";
+import { NAV_LINKS, CONTACT, type MenuItem } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -36,27 +36,27 @@ const EASE_GLIDE = [0.32, 0.72, 0, 1] as const;
  * into a single /product page that has since become three, and a menu of
  * seven anchors was already the longest thing in the nav.
  */
-const PRODUCT_MENU = {
-  /* The software name, and the panel's link to the product overview. The
-     verticals under it are the other two destinations. */
-  heading: "Smart Vizion",
-  blurb: "Facial-recognition access, attendance and alerts.",
-  items: PRODUCT_VERTICALS,
-};
+/* Two menus now, so the panel is rendered from whatever the link carries
+   rather than from one hard-coded object. The first row of each menu is the
+   section's own destination, which is why Product opens onto Smart Vizion
+   and Industries opens onto Schools. */
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  /* The mobile Product row is a disclosure of its own. It starts open when
-     the reader is already somewhere under /product, so the sheet shows them
-     where they are rather than hiding it behind a tap. */
-  const [mobileProduct, setMobileProduct] = useState(false);
+  /* Which menu is open, by href, rather than one boolean per menu. Opening
+     one closes the other without any coordination between them. */
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  /* The mobile sheet expands one section at a time, keyed by href the same
+     way the desktop bar is. It starts open on whichever section holds the
+     page the reader is on, so the sheet shows them where they are rather
+     than hiding it behind a tap. */
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
   const [lifted, setLifted] = useState(false);
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const reduce = useReducedMotion();
-  const productRef = useRef<HTMLLIElement>(null);
+  const menuBarRef = useRef<HTMLUListElement>(null);
   const lastY = useRef(0);
 
   useMotionValueEvent(scrollY, "change", (y) => {
@@ -65,7 +65,7 @@ export function Navbar() {
     const prev = lastY.current;
     lastY.current = y;
 
-    if (open || menuOpen || y < 32) {
+    if (open || openMenu || y < 32) {
       setHidden(false);
       return;
     }
@@ -94,14 +94,14 @@ export function Navbar() {
     };
   }, [open]);
 
-  // The Product disclosure closes on Escape and on a pointer down elsewhere.
+  // A disclosure closes on Escape and on a pointer down outside the bar.
   useEffect(() => {
-    if (!menuOpen) return;
+    if (!openMenu) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
+      if (e.key === "Escape") setOpenMenu(null);
     };
     const onDown = (e: PointerEvent) => {
-      if (!productRef.current?.contains(e.target as Node)) setMenuOpen(false);
+      if (!menuBarRef.current?.contains(e.target as Node)) setOpenMenu(null);
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onDown);
@@ -109,12 +109,15 @@ export function Navbar() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onDown);
     };
-  }, [menuOpen]);
+  }, [openMenu]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const productActive = isActive("/product");
+  /* A menu's trigger is current when the reader is on any page the menu
+     points at, so Industries lights up on /businesses as well as /schools. */
+  const menuActive = (menu: readonly MenuItem[]) =>
+    menu.some((item) => isActive(item.href.split("#")[0]));
 
   return (
     <>
@@ -179,137 +182,120 @@ export function Navbar() {
             so the bar carries its full width instead of leaving a dead
             stretch between the mark and the menu. */}
         <nav aria-label="Primary" className="flex flex-1 items-center justify-end gap-1 lg:justify-center lg:gap-2">
-          <ul className="hidden items-center gap-1 lg:flex xl:gap-2">
-            {/* Product is a disclosure rather than a link: it reveals the
-                software name and the two verticals under it. */}
-            <li
-              ref={productRef}
-              className="relative"
-              onPointerEnter={(e) => {
-                if (e.pointerType === "mouse") setMenuOpen(true);
-              }}
-              onPointerLeave={(e) => {
-                if (e.pointerType === "mouse") setMenuOpen(false);
-              }}
-            >
-              <button
-                type="button"
-                aria-expanded={menuOpen}
-                aria-controls="product-menu"
-                // The trigger stands in for the Product route now that it is a
-                // disclosure rather than a link, so it still has to carry the
-                // current-page signal. Without this, /product is the one route
-                // with no announced nav state.
-                aria-current={productActive ? "page" : undefined}
-                onClick={() => setMenuOpen((v) => !v)}
-                className={
-                  "relative flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-300 xl:px-3.5 " +
-                  (productActive ? "text-foreground" : "text-muted hover:text-foreground")
-                }
-              >
-                Product
+          <ul
+            ref={menuBarRef}
+            className="hidden items-center gap-1 lg:flex xl:gap-2"
+          >
+            {NAV_LINKS.map((link) => {
+              /* A link with a menu is a disclosure; one without is a plain
+                 link. Both wear the same pill, so the bar reads as one row
+                 of equals rather than as two kinds of thing. */
+              const menu = link.menu;
+              const active = menu ? menuActive(menu) : isActive(link.href);
+              const isOpen = openMenu === link.href;
+              const panelId = `menu-${link.href.replace(/W+/g, "-")}`;
+              const pill =
+                "relative flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-300 xl:px-3.5 " +
+                (active ? "text-foreground" : "text-muted hover:text-foreground");
+
+              const marker = active && (
                 <motion.span
+                  layoutId="nav-active"
                   aria-hidden
-                  animate={{ rotate: menuOpen ? 180 : 0 }}
-                  transition={reduce ? { duration: 0 } : { duration: 0.3, ease: EASE_GLIDE }}
-                  className="flex"
-                >
-                  <CaretDown size={12} weight="bold" />
-                </motion.span>
-                {productActive && (
-                  <motion.span
-                    layoutId="nav-active"
-                    aria-hidden
-                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-accent-line"
-                    transition={{ duration: 0.45, ease: EASE_GLIDE }}
-                  />
-                )}
-              </button>
+                  className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-accent-line"
+                  transition={{ duration: 0.45, ease: EASE_GLIDE }}
+                />
+              );
 
-              <AnimatePresence>
-                {menuOpen && (
-                  <motion.div
-                    id="product-menu"
-                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
-                    transition={{ duration: 0.22, ease: EASE_GLIDE }}
-                    // pt-3 rather than mt-3: the pointer must not cross a gap
-                    // between the trigger and the panel.
-                    className="absolute left-0 top-full pt-3"
-                  >
-                    <div className="nav-panel min-w-[17.5rem] rounded-card border border-border bg-surface p-2 shadow-[var(--shade-lift)]">
-                      {/* The software name, and the way in to /product.
-                          It was a plain label, which left that page with no
-                          route to it anywhere on desktop: the trigger is a
-                          disclosure rather than a link, and the panel listed
-                          only the verticals. The overview is where the two
-                          verticals are explained as one product, so it has
-                          to be reachable. */}
-                      <Link
-                        id="product-menu-heading"
-                        href="/product"
-                        aria-current={pathname === "/product" ? "page" : undefined}
-                        onClick={() => setMenuOpen(false)}
-                        className="block rounded-[calc(var(--radius-card)-0.25rem)] px-3.5 pb-2 pt-2.5 text-sm font-semibold tracking-[-0.01em] text-foreground transition-colors duration-200 hover:bg-wash"
-                      >
-                        {PRODUCT_MENU.heading}
-                        <span className="mt-0.5 block text-[0.8125rem] font-normal leading-snug text-faint">
-                          {PRODUCT_MENU.blurb}
-                        </span>
-                      </Link>
-                      <ul
-                        aria-labelledby="product-menu-heading"
-                        className="mt-1 border-t border-border pt-1"
-                      >
-                        {PRODUCT_MENU.items.map((item) => (
-                          <li key={item.href}>
-                            <Link
-                              href={item.href}
-                              aria-current={
-                                pathname === item.href ? "page" : undefined
-                              }
-                              onClick={() => setMenuOpen(false)}
-                              className="block rounded-[calc(var(--radius-card)-0.25rem)] px-3.5 py-2.5 transition-colors duration-200 hover:bg-wash"
-                            >
-                              <span className="block text-sm font-medium text-foreground">
-                                {item.label}
-                              </span>
-                              <span className="mt-0.5 block text-[0.8125rem] leading-snug text-faint">
-                                {item.note}
-                              </span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
+              if (!menu) {
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      className={pill}
+                    >
+                      {link.label}
+                      {marker}
+                    </Link>
+                  </li>
+                );
+              }
 
-            {NAV_LINKS.filter((l) => l.href !== "/product").map((link) => {
-              const active = isActive(link.href);
               return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
+                <li
+                  key={link.href}
+                  className="relative"
+                  onPointerEnter={(e) => {
+                    if (e.pointerType === "mouse") setOpenMenu(link.href);
+                  }}
+                  onPointerLeave={(e) => {
+                    if (e.pointerType === "mouse") setOpenMenu(null);
+                  }}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    // The trigger stands in for the section's own route now
+                    // that it is a disclosure rather than a link, so it still
+                    // has to carry the current-page signal.
                     aria-current={active ? "page" : undefined}
-                    className={
-                      "relative block whitespace-nowrap rounded-full px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-300 xl:px-3.5 " +
-                      (active ? "text-foreground" : "text-muted hover:text-foreground")
-                    }
+                    onClick={() => setOpenMenu(isOpen ? null : link.href)}
+                    className={pill}
                   >
                     {link.label}
-                    {active && (
-                      <motion.span
-                        layoutId="nav-active"
-                        aria-hidden
-                        className="absolute inset-0 -z-10 rounded-full bg-accent-soft ring-1 ring-accent-line"
-                        transition={{ duration: 0.45, ease: EASE_GLIDE }}
-                      />
+                    <motion.span
+                      aria-hidden
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={
+                        reduce ? { duration: 0 } : { duration: 0.3, ease: EASE_GLIDE }
+                      }
+                      className="flex"
+                    >
+                      <CaretDown size={12} weight="bold" />
+                    </motion.span>
+                    {marker}
+                  </button>
+
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        id={panelId}
+                        initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                        transition={{ duration: 0.22, ease: EASE_GLIDE }}
+                        // pt-3 rather than mt-3: the pointer must not cross a
+                        // gap between the trigger and the panel.
+                        className="absolute left-0 top-full pt-3"
+                      >
+                        <div className="nav-panel min-w-[19rem] rounded-card border border-border bg-surface p-2 shadow-[var(--shade-lift)]">
+                          <ul>
+                            {menu.map((item) => (
+                              <li key={item.href}>
+                                <Link
+                                  href={item.href}
+                                  aria-current={
+                                    pathname === item.href ? "page" : undefined
+                                  }
+                                  onClick={() => setOpenMenu(null)}
+                                  className="block rounded-[calc(var(--radius-card)-0.25rem)] px-3.5 py-2.5 transition-colors duration-200 hover:bg-wash"
+                                >
+                                  <span className="block text-sm font-medium text-foreground">
+                                    {item.label}
+                                  </span>
+                                  <span className="mt-0.5 block text-[0.8125rem] leading-snug text-faint">
+                                    {item.note}
+                                  </span>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </motion.div>
                     )}
-                  </Link>
+                  </AnimatePresence>
                 </li>
               );
             })}
@@ -324,7 +310,12 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => {
-              if (!open) setMobileProduct(pathname.startsWith("/product"));
+              if (!open) {
+                const current = NAV_LINKS.find(
+                  (l) => l.menu && menuActive(l.menu),
+                );
+                setMobileSection(current ? current.href : null);
+              }
               setOpen((v) => !v);
             }}
             aria-expanded={open}
@@ -398,21 +389,28 @@ export function Navbar() {
                           {link.label}
                         </Link>
 
-                        {link.href === "/product" && (
+                        {link.menu && (
                           <button
                             type="button"
-                            onClick={() => setMobileProduct((v) => !v)}
-                            aria-expanded={mobileProduct}
-                            aria-controls="mobile-product"
+                            onClick={() =>
+                              setMobileSection((v) =>
+                                v === link.href ? null : link.href,
+                              )
+                            }
+                            aria-expanded={mobileSection === link.href}
+                            aria-controls={`mobile-${link.href.replace(/W+/g, "-")}`}
                             className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-muted transition-colors duration-300"
                           >
                             <span className="sr-only">
-                              {mobileProduct ? "Hide" : "Show"} product pages
+                              {mobileSection === link.href ? "Hide" : "Show"}{" "}
+                              {link.label.toLowerCase()} pages
                             </span>
                             <motion.span
                               aria-hidden
                               className="flex"
-                              animate={{ rotate: mobileProduct ? 180 : 0 }}
+                              animate={{
+                                rotate: mobileSection === link.href ? 180 : 0,
+                              }}
                               transition={{ duration: 0.3, ease: EASE_GLIDE }}
                             >
                               <CaretDown size={18} weight="bold" />
@@ -421,13 +419,16 @@ export function Navbar() {
                         )}
                       </div>
 
-                      {/* The two verticals, indented under Product rather than
+                      {/* The section's pages, indented under it rather than
                           behind a second tap. A nested flyout on touch is the
                           pattern this menu exists to avoid; on mobile there is
-                          room to simply show both. */}
-                      {link.href === "/product" && mobileProduct && (
-                        <ul id="mobile-product" className="-mt-1 flex flex-col pb-4 pl-5">
-                          {PRODUCT_VERTICALS.map((v) => (
+                          room to simply show them. */}
+                      {link.menu && mobileSection === link.href && (
+                        <ul
+                          id={`mobile-${link.href.replace(/W+/g, "-")}`}
+                          className="-mt-1 flex flex-col pb-4 pl-5"
+                        >
+                          {link.menu.map((v) => (
                             <li key={v.href}>
                               <Link
                                 href={v.href}

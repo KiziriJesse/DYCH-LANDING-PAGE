@@ -6,7 +6,7 @@ import {
   PhoneCall,
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr";
-import { BRAND, CONTACT, SITEMAP } from "@/lib/site";
+import { BRAND, CONTACT, FOOTER_NAV } from "@/lib/site";
 import { sequenceAccent } from "@/lib/palette";
 
 const ICON = { size: 18, weight: "light" } as const;
@@ -18,9 +18,11 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-surface-sunk px-4 pb-10 pt-20 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1240px]">
-        {/* Three columns, not a four-column link farm. */}
+        {/* Brand, then the two grouped link columns, then the contact
+            well. Twelve columns split four / five / three so the three link
+            groups inside the middle block each get real width. */}
         <div className="grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-5">
+          <div className="md:col-span-4">
             {/* The name in the site's own type rather than the lockup
                 artwork. The new lockup sets the wordmark in tan and the
                 tagline in a pale script, neither of which holds up at
@@ -47,28 +49,34 @@ export function Footer() {
             </p>
           </div>
 
-          <nav aria-labelledby="footer-sitemap" className="md:col-span-3">
-            <h2
-              id="footer-sitemap"
-              className="text-sm font-medium tracking-[0.1em] text-foreground"
-            >
-              Site
-            </h2>
-            <ul className="mt-5 flex flex-col gap-3">
-              {SITEMAP.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+{/* Grouped the way the header is, rather than as one flat list headed
+              "Site". A reader who has just used the Product and Industries
+              menus meets the same two groups here, and the flat list had
+              grown long enough that the schools pages and the company pages
+              sat in one undifferentiated run. */}
+          <nav aria-label="Footer" className="grid gap-8 sm:grid-cols-3 md:col-span-5">
+            {FOOTER_NAV.map((group) => (
+              <div key={group.heading}>
+                <h2 className="text-sm font-medium tracking-[0.1em] text-foreground">
+                  {group.heading}
+                </h2>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {group.links.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="text-[0.9375rem] text-muted transition-colors duration-300 hover:text-foreground"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </nav>
 
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <h2 className="text-sm font-medium tracking-[0.1em] text-foreground">
               Talk to us
             </h2>

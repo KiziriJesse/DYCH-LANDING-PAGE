@@ -339,7 +339,7 @@
     overflow-x: hidden;
   }
 
-  /* High-frequency grain at 3% — a matte tooth, not a visible tile. */
+  /* High-frequency grain at 3%, a matte tooth, not a visible tile. */
   body::after {
     content: "";
     position: fixed;

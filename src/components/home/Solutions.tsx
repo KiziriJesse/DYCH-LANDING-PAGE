@@ -17,8 +17,11 @@ import { sequenceAccent } from "@/lib/palette";
     EDUCATION IS THE LAST CARD, DELIBERATELY. It used to be the entire site.
     The brief is explicit that it belongs here as one sector among several,
     not as the homepage, and putting it first would quietly undo that while
-    appearing to comply. It keeps the only link in the grid because it is the
-    only sector with a page of its own so far.
+    appearing to comply. Three of the eight now carry links, because three
+    have pages of their own: schools, workplaces and worship centres. The
+    other five are sectors the same technology fits, written to be read
+    rather than clicked, and they stay unlinked until there is somewhere
+    honest to send a reader.
 
     Not cards with borders and shadows. Eight bordered tiles of icon plus
     heading plus text is the most predictable section on the internet, and the
@@ -28,6 +31,7 @@ const SECTORS = [
   {
     Icon: Buildings,
     title: "Corporate offices",
+    href: "/businesses",
     body: "Staff timekeeping without clock cards. Reception sees who entered. Unknown faces become logged visitors rather than silent walk-ins, and HR gets a daily attendance export.",
   },
   {
@@ -58,13 +62,14 @@ const SECTORS = [
   {
     Icon: Church,
     title: "Places of worship and NGOs",
-    body: "Volunteer and staff presence without a sign-in sheet. Visitor records for events. A message to the coordinator when the person they are waiting for arrives.",
+    body: "Guest records on the days a building fills with people nobody recognises, hours for paid staff, and care around the rooms that need it.",
+    href: "/churches",
   },
   {
     Icon: GraduationCap,
     title: "Education",
     body: "Pupil and staff attendance, alerts to guardians, and authorised pickup at the gate. The same engine as every card above, with the vocabulary a school uses.",
-    href: "/product/schools",
+    href: "/schools",
   },
 ];
 
