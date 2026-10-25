@@ -87,7 +87,57 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Vision, mission and the registration line, taken verbatim from
+          DYCH's own corporate profile.
+
+          SCOPE. That profile also describes a far wider set of business
+          lines, a values framework and a set of service-level claims. None
+          of it is here, deliberately: the site presents Smart Vizion
+          and nothing else for now, the two source documents disagree on the
+          values, and the service-level claims have no evidence behind them
+          on a site whose schools page says plainly how early the company
+          is. Only these three items were approved for publication.
+
+          The registration line sits last because it is the one a reader
+          checks rather than reads. */}
       <section className="bg-surface px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <Reveal>
+              <h2 className="text-sm font-medium tracking-[0.1em] text-accent-on-light">
+                Vision
+              </h2>
+              <p className="mt-5 max-w-[46ch] text-[clamp(1.125rem,1.9vw,1.375rem)] leading-[1.45] tracking-[-0.015em] text-foreground">
+                To be Africa&rsquo;s premier driver of industrial and digital
+                transformation, pioneering intelligent automation systems that
+                empower enterprises to build smarter, resilient, and
+                forward-ready operations.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <h2 className="text-sm font-medium tracking-[0.1em] text-accent-on-light">
+                Mission
+              </h2>
+              <p className="mt-5 max-w-[46ch] text-[clamp(1.125rem,1.9vw,1.375rem)] leading-[1.45] tracking-[-0.015em] text-foreground">
+                To accelerate enterprise efficiency and sustainable growth
+                across Africa by engineering robust industrial automation and
+                intelligent software solutions, delivered with technical
+                precision, integrity, and client-first service.
+              </p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.14}>
+            <p className="mt-14 border-t border-border pt-6 text-[0.9375rem] leading-relaxed text-muted">
+              Incorporated in the Republic of Uganda under the Companies Act
+              No. 1 of 2012, URSB-regulated.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-background px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="max-w-[20ch] text-[clamp(1.75rem,3.6vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground">
