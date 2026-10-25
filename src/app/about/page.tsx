@@ -39,7 +39,7 @@ const TEAM = [
     name: "John Jesse Kiziri",
     role: "Deployment and support",
     photo: "John Jesse Kiziri, Deployment and support",
-    src: "/deployment.jpg",
+    src: "/deployment-support.jpg",
   },
 ];
 
